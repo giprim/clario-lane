@@ -1,4 +1,3 @@
-import type { User } from "@supabase/supabase-js";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { BookOpen, MonitorIcon, Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
@@ -17,9 +16,7 @@ import { useTheme, type UserTheme } from "./theme";
 import { useLogout } from "@/hooks";
 
 const AnimateLink = motion.create(Link);
-// type Props = {
-//   user: User | null;
-// };
+
 const Navbar = () => {
   const { setTheme, userTheme } = useTheme();
   const logout = useLogout();

@@ -20,11 +20,10 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const { user } = Route.useRouteContext();
   return (
     <React.Fragment>
       <ThemeProvider>
-        <Navbar user={user} />
+        <Navbar />
         <Outlet />
         <Footer />
         <Toaster position="top-center" />

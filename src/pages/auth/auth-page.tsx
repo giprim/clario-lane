@@ -1,3 +1,4 @@
+/** eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   Button,
   Card,
@@ -14,16 +15,16 @@ import {
   Input,
   Spinner,
 } from "@/components";
-import { Link, useRouter } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
-import type { AnyFieldApi } from "@tanstack/react-form";
-import { useForm } from "@tanstack/react-form";
-import { ValidationSchema } from "./type";
-import { useOnboardingStore } from "@/store";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 import { supabaseService } from "@/integration/supabase/supabase-services";
 import { catchError } from "@/lib";
+import { cn } from "@/lib/utils";
+import { useOnboardingStore } from "@/store";
+import type { AnyFieldApi } from "@tanstack/react-form";
+import { useForm } from "@tanstack/react-form";
+import { Link, useRouter } from "@tanstack/react-router";
+import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
+import { ValidationSchema } from "./type";
 
 export default function AuthPage({
   className,
@@ -48,6 +49,8 @@ export default function AuthPage({
       confirmPassword: "",
       authType: authState,
     },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     validators: { onBlur: ValidationSchema },
     onSubmit: async ({ value }) => {
       try {
