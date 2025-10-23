@@ -50,13 +50,13 @@ export function Results() {
             <MetricCard
               icon={<TrendingUp className="w-5 h-5" />}
               label="Average Speed"
-              value={`${onboarding.averageWPM} WPM`}
+              value={`${onboarding.baseLineWPM} WPM`}
               color="text-blue-600"
             />
             <MetricCard
               icon={<Target className="w-5 h-5" />}
               label="Comprehension"
-              value={`${onboarding.comprehensionScore}%`}
+              value={`${onboarding.baselineComprehension}%`}
               color="text-green-600"
             />
             <MetricCard

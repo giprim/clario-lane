@@ -3,20 +3,24 @@ export type OnboardingType = {
   email?: string;
   dateOfBirth?: string | Date;
   achievements: boolean;
-  averageWPM?: number;
+  baseLineWPM?: number;
   badges?: string[];
   goals: string[];
   contentTypes: string[];
   challenges: string[];
-  comprehensionScore?: number;
+  currentComprehensionScore?: number;
   focusScore?: number;
   dailyReminder: boolean;
   weeklyProgress: boolean;
   streakDays?: number;
   xpEarned?: number;
+  currentWPM?: number;
+  level?: number;
+  baselineComprehension?: number;
+  currentComprehension?: number;
+  onboardingComplete: boolean;
 
   currentStep: number;
-  onboardingComplete: boolean;
   readingTestStage: "intro" | "reading" | "questions" | "results";
   readingTime: number;
   startTime: number;
@@ -25,10 +29,6 @@ export type OnboardingType = {
   // readingGoal?: string;
   // dailyTime?: string;
   // baselineWPM?: number;
-  // baselineComprehension?: number;
-  // currentWPM?: number;
-  // currentComprehension?: number;
-  // level?: number;
   // exercisesCompleted?: number;
 };
 

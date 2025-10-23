@@ -38,14 +38,14 @@ export function useOnboardingReadingTest() {
     const correctAnswers = answers.filter(
       (answer, index) => answer === PASSAGE.questions[index].correct,
     ).length;
-    const comprehensionScore = Math.round(
+    const baselineComprehension = Math.round(
       (correctAnswers / PASSAGE.questions.length) * 100,
     );
-    const averageWPM = Math.round((PASSAGE.wordCount / readingTime) * 60);
+    const baseLineWPM = Math.round((PASSAGE.wordCount / readingTime) * 60);
 
     updateProfile({
-      comprehensionScore,
-      averageWPM,
+      baselineComprehension,
+      baseLineWPM,
       focusScore: 92,
       xpEarned: xpEarned ? xpEarned + 150 : 150,
       readingTestStage: "results",

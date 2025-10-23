@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { AnimatePresence } from "motion/react";
 import {
   Button,
@@ -9,13 +9,29 @@ import {
   type Preferences,
   QuickDrill,
   Progress,
+  PendingPage,
 } from "@/components";
 import { Card } from "@/components/ui/card";
 
 import { useOnboardingStore } from "@/store";
+import { supabaseService } from "@/integration";
 
 export const Route = createFileRoute("/onboarding")({
   component: RouteComponent,
+  pendingComponent: PendingPage,
+  beforeLoad: async ({ context }) => {
+    if (!context.session) {
+      throw redirect({ to: "/auth" });
+    }
+    const serverData = await supabaseService.getUserOnboardingStatus();
+    const storeData = useOnboardingStore.getState().onboardingComplete;
+
+    const onboardingComplete = serverData || storeData;
+
+    if (onboardingComplete) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
 });
 
 function RouteComponent() {
@@ -33,17 +49,23 @@ function RouteComponent() {
     });
   };
 
+  const handleSubmission = async () => {
+    updateProfile({
+      streakDays: 1,
+      onboardingComplete: true,
+      currentStep: 0,
+    });
+
+    await supabaseService.insertUser();
+
+    route.navigate({ to: "/dashboard" });
+  };
+
   const handleNext = () => {
     if (currentStep < totalSteps - 1) {
       updateProfile({ currentStep: currentStep + 1 });
     } else {
-      updateProfile({
-        streakDays: 1,
-        onboardingComplete: true,
-        currentStep: 0,
-      });
-      route.navigate({ to: "/dashboard" });
-      console.log({ profile: onboarding, name, currentStep });
+      handleSubmission();
     }
   };
 

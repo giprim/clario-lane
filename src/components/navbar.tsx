@@ -20,7 +20,7 @@ const AnimateLink = motion.create(Link);
 const Navbar = () => {
   const { setTheme, userTheme } = useTheme();
   const logout = useLogout();
-  const { user } = useRouteContext({ from: "__root__" });
+  const { session } = useRouteContext({ from: "__root__" });
 
   return (
     <nav
@@ -37,7 +37,7 @@ const Navbar = () => {
           ClarioLane
         </AnimateLink>
         <div className="flex gap-4 items-center">
-          {!user ? (
+          {!session ? (
             <Button asChild>
               <AnimateLink to="/auth">Sign in</AnimateLink>
             </Button>

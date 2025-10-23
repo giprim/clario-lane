@@ -1,4 +1,6 @@
 import AuthPage from "@/pages/auth/auth-page";
+import { useOnboardingStore } from "@/store";
+
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { BookOpen } from "lucide-react";
 import { motion } from "motion/react";
@@ -6,7 +8,12 @@ import { motion } from "motion/react";
 export const Route = createFileRoute("/auth")({
   component: RouteComponent,
   beforeLoad: async ({ context }) => {
-    if (context.user) throw redirect({ to: "/dashboard" });
+    const { session } = context;
+    if (session) {
+      const { email } = session.user;
+      useOnboardingStore.setState({ email });
+      throw redirect({ to: "/onboarding" });
+    }
   },
 });
 

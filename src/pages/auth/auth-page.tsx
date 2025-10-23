@@ -34,7 +34,6 @@ export default function AuthPage({
   const route = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const path = authState === "signin" ? "/dashboard" : "/onboarding";
   const successMessage =
     authState === "signin"
       ? "Logged in successfully"
@@ -57,13 +56,13 @@ export default function AuthPage({
         updateProfile({ ...value });
 
         if (authState === "signup") {
-          await supabaseService.signUp(value.email, value.password);
+          await supabaseService.signUp(value.email, value.password, value.name);
         }
         if (authState === "signin") {
           await supabaseService.signIn(value.email, value.password);
         }
         toast.success(successMessage);
-        route.navigate({ to: path });
+        route.navigate({ to: "/onboarding" });
       } catch (error) {
         catchError(error);
       }

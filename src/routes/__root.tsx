@@ -4,18 +4,15 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import { Toaster } from "sonner";
 import Navbar from "@/components/navbar";
-import { supabaseClient } from "@/integration";
-import { Footer, ThemeProvider } from "@/components";
+import { supabaseService } from "@/integration";
+import { Footer, PendingPage, ThemeProvider } from "@/components";
 
 export const Route = createRootRoute({
   component: RootComponent,
+  pendingComponent: PendingPage,
   beforeLoad: async () => {
-    const { data: user, error } = await supabaseClient.auth.getUser();
-    if (error) {
-      console.error(error);
-      return { user: null };
-    }
-    return { user };
+    const session = await supabaseService.getSession();
+    return { session };
   },
 });
 
