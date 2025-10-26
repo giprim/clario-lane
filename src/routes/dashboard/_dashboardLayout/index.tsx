@@ -35,8 +35,6 @@ export const Route = createFileRoute("/dashboard/_dashboardLayout/")({
 export function RouteComponent() {
   const userProfile = useUserProfileStore();
 
-  console.log({ userProfile });
-
   // Mock data for the chart
   const progressData = [
     { day: "Day 1", wpm: userProfile.baseLineWPM },

@@ -13,8 +13,10 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardLayoutRouteImport } from './routes/dashboard/_dashboardLayout'
+import { Route as DashboardDashboardLayoutIndexRouteImport } from './routes/dashboard/_dashboardLayout/index'
+import { Route as DashboardDashboardLayoutProgressRouteImport } from './routes/dashboard/_dashboardLayout/progress'
 import { Route as DashboardDashboardLayoutPracticeRouteImport } from './routes/dashboard/_dashboardLayout/practice'
-import { Route as DashboardDashboardLayoutOverviewRouteImport } from './routes/dashboard/_dashboardLayout'
+import { Route as DashboardDashboardLayoutChallengesRouteImport } from './routes/dashboard/_dashboardLayout/challenges'
 
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
@@ -36,16 +38,28 @@ const DashboardDashboardLayoutRoute =
     id: '/_dashboardLayout',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardDashboardLayoutIndexRoute =
+  DashboardDashboardLayoutIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardDashboardLayoutRoute,
+  } as any)
+const DashboardDashboardLayoutProgressRoute =
+  DashboardDashboardLayoutProgressRouteImport.update({
+    id: '/progress',
+    path: '/progress',
+    getParentRoute: () => DashboardDashboardLayoutRoute,
+  } as any)
 const DashboardDashboardLayoutPracticeRoute =
   DashboardDashboardLayoutPracticeRouteImport.update({
     id: '/practice',
     path: '/practice',
     getParentRoute: () => DashboardDashboardLayoutRoute,
   } as any)
-const DashboardDashboardLayoutOverviewRoute =
-  DashboardDashboardLayoutOverviewRouteImport.update({
-    id: '/overview',
-    path: '/overview',
+const DashboardDashboardLayoutChallengesRoute =
+  DashboardDashboardLayoutChallengesRouteImport.update({
+    id: '/challenges',
+    path: '/challenges',
     getParentRoute: () => DashboardDashboardLayoutRoute,
   } as any)
 
@@ -54,16 +68,19 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
   '/dashboard': typeof DashboardDashboardLayoutRouteWithChildren
-  '/dashboard/overview': typeof DashboardDashboardLayoutOverviewRoute
+  '/dashboard/challenges': typeof DashboardDashboardLayoutChallengesRoute
   '/dashboard/practice': typeof DashboardDashboardLayoutPracticeRoute
+  '/dashboard/progress': typeof DashboardDashboardLayoutProgressRoute
+  '/dashboard/': typeof DashboardDashboardLayoutIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
-  '/dashboard': typeof DashboardDashboardLayoutRouteWithChildren
-  '/dashboard/overview': typeof DashboardDashboardLayoutOverviewRoute
+  '/dashboard/challenges': typeof DashboardDashboardLayoutChallengesRoute
   '/dashboard/practice': typeof DashboardDashboardLayoutPracticeRoute
+  '/dashboard/progress': typeof DashboardDashboardLayoutProgressRoute
+  '/dashboard': typeof DashboardDashboardLayoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,8 +88,10 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
   '/dashboard/_dashboardLayout': typeof DashboardDashboardLayoutRouteWithChildren
-  '/dashboard/_dashboardLayout/overview': typeof DashboardDashboardLayoutOverviewRoute
+  '/dashboard/_dashboardLayout/challenges': typeof DashboardDashboardLayoutChallengesRoute
   '/dashboard/_dashboardLayout/practice': typeof DashboardDashboardLayoutPracticeRoute
+  '/dashboard/_dashboardLayout/progress': typeof DashboardDashboardLayoutProgressRoute
+  '/dashboard/_dashboardLayout/': typeof DashboardDashboardLayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,24 +100,29 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/dashboard'
-    | '/dashboard/overview'
+    | '/dashboard/challenges'
     | '/dashboard/practice'
+    | '/dashboard/progress'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/onboarding'
-    | '/dashboard'
-    | '/dashboard/overview'
+    | '/dashboard/challenges'
     | '/dashboard/practice'
+    | '/dashboard/progress'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/onboarding'
     | '/dashboard/_dashboardLayout'
-    | '/dashboard/_dashboardLayout/overview'
+    | '/dashboard/_dashboardLayout/challenges'
     | '/dashboard/_dashboardLayout/practice'
+    | '/dashboard/_dashboardLayout/progress'
+    | '/dashboard/_dashboardLayout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -137,6 +161,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardLayoutRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/_dashboardLayout/': {
+      id: '/dashboard/_dashboardLayout/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardDashboardLayoutIndexRouteImport
+      parentRoute: typeof DashboardDashboardLayoutRoute
+    }
+    '/dashboard/_dashboardLayout/progress': {
+      id: '/dashboard/_dashboardLayout/progress'
+      path: '/progress'
+      fullPath: '/dashboard/progress'
+      preLoaderRoute: typeof DashboardDashboardLayoutProgressRouteImport
+      parentRoute: typeof DashboardDashboardLayoutRoute
+    }
     '/dashboard/_dashboardLayout/practice': {
       id: '/dashboard/_dashboardLayout/practice'
       path: '/practice'
@@ -144,11 +182,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardLayoutPracticeRouteImport
       parentRoute: typeof DashboardDashboardLayoutRoute
     }
-    '/dashboard/_dashboardLayout/overview': {
-      id: '/dashboard/_dashboardLayout/overview'
-      path: '/overview'
-      fullPath: '/dashboard/overview'
-      preLoaderRoute: typeof DashboardDashboardLayoutOverviewRouteImport
+    '/dashboard/_dashboardLayout/challenges': {
+      id: '/dashboard/_dashboardLayout/challenges'
+      path: '/challenges'
+      fullPath: '/dashboard/challenges'
+      preLoaderRoute: typeof DashboardDashboardLayoutChallengesRouteImport
       parentRoute: typeof DashboardDashboardLayoutRoute
     }
   }
