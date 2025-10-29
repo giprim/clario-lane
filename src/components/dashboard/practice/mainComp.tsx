@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Card,
@@ -9,12 +8,7 @@ import {
 } from "@/components";
 import { BookOpen, Brain, Eye, Zap, Clock, Target, Play } from "lucide-react";
 import { motion } from "motion/react";
-
-export const Route = createFileRoute("/dashboard/_dashboardLayout/practice")({
-  component: RouteComponent,
-});
-
-export function RouteComponent() {
+export function Practice() {
   // const userProfile = useOnboardingStore();
   const [activeExercise, setActiveExercise] = useState<string | null>(null);
 

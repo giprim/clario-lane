@@ -5,10 +5,11 @@ import {
   Link,
   Outlet,
   redirect,
+  useLocation,
 } from "@tanstack/react-router";
 import { BookOpen, Target, TrendingUp, Trophy } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/dashboard/_dashboardLayout")({
   component: RouteComponent,
@@ -24,16 +25,40 @@ export const Route = createFileRoute("/dashboard/_dashboardLayout")({
   },
 });
 
+const PrimaryDashboardPaths = [
+  "dashboard",
+  "practice",
+  "challenges",
+  "progress",
+];
+
 function RouteComponent() {
-  const [activeTab, setActiveTab] = useState("overview");
+  const pathsArray = useLocation().pathname.split("/");
+  const currentPath = pathsArray[pathsArray.length - 1];
+
+  const [activePathname, setActivePathname] = useState(currentPath);
+
+  useEffect(() => {
+    setActivePathname(currentPath);
+    if (PrimaryDashboardPaths.includes(currentPath)) {
+      setActivePathname(currentPath);
+    } else {
+      let newPath = "";
+      PrimaryDashboardPaths.forEach((path) => {
+        if (pathsArray.includes(path)) newPath = path;
+      });
+      setActivePathname(newPath);
+    }
+  }, [activePathname, currentPath, pathsArray]);
+
   return (
     <div className="min-h-screen ">
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs value={activePathname} className="w-full">
           <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-8">
             <TabsTrigger
               asChild
-              value="overview"
+              value="dashboard"
               className="flex items-center gap-2"
             >
               <Link to="/dashboard">

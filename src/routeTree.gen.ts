@@ -17,10 +17,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardLayoutRouteImport } from './routes/dashboard/_dashboardLayout'
 import { Route as DashboardDashboardLayoutIndexRouteImport } from './routes/dashboard/_dashboardLayout/index'
 import { Route as DashboardDashboardLayoutProgressRouteImport } from './routes/dashboard/_dashboardLayout/progress'
-import { Route as DashboardDashboardLayoutPracticeRouteImport } from './routes/dashboard/_dashboardLayout/practice'
 import { Route as DashboardDashboardLayoutChallengesRouteImport } from './routes/dashboard/_dashboardLayout/challenges'
+import { Route as DashboardDashboardLayoutPracticePracticeLayoutRouteImport } from './routes/dashboard/_dashboardLayout/practice/_practice-layout'
+import { Route as DashboardDashboardLayoutPracticePracticeLayoutIndexRouteImport } from './routes/dashboard/_dashboardLayout/practice/_practice-layout/index'
+import { Route as DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRouteImport } from './routes/dashboard/_dashboardLayout/practice/_practice-layout/speedreading'
 
 const DashboardRouteImport = createFileRoute('/dashboard')()
+const DashboardDashboardLayoutPracticeRouteImport = createFileRoute(
+  '/dashboard/_dashboardLayout/practice',
+)()
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -47,6 +52,12 @@ const DashboardDashboardLayoutRoute =
     id: '/_dashboardLayout',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardDashboardLayoutPracticeRoute =
+  DashboardDashboardLayoutPracticeRouteImport.update({
+    id: '/practice',
+    path: '/practice',
+    getParentRoute: () => DashboardDashboardLayoutRoute,
+  } as any)
 const DashboardDashboardLayoutIndexRoute =
   DashboardDashboardLayoutIndexRouteImport.update({
     id: '/',
@@ -59,17 +70,28 @@ const DashboardDashboardLayoutProgressRoute =
     path: '/progress',
     getParentRoute: () => DashboardDashboardLayoutRoute,
   } as any)
-const DashboardDashboardLayoutPracticeRoute =
-  DashboardDashboardLayoutPracticeRouteImport.update({
-    id: '/practice',
-    path: '/practice',
-    getParentRoute: () => DashboardDashboardLayoutRoute,
-  } as any)
 const DashboardDashboardLayoutChallengesRoute =
   DashboardDashboardLayoutChallengesRouteImport.update({
     id: '/challenges',
     path: '/challenges',
     getParentRoute: () => DashboardDashboardLayoutRoute,
+  } as any)
+const DashboardDashboardLayoutPracticePracticeLayoutRoute =
+  DashboardDashboardLayoutPracticePracticeLayoutRouteImport.update({
+    id: '/_practice-layout',
+    getParentRoute: () => DashboardDashboardLayoutPracticeRoute,
+  } as any)
+const DashboardDashboardLayoutPracticePracticeLayoutIndexRoute =
+  DashboardDashboardLayoutPracticePracticeLayoutIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardDashboardLayoutPracticePracticeLayoutRoute,
+  } as any)
+const DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute =
+  DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRouteImport.update({
+    id: '/speedreading',
+    path: '/speedreading',
+    getParentRoute: () => DashboardDashboardLayoutPracticePracticeLayoutRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -78,9 +100,11 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/dashboard': typeof DashboardDashboardLayoutRouteWithChildren
   '/dashboard/challenges': typeof DashboardDashboardLayoutChallengesRoute
-  '/dashboard/practice': typeof DashboardDashboardLayoutPracticeRoute
   '/dashboard/progress': typeof DashboardDashboardLayoutProgressRoute
   '/dashboard/': typeof DashboardDashboardLayoutIndexRoute
+  '/dashboard/practice': typeof DashboardDashboardLayoutPracticePracticeLayoutRouteWithChildren
+  '/dashboard/practice/speedreading': typeof DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute
+  '/dashboard/practice/': typeof DashboardDashboardLayoutPracticePracticeLayoutIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -88,8 +112,9 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/dashboard': typeof DashboardDashboardLayoutIndexRoute
   '/dashboard/challenges': typeof DashboardDashboardLayoutChallengesRoute
-  '/dashboard/practice': typeof DashboardDashboardLayoutPracticeRoute
   '/dashboard/progress': typeof DashboardDashboardLayoutProgressRoute
+  '/dashboard/practice': typeof DashboardDashboardLayoutPracticePracticeLayoutIndexRoute
+  '/dashboard/practice/speedreading': typeof DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -99,9 +124,12 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_dashboardLayout': typeof DashboardDashboardLayoutRouteWithChildren
   '/dashboard/_dashboardLayout/challenges': typeof DashboardDashboardLayoutChallengesRoute
-  '/dashboard/_dashboardLayout/practice': typeof DashboardDashboardLayoutPracticeRoute
   '/dashboard/_dashboardLayout/progress': typeof DashboardDashboardLayoutProgressRoute
   '/dashboard/_dashboardLayout/': typeof DashboardDashboardLayoutIndexRoute
+  '/dashboard/_dashboardLayout/practice': typeof DashboardDashboardLayoutPracticeRouteWithChildren
+  '/dashboard/_dashboardLayout/practice/_practice-layout': typeof DashboardDashboardLayoutPracticePracticeLayoutRouteWithChildren
+  '/dashboard/_dashboardLayout/practice/_practice-layout/speedreading': typeof DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute
+  '/dashboard/_dashboardLayout/practice/_practice-layout/': typeof DashboardDashboardLayoutPracticePracticeLayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,9 +139,11 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/dashboard'
     | '/dashboard/challenges'
-    | '/dashboard/practice'
     | '/dashboard/progress'
     | '/dashboard/'
+    | '/dashboard/practice'
+    | '/dashboard/practice/speedreading'
+    | '/dashboard/practice/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,8 +151,9 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/dashboard'
     | '/dashboard/challenges'
-    | '/dashboard/practice'
     | '/dashboard/progress'
+    | '/dashboard/practice'
+    | '/dashboard/practice/speedreading'
   id:
     | '__root__'
     | '/'
@@ -131,9 +162,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/_dashboardLayout'
     | '/dashboard/_dashboardLayout/challenges'
-    | '/dashboard/_dashboardLayout/practice'
     | '/dashboard/_dashboardLayout/progress'
     | '/dashboard/_dashboardLayout/'
+    | '/dashboard/_dashboardLayout/practice'
+    | '/dashboard/_dashboardLayout/practice/_practice-layout'
+    | '/dashboard/_dashboardLayout/practice/_practice-layout/speedreading'
+    | '/dashboard/_dashboardLayout/practice/_practice-layout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -180,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardLayoutRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/_dashboardLayout/practice': {
+      id: '/dashboard/_dashboardLayout/practice'
+      path: '/practice'
+      fullPath: '/dashboard/practice'
+      preLoaderRoute: typeof DashboardDashboardLayoutPracticeRouteImport
+      parentRoute: typeof DashboardDashboardLayoutRoute
+    }
     '/dashboard/_dashboardLayout/': {
       id: '/dashboard/_dashboardLayout/'
       path: '/'
@@ -194,13 +235,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardLayoutProgressRouteImport
       parentRoute: typeof DashboardDashboardLayoutRoute
     }
-    '/dashboard/_dashboardLayout/practice': {
-      id: '/dashboard/_dashboardLayout/practice'
-      path: '/practice'
-      fullPath: '/dashboard/practice'
-      preLoaderRoute: typeof DashboardDashboardLayoutPracticeRouteImport
-      parentRoute: typeof DashboardDashboardLayoutRoute
-    }
     '/dashboard/_dashboardLayout/challenges': {
       id: '/dashboard/_dashboardLayout/challenges'
       path: '/challenges'
@@ -208,25 +242,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardLayoutChallengesRouteImport
       parentRoute: typeof DashboardDashboardLayoutRoute
     }
+    '/dashboard/_dashboardLayout/practice/_practice-layout': {
+      id: '/dashboard/_dashboardLayout/practice/_practice-layout'
+      path: '/practice'
+      fullPath: '/dashboard/practice'
+      preLoaderRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutRouteImport
+      parentRoute: typeof DashboardDashboardLayoutPracticeRoute
+    }
+    '/dashboard/_dashboardLayout/practice/_practice-layout/': {
+      id: '/dashboard/_dashboardLayout/practice/_practice-layout/'
+      path: '/'
+      fullPath: '/dashboard/practice/'
+      preLoaderRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutIndexRouteImport
+      parentRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutRoute
+    }
+    '/dashboard/_dashboardLayout/practice/_practice-layout/speedreading': {
+      id: '/dashboard/_dashboardLayout/practice/_practice-layout/speedreading'
+      path: '/speedreading'
+      fullPath: '/dashboard/practice/speedreading'
+      preLoaderRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRouteImport
+      parentRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutRoute
+    }
   }
 }
 
+interface DashboardDashboardLayoutPracticePracticeLayoutRouteChildren {
+  DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute
+  DashboardDashboardLayoutPracticePracticeLayoutIndexRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutIndexRoute
+}
+
+const DashboardDashboardLayoutPracticePracticeLayoutRouteChildren: DashboardDashboardLayoutPracticePracticeLayoutRouteChildren =
+  {
+    DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute:
+      DashboardDashboardLayoutPracticePracticeLayoutSpeedreadingRoute,
+    DashboardDashboardLayoutPracticePracticeLayoutIndexRoute:
+      DashboardDashboardLayoutPracticePracticeLayoutIndexRoute,
+  }
+
+const DashboardDashboardLayoutPracticePracticeLayoutRouteWithChildren =
+  DashboardDashboardLayoutPracticePracticeLayoutRoute._addFileChildren(
+    DashboardDashboardLayoutPracticePracticeLayoutRouteChildren,
+  )
+
+interface DashboardDashboardLayoutPracticeRouteChildren {
+  DashboardDashboardLayoutPracticePracticeLayoutRoute: typeof DashboardDashboardLayoutPracticePracticeLayoutRouteWithChildren
+}
+
+const DashboardDashboardLayoutPracticeRouteChildren: DashboardDashboardLayoutPracticeRouteChildren =
+  {
+    DashboardDashboardLayoutPracticePracticeLayoutRoute:
+      DashboardDashboardLayoutPracticePracticeLayoutRouteWithChildren,
+  }
+
+const DashboardDashboardLayoutPracticeRouteWithChildren =
+  DashboardDashboardLayoutPracticeRoute._addFileChildren(
+    DashboardDashboardLayoutPracticeRouteChildren,
+  )
+
 interface DashboardDashboardLayoutRouteChildren {
   DashboardDashboardLayoutChallengesRoute: typeof DashboardDashboardLayoutChallengesRoute
-  DashboardDashboardLayoutPracticeRoute: typeof DashboardDashboardLayoutPracticeRoute
   DashboardDashboardLayoutProgressRoute: typeof DashboardDashboardLayoutProgressRoute
   DashboardDashboardLayoutIndexRoute: typeof DashboardDashboardLayoutIndexRoute
+  DashboardDashboardLayoutPracticeRoute: typeof DashboardDashboardLayoutPracticeRouteWithChildren
 }
 
 const DashboardDashboardLayoutRouteChildren: DashboardDashboardLayoutRouteChildren =
   {
     DashboardDashboardLayoutChallengesRoute:
       DashboardDashboardLayoutChallengesRoute,
-    DashboardDashboardLayoutPracticeRoute:
-      DashboardDashboardLayoutPracticeRoute,
     DashboardDashboardLayoutProgressRoute:
       DashboardDashboardLayoutProgressRoute,
     DashboardDashboardLayoutIndexRoute: DashboardDashboardLayoutIndexRoute,
+    DashboardDashboardLayoutPracticeRoute:
+      DashboardDashboardLayoutPracticeRouteWithChildren,
   }
 
 const DashboardDashboardLayoutRouteWithChildren =

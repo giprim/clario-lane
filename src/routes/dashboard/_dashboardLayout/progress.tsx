@@ -135,9 +135,9 @@ export function RouteComponent() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-gray-600">Improvement</span>
+              <span className="text-sm">Improvement</span>
             </div>
-            <div className="text-2xl text-indigo-900">
+            <div className="text-2xl text-primary">
               +
               {Math.round(
                 ((userProfile.currentWPM! - userProfile.baseLineWPM!) /
@@ -146,7 +146,7 @@ export function RouteComponent() {
               )}
               %
             </div>
-            <p className="text-sm text-gray-600 mt-1">from baseline</p>
+            <p className="text-sm mt-1">from baseline</p>
           </CardContent>
         </Card>
 
@@ -154,12 +154,12 @@ export function RouteComponent() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-2">
               <Calendar className="w-5 h-5 text-blue-600" />
-              <span className="text-sm text-gray-600">Sessions</span>
+              <span className="text-sm">Sessions</span>
             </div>
-            <div className="text-2xl text-indigo-900">
-              {"userProfile.totalSessions"}
+            <div className="text-2xl text-primary">
+              {userProfile.totalSessions || 0}
             </div>
-            <p className="text-sm text-gray-600 mt-1">total completed</p>
+            <p className="text-sm mt-1">total completed</p>
           </CardContent>
         </Card>
 
@@ -167,12 +167,12 @@ export function RouteComponent() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-2">
               <Flame className="w-5 h-5 text-orange-600" />
-              <span className="text-sm text-gray-600">Best Streak</span>
+              <span className="text-sm">Best Streak</span>
             </div>
-            <div className="text-2xl text-indigo-900">
+            <div className="text-2xl text-primary">
               {userProfile.streakDays} days
             </div>
-            <p className="text-sm text-gray-600 mt-1">current streak</p>
+            <p className="text-sm mt-1">current streak</p>
           </CardContent>
         </Card>
 
@@ -180,12 +180,12 @@ export function RouteComponent() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-3 mb-2">
               <Trophy className="w-5 h-5 text-yellow-600" />
-              <span className="text-sm text-gray-600">Badges</span>
+              <span className="text-sm">Badges</span>
             </div>
-            <div className="text-2xl text-indigo-900">
+            <div className="text-2xl text-primary">
               {badges.filter((b) => b.earned).length}/{badges.length}
             </div>
-            <p className="text-sm text-gray-600 mt-1">earned</p>
+            <p className="text-sm mt-1">earned</p>
           </CardContent>
         </Card>
       </div>
@@ -316,7 +316,7 @@ export function RouteComponent() {
                 >
                   <div className="text-3xl mb-2">{badge.icon}</div>
                   <h3 className="text-sm mb-1">{badge.name}</h3>
-                  <p className="text-xs text-gray-600">{badge.description}</p>
+                  <p className="text-xs">{badge.description}</p>
                   {badge.earned && (
                     <Badge className="mt-2 bg-yellow-500 text-white text-xs">
                       Earned
@@ -368,7 +368,7 @@ export function RouteComponent() {
                     >
                       {milestone.title}
                     </h3>
-                    <p className="text-sm text-gray-600">{milestone.date}</p>
+                    <p className="text-sm">{milestone.date}</p>
                   </div>
                 </div>
               ))}

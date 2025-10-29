@@ -20,3 +20,4 @@ export * from "./tabs";
 export * from "./badge";
 export * from "./avatar";
 export * from "./pending-page";
+export * from "./slider";
