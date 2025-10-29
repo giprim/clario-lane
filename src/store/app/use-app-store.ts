@@ -1,15 +1,15 @@
-import { EXERCISES } from '@/lib'
-import { create } from 'zustand'
+import { EXERCISES } from "@/lib";
+import { create } from "zustand";
 
 type AppStore = {
-  activeExercise: EXERCISES
-}
+  activeExercise: EXERCISES;
+};
 
 type AppStoreActions = {
-  setActiveExercise: (exerciseId: EXERCISES) => void
-}
+  setActiveExercise: (exerciseId: EXERCISES) => void;
+};
 
 export const useAppStore = create<AppStore & AppStoreActions>((set) => ({
-  activeExercise: EXERCISES.NONE,
+  activeExercise: EXERCISES.SPEED_READING,
   setActiveExercise: (exerciseId) => set({ activeExercise: exerciseId }),
-}))
+}));

@@ -1,61 +1,61 @@
-import { TrainingStep } from '@/lib'
-import { create } from 'zustand'
+import { ExerciseStep } from "@/lib";
+import { create } from "zustand";
 
 export type Question = {
-  id: string
-  question: string
-  options: string[]
-  correctIndex: number
-}
+  id: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+};
 
 export type Passage = {
-  id: string
-  text: string
-  title: string
-  questions: Question[]
-}
+  id: string;
+  text: string;
+  title: string;
+  questions: Question[];
+};
 
 export type SpeedReadingStore = {
-  text: string
-  currentStep: TrainingStep
-  wordsRead?: number
-  duration?: number
-  wpm: number
+  text: string;
+  currentStep: ExerciseStep;
+  wordsRead?: number;
+  duration?: number;
+  wpm: number;
 
-  correctAnswers: number
-  totalQuestions: number
-  comprehension: number
-  passage: Passage | null
-  loading: boolean
-}
+  correctAnswers: number;
+  totalQuestions: number;
+  comprehension: number;
+  passage: Passage | null;
+  loading: boolean;
+};
 
 type SpeedReadingStoreActions = {
-  setStep: (step: TrainingStep) => void
+  setStep: (step: ExerciseStep) => void;
   setCompleted: (
-    values: Pick<SpeedReadingStore, 'wordsRead' | 'duration' | 'wpm'>
-  ) => void
-  setText: (text: string) => void
-  setWpm: (wpm: number) => void
-  updateStore: (values: Partial<SpeedReadingStore>) => void
-}
+    values: Pick<SpeedReadingStore, "wordsRead" | "duration" | "wpm">,
+  ) => void;
+  setText: (text: string) => void;
+  setWpm: (wpm: number) => void;
+  updateStore: (values: Partial<SpeedReadingStore>) => void;
+};
 
 export const useSpeedReadingStore = create<
   SpeedReadingStore & SpeedReadingStoreActions
 >((set) => ({
-  text: '',
+  text: "",
   wpm: 200,
-  currentStep: TrainingStep.Reading,
+  currentStep: ExerciseStep.Reading,
   correctAnswers: 0,
   totalQuestions: 0,
   comprehension: 0,
   passage: null,
   loading: false,
 
-  setStep: (step: TrainingStep) => set({ currentStep: step }),
+  setStep: (step: ExerciseStep) => set({ currentStep: step }),
   setCompleted: (
-    values: Pick<SpeedReadingStore, 'wordsRead' | 'duration' | 'wpm'>
+    values: Pick<SpeedReadingStore, "wordsRead" | "duration" | "wpm">,
   ) => set(values),
   setText: (text: string) => set({ text }),
   setWpm: (wpm: number) => set({ wpm }),
   updateStore: (values: Partial<SpeedReadingStore>) => set(values),
-}))
+}));
