@@ -11,7 +11,7 @@ const steps = {
 };
 
 export const SpeedReadingTraining = () => {
-  const { currentStep, passage } = useSpeedReadingStore();
-  console.log({ passage, currentStep });
+  const { currentStep } = useSpeedReadingStore();
+
   return <div>{steps[currentStep]}</div>;
 };
