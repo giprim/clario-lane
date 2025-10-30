@@ -1,96 +1,96 @@
-import * as React from "react";
+import * as React from 'react'
 
-import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { cn } from '@/lib/utils'
+import { motion } from 'motion/react'
 
-function Card_({ className, ...props }: React.ComponentProps<"div">) {
+function Card_({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card"
+      data-slot='card'
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
-        className,
+        'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
+        className
       )}
       {...props}
     />
-  );
+  )
 }
-const Card = motion(Card_);
+const Card = motion.create(Card_)
 
-function CardHeader_({ className, ...props }: React.ComponentProps<"div">) {
+function CardHeader_({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card-header"
+      data-slot='card-header'
       className={cn(
-        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
-        className,
+        '@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6',
+        className
       )}
       {...props}
     />
-  );
+  )
 }
-const CardHeader = motion(CardHeader_);
+const CardHeader = motion.create(CardHeader_)
 
-function CardTitle_({ className, ...props }: React.ComponentProps<"div">) {
+function CardTitle_({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card-title"
-      className={cn("leading-none font-semibold", className)}
+      data-slot='card-title'
+      className={cn('leading-none font-semibold', className)}
       {...props}
     />
-  );
+  )
 }
-const CardTitle = motion(CardTitle_);
+const CardTitle = motion.create(CardTitle_)
 
 function CardDescription_({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      data-slot='card-description'
+      className={cn('text-muted-foreground text-sm', className)}
       {...props}
     />
-  );
+  )
 }
-const CardDescription = motion(CardDescription_);
+const CardDescription = motion.create(CardDescription_)
 
-function CardAction_({ className, ...props }: React.ComponentProps<"div">) {
+function CardAction_({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card-action"
+      data-slot='card-action'
       className={cn(
-        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
-        className,
+        'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
+        className
       )}
       {...props}
     />
-  );
+  )
 }
-const CardAction = motion(CardAction_);
+const CardAction = motion.create(CardAction_)
 
-function CardContent_({ className, ...props }: React.ComponentProps<"div">) {
+function CardContent_({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card-content"
-      className={cn("px-6", className)}
+      data-slot='card-content'
+      className={cn('px-6', className)}
       {...props}
     />
-  );
+  )
 }
-const CardContent = motion(CardContent_);
+const CardContent = motion.create(CardContent_)
 
-function CardFooter_({ className, ...props }: React.ComponentProps<"div">) {
+function CardFooter_({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card-footer"
-      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      data-slot='card-footer'
+      className={cn('flex items-center px-6 [.border-t]:pt-6', className)}
       {...props}
     />
-  );
+  )
 }
-const CardFooter = motion(CardFooter_);
+const CardFooter = motion.create(CardFooter_)
 
 export {
   Card,
@@ -100,4 +100,4 @@ export {
   CardAction,
   CardDescription,
   CardContent,
-};
+}
