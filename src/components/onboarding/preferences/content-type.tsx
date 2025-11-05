@@ -1,47 +1,46 @@
-import { BookOpen, FileText, GraduationCap, Newspaper } from "lucide-react";
-import { OptionCard } from "@/components/ui/option-card";
-import { StepContainer } from "@/components/ui/step-container";
-import type { PreferencesType } from "./type";
+import { BookOpen, FileText, GraduationCap, Newspaper } from 'lucide-react'
+import { OptionCard } from '@/components/ui/option-card'
+import { StepContainer } from '@/components/ui/step-container'
+import type { PreferencesType } from './type'
+import type { ContentTypesType } from '@/lib'
+import type { ReactNode } from 'react'
+import { getIcon } from './getIcon'
+
+type content = 'non-fiction' | 'fictions' | 'news' | 'technology'
+
+const Icons: Record<content, ReactNode> = {
+  fictions: <BookOpen className='w-6 h-6' />,
+  'non-fiction': <FileText className='w-6 h-6' />,
+  news: <Newspaper className='w-6 h-6' />,
+  technology: <GraduationCap className='w-6 h-6' />,
+}
 
 type Props = {
-	contentTypes: string[];
-	toggleSelection: (category: PreferencesType, value: string) => void;
-};
+  selections: string[]
+  contentType: ContentTypesType[]
+  toggleSelection: (category: PreferencesType, value: string) => void
+}
 
-export function ContentType({ contentTypes, toggleSelection }: Props) {
-	return (
-		<StepContainer key="step-1">
-			<h3 className="mb-6 text-center">What do you like to read?</h3>
-			<div className="grid sm:grid-cols-2 gap-4">
-				<OptionCard
-					icon={<BookOpen className="w-6 h-6" />}
-					title="Fiction"
-					description="Novels and stories"
-					selected={contentTypes.includes("fiction")}
-					onClick={() => toggleSelection("contentTypes", "fiction")}
-				/>
-				<OptionCard
-					icon={<FileText className="w-6 h-6" />}
-					title="Nonfiction"
-					description="Educational and informative"
-					selected={contentTypes.includes("nonfiction")}
-					onClick={() => toggleSelection("contentTypes", "nonfiction")}
-				/>
-				<OptionCard
-					icon={<GraduationCap className="w-6 h-6" />}
-					title="Technical"
-					description="Code, documentation, research"
-					selected={contentTypes.includes("technical")}
-					onClick={() => toggleSelection("contentTypes", "technical")}
-				/>
-				<OptionCard
-					icon={<Newspaper className="w-6 h-6" />}
-					title="News"
-					description="Articles and journalism"
-					selected={contentTypes.includes("news")}
-					onClick={() => toggleSelection("contentTypes", "news")}
-				/>
-			</div>
-		</StepContainer>
-	);
+export function ContentType({
+  selections,
+  contentType,
+  toggleSelection,
+}: Props) {
+  return (
+    <StepContainer key='step-1'>
+      <h3 className='mb-6 text-center'>What do you like to read?</h3>
+      <div className='grid sm:grid-cols-2 gap-4'>
+        {contentType.map(({ content, id, description }) => (
+          <OptionCard
+            key={id}
+            icon={getIcon(Icons, content.toLowerCase() as content)}
+            title={content}
+            description={description}
+            selected={selections.includes(content)}
+            onClick={() => toggleSelection('contentTypes', content)}
+          />
+        ))}
+      </div>
+    </StepContainer>
+  )
 }

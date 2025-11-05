@@ -17,6 +17,7 @@ import { Card } from '@/components/ui/card'
 import { useOnboardingStore, useUserProfileStore } from '@/store'
 import { supabaseService } from '@/integration'
 import Billing from '@/components/onboarding/billing'
+import type { OnboardingPreferences } from '@/lib'
 
 export const Route = createFileRoute('/onboarding/_onboardingLayout/')({
   component: RouteComponent,
@@ -37,6 +38,17 @@ export const Route = createFileRoute('/onboarding/_onboardingLayout/')({
       throw redirect({ to: '/dashboard' })
     }
   },
+  loader: async (): Promise<OnboardingPreferences> => {
+    // You can fetch any data needed for the onboarding layout here
+
+    const challenges = await supabaseService.getChallenges()
+    const contentTypes = await supabaseService.getContentTypes()
+    const goals = await supabaseService.getGoals()
+
+    if (challenges && contentTypes && goals) {
+      return { challenges, contentTypes, goals }
+    } else return { challenges: [], contentTypes: [], goals: [] }
+  },
 })
 
 function RouteComponent() {
@@ -44,6 +56,10 @@ function RouteComponent() {
     useOnboardingStore()
   const progress = ((currentStep + 1) / totalSteps) * 100
   const route = useRouter()
+
+  const { challenges, contentTypes, goals } = Route.useLoaderData()
+
+  console.log({ challenges, contentTypes, goals })
 
   const toggleSelection = (category: keyof Preferences, value: string) => {
     updateProfile({
@@ -120,18 +136,24 @@ function RouteComponent() {
       <AnimatePresence mode='wait'>
         {currentStep === 0 && (
           <Challenges
-            challenges={onboarding.challenges}
+            challenges={challenges}
+            selections={onboarding.challenges}
             toggleSelection={toggleSelection}
           />
         )}
         {currentStep === 1 && (
           <ContentType
-            contentTypes={onboarding.contentTypes}
+            contentType={contentTypes}
+            selections={onboarding.contentTypes}
             toggleSelection={toggleSelection}
           />
         )}
         {currentStep === 2 && (
-          <Goals goals={onboarding.goals} toggleSelection={toggleSelection} />
+          <Goals
+            selections={onboarding.goals}
+            goals={goals}
+            toggleSelection={toggleSelection}
+          />
         )}
       </AnimatePresence>
 

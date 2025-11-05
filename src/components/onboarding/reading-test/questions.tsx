@@ -39,8 +39,9 @@ export function Questions() {
           onValueChange={(value) => handleAnswerQuestion(parseInt(value))}>
           <div className='space-y-3'>
             {currentQ.options.map((option, index) => (
-              <div
+              <Label
                 key={option}
+                htmlFor={`option-${index}`}
                 className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-colors ${
                   answers[currentQuestion] === index
                     ? 'border-primary bg-primary/5'
@@ -50,12 +51,8 @@ export function Questions() {
                   value={index.toString()}
                   id={`option-${index}`}
                 />
-                <Label
-                  htmlFor={`option-${index}`}
-                  className='flex-1 cursor-pointer'>
-                  {option}
-                </Label>
-              </div>
+                <span className='flex-1 cursor-pointer'>{option}</span>
+              </Label>
             ))}
           </div>
         </RadioGroup>

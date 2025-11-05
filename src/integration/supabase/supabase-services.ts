@@ -144,6 +144,38 @@ class SupabaseService {
     }
   }
 
+  async getChallenges() {
+    const { data, error } = await this.supabase
+      .from("challenges")
+      .select("*");
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  }
+
+  async getContentTypes() {
+    const { data, error } = await this.supabase
+      .from("content_types")
+      .select("*")
+      .in("content", ["technology", "non-fiction", "fictions", "news"]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  }
+
+  async getGoals() {
+    const { data, error } = await this.supabase.from("goals").select("*");
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
+  }
+
   async initiateSubscription(type: string) {
     this.supabase.functions.invoke("subscription", {
       body: {
