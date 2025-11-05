@@ -24,27 +24,27 @@ function RouteComponent() {
       {/* Progress Bar */}
       <div className='mb-8'>
         <div className='flex justify-between mb-2 text-sm text-muted-foreground'>
-          {currentStep > 0 ? (
-            <Button
-              size={'sm'}
-              variant='outline'
-              onClick={() => updateProfile({ currentStep: currentStep - 1 })}>
-              <ArrowLeft />
-              Back
-            </Button>
-          ) : (
-            <div></div>
-          )}
           <div className='flex gap-2 items-center'>
+            {currentStep > 0 ? (
+              <Button
+                size={'sm'}
+                variant='ghost'
+                onClick={() => updateProfile({ currentStep: currentStep - 1 })}>
+                <ArrowLeft />
+                Back
+              </Button>
+            ) : null}
             {canSkip ? (
               <Button
                 size='sm'
                 variant={'ghost'}
                 onClick={onSkipNextStep}
                 className='flex items-center gap-2'>
-                Skip step <ArrowRight />
+                Skip <ArrowRight />
               </Button>
             ) : null}
+          </div>
+          <div className='flex gap-2 items-center'>
             <span>
               Step {currentStep + 1} of {totalSteps}
             </span>

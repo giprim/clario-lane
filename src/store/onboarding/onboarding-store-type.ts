@@ -1,32 +1,32 @@
 export type OnboardingType = {
   name?: string;
   email?: string;
-  dateOfBirth?: string | Date;
-  achievements: boolean;
   baseLineWPM?: number;
-  badges?: string[];
+  baselineComprehension?: number;
   goals: string[];
   contentTypes: string[];
   challenges: string[];
   currentComprehensionScore: number;
+  onboardingComplete: boolean;
+  currentWPM?: number;
+  achievements: boolean;
+  badges?: string[];
+
+  dateOfBirth?: string | Date;
   focusScore?: number;
   dailyReminder: boolean;
   weeklyProgress: boolean;
   streakDays?: number;
   xpEarned?: number;
-  currentWPM?: number;
   level?: number;
-  baselineComprehension?: number;
-  onboardingComplete: boolean;
-  isSubmitting: boolean;
 
+  isSubmitting: boolean;
   currentStep: number;
   readingTestStage: "intro" | "reading" | "questions" | "results";
   readingTime: number;
   startTime: number;
   totalSessions?: number;
-  totalSteps: number
-
+  totalSteps: number;
   // readingGoal?: string;
   // dailyTime?: string;
   // baselineWPM?: number;

@@ -13,7 +13,6 @@ import {
 } from 'lucide-react'
 
 import { Link } from '@tanstack/react-router'
-import PricingCard from '@/components/pricingCard'
 
 export function LandingPage() {
   const [readerCount, setReaderCount] = useState(30000)
@@ -200,47 +199,6 @@ export function LandingPage() {
           />
         </div>
       </motion.div>
-
-      {/* Final CTA
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.1 }}
-        className="text-center max-w-2xl px-4 pb-16 mx-auto"
-      >
-        <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 border rounded-2xl p-12">
-          <h2 className="mb-4">Ready to Transform Your Reading?</h2>
-          <p className="text-muted-foreground mb-6">
-            Join thousands of readers who've doubled their speed while
-            maintaining comprehension
-          </p>
-
-          <Button asChild size="lg" variant={"default"}>
-            <Link to="/">Start Your Free Test Now</Link>
-          </Button>
-          <p className="text-xs text-muted-foreground mt-4">
-            No credit card required • 5-minute assessment • Instant results
-          </p>
-        </div>
-      </motion.div> */}
-
-      <PricingCard
-        price='8'
-        title='Plus'
-        // currency='N'
-        // frequency='Monthly'
-        ctaLabel='Activate'
-        popular
-        features={[
-          'Unlimited speed reading exercises',
-          'Personalized AI coaching',
-          'Detailed progress analytics',
-          'Daily reading goals & reminders',
-          'Access to advanced RSVP training',
-          'Focus building exercises',
-        ]}
-        onCta={() => {}}
-      />
 
       {/* Stats Section */}
       <motion.section

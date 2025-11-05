@@ -3,8 +3,8 @@ import { logServerError } from "@/lib";
 import {
   initialUserProfile,
   useOnboardingStore,
-  useUserProfileStore,
   type UserProfileType,
+  useUserProfileStore,
 } from "@/store";
 import { createClient } from "@supabase/supabase-js";
 
@@ -144,12 +144,14 @@ class SupabaseService {
     }
   }
 
-  async initiateSubscription() {
-    this.supabase.functions.invoke('subscription', {
-      
-    })
+  async initiateSubscription(type: string) {
+    this.supabase.functions.invoke("subscription", {
+      body: {
+        name: "ClarioLane User",
+        type,
+      },
+    });
   }
-
 }
 
 export const supabaseService = new SupabaseService();

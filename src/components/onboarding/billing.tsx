@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PricingCard from '@/components/pricingCard'
 import { Switch } from '..'
 import { useRouteContext } from '@tanstack/react-router'
+import { supabaseService } from '@/integration'
 
 type PricingPlan = {
   title: string
@@ -52,12 +53,16 @@ export default function Billing() {
 
   const currency = userCountryCode === 'NG' ? 'NGN' : 'USD'
 
-  const onSelect = (plan: string) => {
-    // simple handler - replace with navigation / checkout logic
-    window.alert(`Selected ${plan} (${interval})`)
-  }
-
   const prices = countryPricingMap[userCountryCode]
+
+  const handleSubscription = async (type: string) => {
+    // Implement subscription logic here
+    const res = await supabaseService.initiateSubscription(type)
+
+    console.log({ res })
+
+    return
+  }
 
   return (
     <div className='max-w-2xl mx-auto w-full'>
@@ -97,7 +102,7 @@ export default function Billing() {
             badge='Popular'
             popular
             ctaLabel='Start'
-            onCta={() => onSelect('Pro')}
+            onCta={() => handleSubscription('Pro')}
           />
         ))}
       </div>

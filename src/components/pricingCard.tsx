@@ -29,7 +29,7 @@ export type PricingCardProps = {
 export default function PricingCard({
   title,
   price,
-  currency = '$',
+  currency = 'USD',
   frequency = 'mo',
   description,
   badge,

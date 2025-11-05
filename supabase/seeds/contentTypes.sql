@@ -1,0 +1,15 @@
+insert into content_types (content, description) values
+('fictions', 'fantasy, mystery, romance, thriller, sci-fi etc.'),
+('non-fiction', 'biography, self-help, cookbooks, history books'),
+('science', 'physics, biology, chemistry, astronomy'),
+('history', 'world wars, ancient civilizations, medieval times'),
+('technology', 'programming, AI, gadgets, software development'),
+('art', 'painting, sculpture, photography, digital art'),
+('culture', 'traditions, customs, festivals, lifestyle'),
+('business', 'entrepreneurship, finance, marketing, management'),
+('health', 'fitness, nutrition, mental health, wellness'),
+('education', 'learning resources, tutorials, courses, academic'),
+('news', 'current events, politics, world news, local news'),
+('travel', 'destinations, adventures, guides, tips'),
+('sports', 'football, basketball, tennis, athletics'),
+('entertainment', 'movies, music, games, shows');
