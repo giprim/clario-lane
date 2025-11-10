@@ -5,10 +5,12 @@ import { supabaseService } from "~supabase/clientServices";
 export const challengeRequestKey = "challenges";
 
 export const challengeRequest = queryOptions({
-  queryKey: ["challenges"],
+  queryKey: [challengeRequestKey],
   queryFn: async () => {
-    return await supabaseService
-      .getChallenges()
-      .then((data) => data as ChallengesType[]);
+    const { data } = await supabaseService.supabase
+      .from("challenges")
+      .select("*");
+    return data as ChallengesType[];
   },
+  staleTime: "static",
 });

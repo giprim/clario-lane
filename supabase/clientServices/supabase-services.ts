@@ -1,20 +1,14 @@
 import { clientEnv } from "@/config/env";
 import { logServerError } from "@/lib";
-import {
-  initialUserProfile,
-  OnboardingSchema,
-  useOnboardingStore,
-  type UserProfileType,
-  useUserProfileStore,
-} from "@/store";
+import type { UserTable } from "@/types";
 import { createClient } from "@supabase/supabase-js";
-import { apiInstance } from "../../src/integration/api-instance";
-import type { SubscriptionRequest } from "@/types";
+
+import type { Database } from "~supabase/supabase_types";
 
 class SupabaseService {
   public supabase;
   constructor() {
-    this.supabase = createClient(
+    this.supabase = createClient<Database>(
       clientEnv.VITE_SUPABASE_URL,
       clientEnv.VITE_SUPABASE_ANON_KEY,
     );
@@ -65,134 +59,52 @@ class SupabaseService {
     });
 
     if (error) {
-      throw new Error(error.message);
-    }
-    return data;
-  }
-
-  public async getSession() {
-    try {
-      const { data, error } = await this.supabase.auth.getSession();
-      if (error) {
-        throw error;
-      }
-      return data.session;
-    } catch (error) {
-      return logServerError(error);
-    }
-  }
-
-  public async getUser() {
-    try {
-      const { error, data } = await this.supabase
-        .from("users")
-        .select("*")
-        .single();
-
-      if (error) {
-        throw error;
-      }
-      useUserProfileStore.setState(data as UserProfileType);
-      return data;
-    } catch (error) {
-      useUserProfileStore.setState(initialUserProfile);
-      return logServerError(error);
-    }
-  }
-
-  public async insertUser() {
-    try {
-      const store = useOnboardingStore.getState();
-      const { success, error: zodError } = await OnboardingSchema
-        .safeParseAsync(store);
-
-      if (!success) throw zodError;
-
-      const { error } = await this.supabase.from("users").insert({});
-      //   {
-      //   name: store.name,
-      //   email: store.email,
-      //   dateOfBirth: store.date_of_birth,
-      //   achievements: store.achievements,
-      //   baseLineWPM: store.baseline_wpm,
-      //   badges: store.badges,
-      //   goals: store.goals,
-      //   contentTypes: store.content_type,
-      //   challenges: store.challenges,
-      //   currentComprehensionScore: store.current_comprehension_score,
-      //   focusScore: store.focus_score,
-      //   dailyReminder: store.daily_reminder,
-      //   weeklyProgress: store.weekly_summary,
-      //   streakDays: store.streak_days,
-      //   xpEarned: store.xp_earned,
-      //   currentWPM: store.baseline_wpm,
-      //   level: store.level,
-      //   baselineComprehension: store.baseline_comprehension,
-      //   currentComprehension: store.current_comprehension_score,
-      //   onboardingComplete: store.onboarding_completed,
-      // }
-
-      if (error) {
-        throw error;
-      }
-
-      const res = await this.getUser();
-      if (res) {
-        useOnboardingStore.setState({
-          current_step: 0,
-          isSubmitting: false,
-        });
-        useUserProfileStore.setState({
-          onboardingComplete: store.onboarding_completed,
-        });
-      }
-
+      logServerError(error);
       return;
-    } catch (error) {
-      return logServerError(error);
     }
+    return data;
   }
 
-  async getChallenges() {
-    const { data, error } = await this.supabase
-      .from("challenges")
-      .select("*");
+  async getUser() {
+    const { data, error } = await supabaseService.supabase.from("users").select(
+      "*",
+    )
+      .single();
 
     if (error) {
-      throw new Error(error.message);
+      logServerError(error.message);
+      return;
     }
     return data;
   }
 
-  async getContentTypes() {
-    const { data, error } = await this.supabase
-      .from("content_types")
-      .select("*")
-      .in("content", ["technology", "non-fiction", "fictions", "news"]);
+  async getSession() {
+    const { data: { session }, error } = await supabaseService.supabase.auth
+      .getSession();
 
     if (error) {
-      throw new Error(error.message);
+      logServerError(error.message);
     }
-    return data;
+
+    return session;
   }
 
-  async getGoals() {
-    const { data, error } = await this.supabase.from("goals").select("*");
-
-    if (error) {
-      throw new Error(error.message);
-    }
-    return data;
-  }
-
-  async getUserCurrency() {
-    const { data } = await apiInstance.get("subscription/user-currency");
-    return data;
-  }
-
-  async initiateSubscription(params: SubscriptionRequest) {
-    const { data } = await apiInstance.post("subscription/initialize", params);
-    return data;
+  channel(callback: (payload: UserTable) => void) {
+    return this.supabase.channel("changes", {
+      config: {
+        broadcast: {
+          ack: true,
+        },
+      },
+    }).on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "users",
+      },
+      (payload) => callback(payload.new as UserTable),
+    ).subscribe();
   }
 }
 

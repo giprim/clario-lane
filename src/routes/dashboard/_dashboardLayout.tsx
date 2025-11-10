@@ -1,5 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from '@/components'
-import { useUserProfileStore } from '@/store'
+import { useOnboardingFlow } from '@/store'
 import {
   createFileRoute,
   Link,
@@ -14,12 +14,17 @@ import { useEffect, useState } from 'react'
 export const Route = createFileRoute('/dashboard/_dashboardLayout')({
   component: RouteComponent,
   beforeLoad: async ({ context }) => {
-    if (!context.session) {
+    const { session, user } = context
+
+    if (!session) {
       throw redirect({ to: '/auth' })
     }
 
-    const { onboardingComplete } = useUserProfileStore.getState()
-    if (!onboardingComplete) {
+    if (!user || !user?.onboarding_completed)
+      throw redirect({ to: '/onboarding' })
+
+    if (!user?.is_subscribed) {
+      useOnboardingFlow.setState({ current_step: 7 })
       throw redirect({ to: '/onboarding' })
     }
   },

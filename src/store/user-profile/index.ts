@@ -3,26 +3,24 @@ import { create } from "zustand";
 export type UserProfileType = {
   name?: string;
   email?: string;
-  dateOfBirth?: string | Date;
-  achievements: boolean;
-  baseLineWPM?: number;
-  badges?: string[];
+  baseline_wpm?: number;
+  baseline_comprehension?: number;
   goals: string[];
-  contentTypes: string[];
+  content_type: string[];
   challenges: string[];
-  currentComprehensionScore?: number;
-  focusScore?: number;
-  dailyReminder: boolean;
-  weeklyProgress: boolean;
-  streakDays?: number;
-  xpEarned?: number;
-  currentWPM: number;
+  current_comprehension_score?: number;
+  onboarding_completed: boolean;
+  current_wpm: number;
+  achievements: boolean;
+  badges?: string[];
+  date_of_birth?: string | Date;
+  focus_score?: number;
+  daily_reminder: boolean;
+  weekly_summary: boolean;
+  streak_days?: number;
+  xp_earned?: number;
   level?: number;
-  baselineComprehension?: number;
-  currentComprehension?: number;
-  onboardingComplete: boolean;
-  totalSessions?: number;
-  progress?: number;
+  total_sessions?: number;
 };
 
 export type UserProfileStoreActions = {
@@ -32,26 +30,24 @@ export type UserProfileStoreActions = {
 export const initialUserProfile: UserProfileType = {
   name: "",
   email: "",
-  dateOfBirth: "",
+  date_of_birth: "",
   achievements: false,
-  baseLineWPM: 0,
+  baseline_wpm: 0,
   badges: [],
   goals: [],
-  contentTypes: [],
+  content_type: [],
   challenges: [],
-  currentComprehensionScore: 0,
-  focusScore: 0,
-  dailyReminder: false,
-  weeklyProgress: false,
-  streakDays: 0,
-  xpEarned: 0,
-  currentWPM: 0,
+  current_comprehension_score: 0,
+  focus_score: 0,
+  daily_reminder: false,
+  weekly_summary: false,
+  streak_days: 0,
+  xp_earned: 0,
+  current_wpm: 0,
   level: 0,
-  baselineComprehension: 0,
-  currentComprehension: 0,
-  onboardingComplete: false,
-  totalSessions: 0,
-  progress: 0,
+  baseline_comprehension: 0,
+  onboarding_completed: false,
+  total_sessions: 0,
 };
 
 export const useUserProfileStore = create<

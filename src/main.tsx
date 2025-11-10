@@ -3,21 +3,10 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 
 // Import the generated route tree
-import { routeTree } from './routeTree.gen'
-import { createRouter, RouterProvider } from '@tanstack/react-router'
-import { DefaultCatchBoundary, PendingPage } from './components'
+import { RouterProvider } from '@tanstack/react-router'
+import { getRouter } from './router'
 
-// Create a new router instance
-const router = createRouter({
-  routeTree,
-  defaultErrorComponent: DefaultCatchBoundary,
-  defaultPendingComponent: PendingPage,
-  defaultPreload: 'intent',
-  context: {
-    session: null,
-  },
-})
-
+const router = getRouter()
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {

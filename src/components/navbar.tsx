@@ -7,7 +7,8 @@ import { Button, ProfileMenu, ThemeToggle } from './ui'
 const AnimateLink = motion.create(Link)
 
 const Navbar = () => {
-  const { session } = useRouteContext({ from: '__root__' })
+  const rootRoute = useRouteContext({ from: '__root__' })
+  const { session } = rootRoute
   return (
     <nav
       className='w-full

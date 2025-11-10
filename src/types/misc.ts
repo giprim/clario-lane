@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Database } from "~supabase/supabase_types";
 
 export const ChallengesSchema = z.object({
   challenge: z.string(),
@@ -73,3 +74,5 @@ export const AuthValidationSchema = z.object({
   authType: z.literal(["signin", "signup"]).optional(),
 });
 export type AuthValidationSchema = z.infer<typeof AuthValidationSchema>;
+
+export type UserTable = Database["public"]["Tables"]["users"]["Row"];

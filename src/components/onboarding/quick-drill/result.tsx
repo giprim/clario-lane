@@ -1,13 +1,13 @@
 import { Award, Sparkles } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Button, Card, CardContent, ConfettiComponent } from '@/components'
-import { useOnboardingStore } from '@/store'
+import { useOnboardingFlow } from '@/store'
 
 type Props = {
   improvement: number
 }
 export function Result({ improvement }: Props) {
-  const { updateProfile, current_step: currentStep } = useOnboardingStore()
+  const { update, current_step } = useOnboardingFlow()
 
   return (
     <motion.div
@@ -47,7 +47,7 @@ export function Result({ improvement }: Props) {
       </div>
 
       <Button
-        onClick={() => updateProfile({ current_step: currentStep + 1 })}
+        onClick={() => update({ current_step: current_step + 1 })}
         size='lg'
         className='w-full'>
         Continue

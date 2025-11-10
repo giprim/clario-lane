@@ -5,10 +5,10 @@ import { supabaseService } from "~supabase/clientServices";
 export const goalsRequestKey = "goals";
 
 export const goalsRequest = queryOptions({
-  queryKey: ["goals"],
+  queryKey: [goalsRequestKey],
   queryFn: async () => {
-    return await supabaseService
-      .getGoals()
-      .then((data) => data as GoalsType[]);
+    const { data } = await supabaseService.supabase.from("goals").select("*");
+    return data as GoalsType[];
   },
+  staleTime: "static",
 });

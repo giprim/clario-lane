@@ -1,12 +1,13 @@
 import { Award, Sparkles, Target, TrendingUp, Zap } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Button, Card, ConfettiComponent, MetricCard } from '@/components'
-import { useOnboardingStore } from '@/store'
+import { useOnboardingFlow, useOnboardingStore } from '@/store'
 
 export function Results() {
   const onboarding = useOnboardingStore()
+  const { update, current_step } = useOnboardingFlow()
   const onContinue = () => {
-    onboarding.updateProfile({ current_step: onboarding.current_step + 1 })
+    update({ current_step: current_step + 1 })
   }
 
   return (

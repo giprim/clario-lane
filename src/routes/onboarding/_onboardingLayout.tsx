@@ -1,27 +1,26 @@
 import { Button } from '@/components'
-import { useOnboardingStore } from '@/store'
+
+import { useOnboardingFlow } from '@/store'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { supabaseService } from '~supabase/clientServices'
 
 export const Route = createFileRoute('/onboarding/_onboardingLayout')({
   component: RouteComponent,
-  beforeLoad: () => {
-    useOnboardingStore.setState({ current_step: 5 })
+  beforeLoad: async ({ context }) => {
+    const user = await supabaseService.getUser()
+    return { ...context, user }
   },
 })
 
 function RouteComponent() {
-  const {
-    current_step: currentStep,
-    updateProfile,
-    total_steps: totalSteps,
-  } = useOnboardingStore()
+  const { current_step, total_steps, update } = useOnboardingFlow()
 
   const onSkipNextStep = () => {
-    if (currentStep < 6) updateProfile({ current_step: currentStep + 1 })
+    if (current_step < 6) update({ current_step: current_step + 1 })
   }
 
-  const canSkip = [4, 5].includes(currentStep)
+  const canSkip = [4, 5].includes(current_step)
 
   return (
     <div className='min-h-[80svh] bg-background p-4 max-w-6xl mx-auto'>
@@ -29,13 +28,11 @@ function RouteComponent() {
       <div className='mb-8'>
         <div className='flex justify-between mb-2 text-sm text-muted-foreground'>
           <div className='flex gap-2 items-center'>
-            {currentStep > 0 ? (
+            {current_step > 0 ? (
               <Button
                 size={'sm'}
                 variant='ghost'
-                onClick={() =>
-                  updateProfile({ current_step: currentStep - 1 })
-                }>
+                onClick={() => update({ current_step: current_step - 1 })}>
                 <ArrowLeft />
                 Back
               </Button>
@@ -52,7 +49,7 @@ function RouteComponent() {
           </div>
           <div className='flex gap-2 items-center'>
             <span>
-              Step {currentStep + 1} of {totalSteps}
+              Step {current_step + 1} of {total_steps}
             </span>
           </div>
         </div>

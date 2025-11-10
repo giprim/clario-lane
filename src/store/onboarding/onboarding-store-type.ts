@@ -13,7 +13,6 @@ export const OnboardingSchema = z.object({
   current_wpm: z.number().optional(),
   achievements: z.boolean(),
   badges: z.array(z.string()).optional(),
-
   date_of_birth: z.union([z.string(), z.date()]).optional(),
   focus_score: z.number().optional(),
   daily_reminder: z.boolean(),
@@ -21,18 +20,23 @@ export const OnboardingSchema = z.object({
   streak_days: z.number().optional(),
   xp_earned: z.number().optional(),
   level: z.number().optional(),
+  total_sessions: z.number().optional(),
+});
+export type OnboardingType = z.infer<typeof OnboardingSchema>;
+export type OnboardingContextType = {
+  updateProfile: (updates: Partial<OnboardingType>) => void;
+};
 
-  isSubmitting: z.boolean(),
+export const OnboardingFlowSchema = z.object({
   current_step: z.number(),
   reading_test_stage: z.enum(["intro", "reading", "questions", "results"]),
   reading_time: z.number(),
   start_time: z.number(),
-  total_sessions: z.number().optional(),
   total_steps: z.number(),
 });
 
-export type OnboardingType = z.infer<typeof OnboardingSchema>;
+export type OnboardingFlowType = z.infer<typeof OnboardingFlowSchema>;
 
-export type OnboardingContextType = {
-  updateProfile: (updates: Partial<OnboardingType>) => void;
+export type OnboardingFlowActionType = {
+  update: (updates: Partial<OnboardingFlowType>) => void;
 };

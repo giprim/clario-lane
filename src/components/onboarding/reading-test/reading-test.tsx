@@ -1,4 +1,4 @@
-import { useOnboardingStore } from '@/store'
+import { useOnboardingFlow } from '@/store'
 import { ReadingTestIntro } from './intro'
 import { Questions } from './questions'
 import { Reading } from './reading'
@@ -12,6 +12,6 @@ const stages = {
 }
 
 export function OnboardingReadingTest() {
-  const { reading_test_stage: readingTestStage } = useOnboardingStore()
-  return stages[readingTestStage]
+  const { reading_test_stage } = useOnboardingFlow()
+  return stages[reading_test_stage]
 }

@@ -36,7 +36,6 @@ export function ComprehensionQuiz() {
         currentStep: ExerciseStep.Results,
         loading: true,
       }
-      console.log({ payload })
       updateStore(payload)
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)

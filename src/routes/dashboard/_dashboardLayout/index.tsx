@@ -6,8 +6,11 @@ import {
   OverviewPending,
 } from '@/components'
 
-import { useUserProfileStore } from '@/store'
-import { createFileRoute } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  redirect,
+  useRouteContext,
+} from '@tanstack/react-router'
 import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/dashboard/_dashboardLayout/')({
@@ -16,26 +19,31 @@ export const Route = createFileRoute('/dashboard/_dashboardLayout/')({
 })
 
 export function RouteComponent() {
-  const userProfile = useUserProfileStore()
+  // const userProfile = useUserProfileStore()
+  const userProfile = useRouteContext({ from: '__root__' }).user
+
+  if (!userProfile) {
+    throw redirect({ to: '/auth' })
+  }
 
   // Mock data for the chart
   const progressData = [
-    { day: 'Day 1', wpm: userProfile.baseLineWPM },
-    { day: 'Day 2', wpm: userProfile.baseLineWPM! + 10 },
-    { day: 'Day 3', wpm: userProfile.baseLineWPM! + 15 },
-    { day: 'Day 4', wpm: userProfile.baseLineWPM! + 25 },
-    { day: 'Day 5', wpm: userProfile.baseLineWPM! + 30 },
-    { day: 'Day 6', wpm: userProfile.baseLineWPM! + 40 },
-    { day: 'Today', wpm: userProfile.currentWPM },
+    { day: 'Day 1', wpm: userProfile.baseline_wpm! },
+    { day: 'Day 2', wpm: userProfile.baseline_wpm! + 10 },
+    { day: 'Day 3', wpm: userProfile.baseline_wpm! + 15 },
+    { day: 'Day 4', wpm: userProfile.baseline_wpm! + 25 },
+    { day: 'Day 5', wpm: userProfile.baseline_wpm! + 30 },
+    { day: 'Day 6', wpm: userProfile.baseline_wpm! + 40 },
+    { day: 'Today', wpm: userProfile.current_wpm! },
   ]
 
-  const goalWPM = Math.round(userProfile.baseLineWPM! * 1.5)
+  const goalWPM = Math.round(userProfile.baseline_wpm! * 1.5)
   const progressPercent = Math.round(
-    ((userProfile.currentWPM! - userProfile.baseLineWPM!) /
-      (goalWPM - userProfile.baseLineWPM!)) *
+    ((userProfile.current_wpm! - userProfile.baseline_wpm!) /
+      (goalWPM - userProfile.baseline_wpm!)) *
       100
   )
-  const improvement = userProfile.currentWPM! - userProfile.baseLineWPM!
+  const improvement = userProfile.current_wpm! - userProfile.baseline_wpm!
 
   const todaysTasks = [
     {
@@ -59,21 +67,21 @@ export function RouteComponent() {
       {/* Quick Stats */}
       <OverviewStats
         comprehension={{
-          score: userProfile.currentComprehensionScore!,
-          baseline: userProfile.baselineComprehension!,
+          score: userProfile.current_comprehension_score!,
+          baseline: userProfile.baseline_comprehension!,
         }}
         currentSpeed={{
-          wpm: userProfile.currentWPM!,
-          baseline: userProfile.baseLineWPM!,
+          wpm: userProfile.current_wpm!,
+          baseline: userProfile.baseline_wpm!,
           improvement,
         }}
         progress={{
           percentage: progressPercent,
-          target: goalWPM - userProfile.currentWPM,
+          target: goalWPM - userProfile.current_wpm!,
         }}
         session={{
-          streak: userProfile.streakDays!,
-          total: userProfile.totalSessions!,
+          streak: userProfile.streak_days!,
+          total: userProfile.total_sessions!,
         }}
       />
 
@@ -88,14 +96,14 @@ export function RouteComponent() {
 
         {/* Goal Tracker */}
         <GoalTrackerCard
-          currentWPM={userProfile.currentWPM}
+          current_wpm={userProfile.current_wpm || 0}
           goalWPM={goalWPM}
           progressPercent={progressPercent}
-          badges={userProfile.badges}
-          baseLineWPM={userProfile.baseLineWPM}
-          level={userProfile.level}
-          streakDays={userProfile.streakDays}
-          totalSessions={userProfile.totalSessions}
+          badges={userProfile.badges ? [...userProfile.badges] : undefined}
+          baseline_wpm={userProfile.baseline_wpm || 0}
+          level={userProfile.level || 0}
+          streak_days={userProfile.streak_days || 0}
+          total_sessions={userProfile.total_sessions || 0}
         />
       </div>
     </motion.div>

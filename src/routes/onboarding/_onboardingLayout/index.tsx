@@ -14,78 +14,56 @@ import {
 import { Card } from '@/components/ui/card'
 import PaystackPop from '@paystack/inline-js'
 
-import { useOnboardingStore, useUserProfileStore } from '@/store'
+import { useOnboardingFlow, useOnboardingStore } from '@/store'
 
 import Billing from '@/components/onboarding/billing'
-import type {
-  ChallengesType,
-  ContentTypesType,
-  GoalsType,
-  PlanObject,
-  Preferences,
-} from '@/types'
-import { toast } from 'sonner'
+import type { Preferences, UserTable } from '@/types'
 import {
   challengeRequest,
-  challengeRequestKey,
   contentTypeRequest,
-  contentTypeRequestKey,
   goalsRequest,
-  goalsRequestKey,
   plansRequest,
-  plansRequestKey,
-} from '@/queries'
+} from '@/integration/queries'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useCreateUserMutation, useInitSubscription } from '@/integration'
+import { useCallback, useEffect, useState } from 'react'
 import { supabaseService } from '~supabase/clientServices'
 
 export const Route = createFileRoute('/onboarding/_onboardingLayout/')({
   component: RouteComponent,
   pendingComponent: PendingPage,
-  beforeLoad: async ({ context: { session } }) => {
-    if (!session) {
-      throw redirect({ to: '/auth' })
-    }
-
+  beforeLoad: ({ context }) => {
+    const { user, session } = context
+    if (!session) throw redirect({ to: '/auth' })
+    if (!user) return context
+    if (user?.onboarding_completed && user.is_subscribed)
+      throw redirect({ to: '/dashboard' })
+  },
+  loader: ({ context: { session } }) => {
+    if (!session) return
     const user_metadata = session?.user.user_metadata
     const name = user_metadata.displayName || user_metadata.full_name
     const email = session?.user.email
-
     useOnboardingStore.setState({ email, name })
-    const { onboardingComplete } = useUserProfileStore.getState()
-
-    if (onboardingComplete) {
-      throw redirect({ to: '/dashboard' })
-    }
-  },
-  loader: async ({ context }) => {
-    context.queryClient?.ensureQueryData(contentTypeRequest)
-    context.queryClient?.ensureQueryData(challengeRequest)
-    context.queryClient?.ensureQueryData(goalsRequest)
-    context.queryClient?.ensureQueryData(plansRequest)
   },
 })
 
+const paystackPop = new PaystackPop()
+
 function RouteComponent() {
-  const {
-    current_step: currentStep,
-    total_steps: totalSteps,
-    updateProfile,
-    ...onboarding
-  } = useOnboardingStore()
-  const progress = ((currentStep + 1) / totalSteps) * 100
-  const route = useRouter()
+  const { updateProfile, ...onboarding } = useOnboardingStore()
+  const { current_step, total_steps, update } = useOnboardingFlow()
+  const progress = ((current_step + 1) / total_steps) * 100
 
-  const queryClient = Route.useRouteContext().queryClient
+  const { data: goals } = useQuery(goalsRequest)
+  const { data: challenges } = useQuery(challengeRequest)
+  const { data: contentType } = useQuery(contentTypeRequest)
+  const { data: plans } = useQuery(plansRequest)
+  const [user, setUser] = useState<UserTable>()
 
-  const goals = queryClient?.getQueryData([goalsRequestKey]) as GoalsType[]
-  const challenges = queryClient?.getQueryData([
-    challengeRequestKey,
-  ]) as ChallengesType[]
-  const contentType = queryClient?.getQueryData([
-    contentTypeRequestKey,
-  ]) as ContentTypesType[]
-  const plans = queryClient?.getQueryData([plansRequestKey]) as PlanObject[]
+  const { mutateAsync: createMutateAsync } = useMutation(useCreateUserMutation)
 
-  console.log({ challenges, contentType, goals, plans })
+  const { mutateAsync: subscriptionMutate } = useMutation(useInitSubscription)
 
   const toggleSelection = (category: keyof Preferences, value: string) => {
     updateProfile({
@@ -95,41 +73,57 @@ function RouteComponent() {
     })
   }
 
-  const session = Route.useRouteContext()?.session
-  const email = session?.user?.email ?? ''
-  const paystackPop = new PaystackPop()
-
-  const onSubscribe = async (amount: number, plan: string) => {
-    const data = await supabaseService.initiateSubscription({
-      email,
-      amount,
-      plan,
-    })
-
-    return paystackPop.resumeTransaction(data.data.access_code)
-  }
+  const onSubscribe = useCallback(
+    (amount: number, plan: string) => {
+      subscriptionMutate({
+        email: onboarding.email,
+        amount,
+        plan,
+      }).then((data) => paystackPop.resumeTransaction(data.data.access_code))
+    },
+    [onboarding.email, subscriptionMutate]
+  )
 
   const handleSubmission = async () => {
-    updateProfile({
-      streak_days: 1,
+    createMutateAsync({
+      ...onboarding,
       onboarding_completed: true,
-      isSubmitting: true,
-    })
-
-    supabaseService
-      .insertUser()
-      .then(() => handleNext())
-      .catch((error) => toast.error(error.message))
+      streak_days: 1,
+    }).then(() => handleNext())
   }
 
   const handleNext = () => {
-    if (currentStep < totalSteps - 1) {
-      updateProfile({ current_step: currentStep + 1 })
+    if (current_step < total_steps - 1) {
+      update({ current_step: current_step + 1 })
     }
   }
+  const route = useRouter()
+
+  const handleConfirmSubscription = useCallback(
+    ({ email }: UserTable) => {
+      if (email === onboarding.email) {
+        supabaseService.getUser().then((res) => setUser(res))
+      }
+    },
+    [onboarding.email]
+  )
+
+  useEffect(() => {
+    if (user?.is_subscribed) {
+      update({ current_step: 0 })
+      route.navigate({ to: '/dashboard' })
+    }
+  }, [route, update, user?.is_subscribed])
+
+  useEffect(() => {
+    const channel = supabaseService.channel(handleConfirmSubscription)
+    return () => {
+      supabaseService.supabase.removeChannel(channel)
+    }
+  }, [handleConfirmSubscription])
 
   const canProceed = () => {
-    switch (currentStep) {
+    switch (current_step) {
       case 0:
         return onboarding.challenges.length > 0
       case 1:
@@ -141,13 +135,12 @@ function RouteComponent() {
     }
   }
 
-  if (currentStep === 3) return <OnboardingReadingTest />
-  if (currentStep === 4) return <QuickDrill />
-  if (currentStep === 5)
+  if (current_step === 3) return <OnboardingReadingTest />
+  if (current_step === 4) return <QuickDrill />
+  if (current_step === 5)
     return <NotificationSetup onContinue={handleSubmission} />
-  if (currentStep === 6 && plans?.length)
-    return <Billing plans={plans} onSubscribe={onSubscribe} />
-  else route.navigate({ to: '/dashboard' })
+  if (current_step === 6)
+    return <Billing plans={plans || []} onSubscribe={onSubscribe} />
 
   return (
     <Card className='w-full mx-auto mt-10 lg:mt-20 max-w-3xl  p-8'>
@@ -155,7 +148,7 @@ function RouteComponent() {
       <div className='mb-8'>
         <div className='flex justify-between mb-2 text-sm text-muted-foreground'>
           <span>
-            Step {currentStep + 1} of {totalSteps}
+            Step {current_step + 1} of {total_steps}
           </span>
           <span>{Math.round(progress)}%</span>
         </div>
@@ -163,7 +156,7 @@ function RouteComponent() {
       </div>
 
       {/* Welcome Message */}
-      {currentStep === 0 && (
+      {current_step === 0 && (
         <div className='mb-6 text-center'>
           <h2 className='mb-2'>Welcome, {onboarding.name}! 👋</h2>
           <p className='text-muted-foreground'>
@@ -174,24 +167,24 @@ function RouteComponent() {
 
       {/* Steps */}
       <AnimatePresence mode='wait'>
-        {currentStep === 0 && (
+        {current_step === 0 && (
           <Challenges
-            challenges={challenges}
+            challenges={challenges || []}
             selections={onboarding.challenges}
             toggleSelection={toggleSelection}
           />
         )}
-        {currentStep === 1 && (
+        {current_step === 1 && (
           <ContentType
-            contentType={contentType}
+            contentType={contentType || []}
             selections={onboarding.content_type}
             toggleSelection={toggleSelection}
           />
         )}
-        {currentStep === 2 && (
+        {current_step === 2 && (
           <Goals
+            goals={goals || []}
             selections={onboarding.goals}
-            goals={goals}
             toggleSelection={toggleSelection}
           />
         )}
@@ -204,7 +197,7 @@ function RouteComponent() {
           onClick={handleNext}
           disabled={!canProceed()}
           className='flex-1'>
-          {currentStep === totalSteps - 1 ? 'Complete' : 'Next'}
+          {current_step === total_steps - 1 ? 'Complete' : 'Next'}
         </Button>
       </div>
     </Card>

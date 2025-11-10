@@ -4,90 +4,89 @@ import {
   CardHeader,
   CardTitle,
   Progress,
-} from "@/components";
-import type { UserProfileType } from "@/store";
-import { motion } from "motion/react";
+} from '@/components'
+import type { UserProfileType } from '@/store'
+import { motion } from 'motion/react'
 
 type Props = Pick<
   UserProfileType,
-  | "baseLineWPM"
-  | "currentWPM"
-  | "badges"
-  | "streakDays"
-  | "level"
-  | "totalSessions"
+  | 'baseline_wpm'
+  | 'current_wpm'
+  | 'badges'
+  | 'streak_days'
+  | 'level'
+  | 'total_sessions'
 > & {
-  progressPercent: number;
-  goalWPM: number;
-};
+  progressPercent: number
+  goalWPM: number
+}
 
 export const GoalTrackerCard = (props: Props) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.4 }}
-    >
+      transition={{ duration: 0.5, delay: 0.4 }}>
       <Card>
         <CardHeader>
           <CardTitle>30-Day Goal Tracker</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
+          <div className='space-y-6'>
             <div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm ">Starting Point</span>
-                <span className="text-sm text-gray-900">
-                  {props.baseLineWPM} WPM
+              <div className='flex justify-between mb-2'>
+                <span className='text-sm '>Starting Point</span>
+                <span className='text-sm text-gray-900'>
+                  {props.baseline_wpm} WPM
                 </span>
               </div>
-              <div className="flex justify-between mb-2">
-                <span className="text-sm ">Current Speed</span>
-                <span className="text-sm text-indigo-600">
-                  {props.currentWPM} WPM
+              <div className='flex justify-between mb-2'>
+                <span className='text-sm '>Current Speed</span>
+                <span className='text-sm text-indigo-600'>
+                  {props.current_wpm} WPM
                 </span>
               </div>
-              <div className="flex justify-between mb-4">
-                <span className="text-sm ">30-Day Goal</span>
-                <span className="text-sm text-gray-900">
+              <div className='flex justify-between mb-4'>
+                <span className='text-sm '>30-Day Goal</span>
+                <span className='text-sm text-gray-900'>
                   {props.goalWPM} WPM
                 </span>
               </div>
-              <Progress value={props.progressPercent} className="h-3" />
-              <p className="text-sm  mt-2 text-center">
+              <Progress value={props.progressPercent} className='h-3' />
+              <p className='text-sm  mt-2 text-center'>
                 {props.progressPercent}% complete
               </p>
             </div>
 
-            <div className="bg-indigo-50 p-4 rounded-lg">
-              <h3 className="mb-2 text-primary">On Track!</h3>
-              <p className="text-sm text-gray-700">
+            <div className='bg-indigo-50 p-4 rounded-lg'>
+              <h3 className='mb-2 text-primary'>On Track!</h3>
+              <p className='text-sm text-gray-700'>
                 You're making great progress. At this rate, you'll hit your goal
                 in {Math.round(30 * (1 - props.progressPercent / 100))} days.
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="text-lg text-indigo-600">
-                  {props.streakDays}
+            <div className='grid grid-cols-3 gap-3 text-center'>
+              <div className='bg-white p-3 rounded-lg border'>
+                <div className='text-lg text-indigo-600'>
+                  {props.streak_days}
                 </div>
-                <div className="text-xs ">Day Streak</div>
+                <div className='text-xs '>Day Streak</div>
               </div>
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="text-lg text-indigo-600">
+              <div className='bg-white p-3 rounded-lg border'>
+                <div className='text-lg text-indigo-600'>
                   {props.badges?.length || 0}
                 </div>
-                <div className="text-xs ">Badges</div>
+                <div className='text-xs '>Badges</div>
               </div>
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="text-lg text-indigo-600">{props.level}</div>
-                <div className="text-xs ">Level</div>
+              <div className='bg-white p-3 rounded-lg border'>
+                <div className='text-lg text-indigo-600'>{props.level}</div>
+                <div className='text-xs '>Level</div>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
     </motion.div>
-  );
-};
+  )
+}

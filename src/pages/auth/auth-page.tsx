@@ -62,10 +62,11 @@ export default function AuthPage({
           await supabaseService.signIn(value.email, value.password)
         }
         toast.success(successMessage)
-        route.invalidate()
         route.navigate({ to: '/onboarding' })
       } catch (error) {
         catchError(error)
+      } finally {
+        route.invalidate()
       }
     },
   })
@@ -87,6 +88,8 @@ export default function AuthPage({
       await supabaseService.signInWithGoogle()
     } catch (error) {
       catchError(error)
+    } finally {
+      route.invalidate()
     }
   }
 
