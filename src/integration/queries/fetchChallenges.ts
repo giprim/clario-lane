@@ -7,7 +7,7 @@ export const fetchChallengesKey = "challenges";
 export const fetchChallenges = queryOptions({
   queryKey: [fetchChallengesKey],
   queryFn: async () => {
-    const { data } = await supabaseService.supabase
+    const { data } = await supabaseService.sp
       .from("challenges")
       .select("*");
     return data as ChallengesType[];

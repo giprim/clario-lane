@@ -26,7 +26,7 @@ import {
 } from '@/integration/queries'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useCreateUserMutation, useInitSubscription } from '@/integration'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { supabaseService } from '~supabase/clientServices'
 
 export const Route = createFileRoute('/onboarding/_onboardingLayout/')({
@@ -59,7 +59,6 @@ function RouteComponent() {
   const { data: challenges } = useQuery(fetchChallenges)
   const { data: contentType } = useQuery(fetchContentType)
   const { data: plans } = useQuery(fetchPlans)
-  const [user, setUser] = useState<UserTable>()
 
   const { mutateAsync: createMutateAsync } = useMutation(useCreateUserMutation)
 
@@ -100,25 +99,18 @@ function RouteComponent() {
   const route = useRouter()
 
   const handleConfirmSubscription = useCallback(
-    ({ email }: UserTable) => {
-      if (email === onboarding.email) {
-        supabaseService.getUser().then((res) => setUser(res))
+    (payload: UserTable) => {
+      if (payload.email === onboarding.email && payload.is_subscribed) {
+        route.navigate({ to: '/dashboard' })
       }
     },
-    [onboarding.email]
+    [onboarding.email, route]
   )
-
-  useEffect(() => {
-    if (user?.is_subscribed) {
-      update({ current_step: 0 })
-      route.navigate({ to: '/dashboard' })
-    }
-  }, [route, update, user?.is_subscribed])
 
   useEffect(() => {
     const channel = supabaseService.channel(handleConfirmSubscription)
     return () => {
-      supabaseService.supabase.removeChannel(channel)
+      supabaseService.sp.removeChannel(channel)
     }
   }, [handleConfirmSubscription])
 

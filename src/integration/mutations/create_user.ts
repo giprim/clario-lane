@@ -6,7 +6,7 @@ import { supabaseService } from "~supabase/clientServices";
 export const useCreateUserMutation = mutationOptions({
   mutationFn: async (params: OnboardingType) => {
     const data = params as unknown as UserTable;
-    const { status } = await supabaseService.supabase.from("users").insert(
+    const { status } = await supabaseService.sp.from("users").insert(
       {
         ...data,
         current_comprehension_score: data.baseline_comprehension,

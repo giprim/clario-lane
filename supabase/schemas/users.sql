@@ -23,7 +23,6 @@ create table if not exists users (
     level integer default 1,
     focus_score integer default 0,
     is_subscribed boolean default false,
-    subscriptions text default '{}',
     date_of_birth date,
 
     created_at timestamptz default now(),

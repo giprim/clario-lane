@@ -7,7 +7,7 @@ export const fetchGoalsKey = "goals";
 export const fetchGoals = queryOptions({
   queryKey: [fetchGoalsKey],
   queryFn: async () => {
-    const { data } = await supabaseService.supabase.from("goals").select("*");
+    const { data } = await supabaseService.sp.from("goals").select("*");
     return data as GoalsType[];
   },
   staleTime: "static",

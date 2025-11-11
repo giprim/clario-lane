@@ -21,7 +21,7 @@ export const useRSVPReader = ({ onPause }: RSVPReaderProps) => {
   const { setWpm, wpm, setStep, setCompleted, passage } =
     useSpeedReadingStore();
 
-  const { isLoading, refetch } = useQuery(fetchPassage);
+  const { isLoading } = useQuery(fetchPassage);
 
   useEffect(() => {
     // Split text into words
@@ -118,7 +118,6 @@ export const useRSVPReader = ({ onPause }: RSVPReaderProps) => {
     }
 
     setStep(ExerciseStep.Quiz);
-    refetch();
   };
 
   const handleReset = () => {

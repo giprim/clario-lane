@@ -47,7 +47,7 @@ export function RSVPReader({ onPause }: RSVPReaderProps) {
       </div>
 
       {/* Controls */}
-      <div className='flex items-center gap-4'>
+      <div className='flex items-center flex-wrap gap-4'>
         <Button
           onClick={handlePlayPause}
           disabled={currentIndex >= words.length}

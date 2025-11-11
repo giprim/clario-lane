@@ -1,11 +1,15 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@hono/hono@*": "4.10.4"
+    "jsr:@hono/hono@*": "4.10.4",
+    "jsr:@std/crypto@*": "1.0.5"
   },
   "jsr": {
     "@hono/hono@4.10.4": {
       "integrity": "e54d00c4cf994e7ae297d7321793cf940656b9c5e934564c03ffc15499041b9e"
+    },
+    "@std/crypto@1.0.5": {
+      "integrity": "0dcfbb319fe0bba1bd3af904ceb4f948cde1b92979ec1614528380ed308a3b40"
     }
   }
 }

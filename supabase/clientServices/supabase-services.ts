@@ -6,16 +6,16 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "~supabase/supabase_types";
 
 class SupabaseService {
-  public supabase;
+  public sp;
   constructor() {
-    this.supabase = createClient<Database>(
+    this.sp = createClient<Database>(
       clientEnv.VITE_SUPABASE_URL,
       clientEnv.VITE_SUPABASE_ANON_KEY,
     );
   }
 
   public async signUp(email: string, password: string, name: string) {
-    const { data, error } = await this.supabase.auth.signUp({
+    const { data, error } = await this.sp.auth.signUp({
       email,
       password,
       options: {
@@ -32,7 +32,7 @@ class SupabaseService {
   }
 
   async signIn(email: string, password: string) {
-    const { data, error } = await this.supabase.auth.signInWithPassword({
+    const { data, error } = await this.sp.auth.signInWithPassword({
       email,
       password,
     });
@@ -44,14 +44,14 @@ class SupabaseService {
   }
 
   public async signOut() {
-    const { error } = await this.supabase.auth.signOut();
+    const { error } = await this.sp.auth.signOut();
     if (error) {
       throw new Error(error.message);
     }
   }
 
   public async signInWithGoogle() {
-    const { data, error } = await this.supabase.auth.signInWithOAuth({
+    const { data, error } = await this.sp.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth`,
@@ -66,7 +66,7 @@ class SupabaseService {
   }
 
   async getUser() {
-    const { data, error } = await supabaseService.supabase.from("users").select(
+    const { data, error } = await supabaseService.sp.from("users").select(
       "*",
     )
       .single();
@@ -79,7 +79,7 @@ class SupabaseService {
   }
 
   async getSession() {
-    const { data: { session }, error } = await supabaseService.supabase.auth
+    const { data: { session }, error } = await supabaseService.sp.auth
       .getSession();
 
     if (error) {
@@ -90,7 +90,7 @@ class SupabaseService {
   }
 
   channel(callback: (payload: UserTable) => void) {
-    return this.supabase.channel("changes", {
+    return this.sp.channel("changes", {
       config: {
         broadcast: {
           ack: true,

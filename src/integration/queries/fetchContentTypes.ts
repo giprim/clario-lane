@@ -7,7 +7,7 @@ export const fetchContentTypeKey = "content-types";
 export const fetchContentType = queryOptions({
   queryKey: [fetchContentTypeKey],
   queryFn: async () => {
-    const { data } = await supabaseService.supabase
+    const { data } = await supabaseService.sp
       .from("content_types")
       .select("*")
       .in("content", ["technology", "non-fiction", "fictions", "news"]);
