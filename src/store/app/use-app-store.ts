@@ -1,15 +1,15 @@
-import { EXERCISES } from "@/lib";
+import { Practice } from "@/lib";
 import { create } from "zustand";
 
 type AppStore = {
-  activeExercise: EXERCISES;
+  activePractice: Practice | undefined;
 };
 
 type AppStoreActions = {
-  setActiveExercise: (exerciseId: EXERCISES) => void;
+  setActivePractice: (practice: Practice) => void;
 };
 
 export const useAppStore = create<AppStore & AppStoreActions>((set) => ({
-  activeExercise: EXERCISES.SPEED_READING,
-  setActiveExercise: (exerciseId) => set({ activeExercise: exerciseId }),
+  activePractice: undefined,
+  setActivePractice: (activePractice) => set({ activePractice }),
 }));

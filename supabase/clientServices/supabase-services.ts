@@ -103,7 +103,9 @@ class SupabaseService {
         schema: "public",
         table: "users",
       },
-      (payload) => callback(payload.new as UserTable),
+      (payload) => {
+        callback(payload.new as UserTable);
+      },
     ).subscribe();
   }
 }

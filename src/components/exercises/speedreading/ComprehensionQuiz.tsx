@@ -1,16 +1,22 @@
 import { useState } from 'react'
 import { Button, Card } from '@/components'
 import { CheckCircle, XCircle } from 'lucide-react'
-import { useSpeedReadingStore } from './use-speed-reading-store'
-import { ExerciseStep } from '@/lib'
+import { usePracticeStore } from '@/store'
+import { PracticeStep } from '@/lib'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { fetchPassageKey, sessionMutation } from '@/integration'
+
+import type { PassageResponse } from '@/types'
+import { useParams } from '@tanstack/react-router'
 
 export function ComprehensionQuiz() {
-  const { passage, updateStore } = useSpeedReadingStore()
+  const { passage, updateStore, ...rest } = usePracticeStore()
   const questions = passage!.questions!
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [answers, setAnswers] = useState<boolean[]>([])
   const [showResult, setShowResult] = useState(false)
+  const { practiceId } = useParams({ strict: false })
 
   const currentQuestion = questions?.[currentQuestionIndex]
   const isLastQuestion = currentQuestionIndex === questions?.length - 1
@@ -25,6 +31,14 @@ export function ComprehensionQuiz() {
     }
   }
 
+  const queryClient = useQueryClient()
+
+  const passageResponse = queryClient.getQueryData([
+    fetchPassageKey,
+  ]) as PassageResponse
+
+  const { mutate } = useMutation(sessionMutation)
+
   const handleNext = () => {
     if (isLastQuestion) {
       const correctAnswers = answers.filter((a) => a).length
@@ -33,9 +47,23 @@ export function ComprehensionQuiz() {
         correctAnswers,
         totalQuestions: questions.length,
         comprehension,
-        currentStep: ExerciseStep.Results,
+        currentStep: PracticeStep.enum.Results,
         loading: true,
       }
+
+      mutate({
+        comprehension,
+        correct_answers: correctAnswers,
+        duration: rest.duration!,
+        elapsed_time: rest.elapsedTime,
+        start_time: rest.startTime,
+        total_questions: questions.length,
+        total_words: rest.wordsRead!,
+        wpm: rest.wpm,
+        exercise_id: practiceId!,
+        passage_id: passageResponse?.id,
+      })
+
       updateStore(payload)
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)

@@ -1,13 +1,12 @@
 import { Button, Card, ConfettiComponent } from '@/components'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
-import { ExerciseStep } from '@/lib'
-import { useSpeedReadingStore } from './use-speed-reading-store'
+import { usePracticeStore } from '@/store'
 import { fetchPassage } from '@/integration'
 import { useQuery } from '@tanstack/react-query'
 
 export const Results = () => {
-  const { setStep, wpm, comprehension } = useSpeedReadingStore()
+  const { wpm, comprehension, reset } = usePracticeStore()
   const route = useRouter()
   const { refetch } = useQuery(fetchPassage)
 
@@ -17,12 +16,12 @@ export const Results = () => {
 
   const onComplete = () => {
     route.navigate({ to: '/dashboard/practice' })
-    setStep(ExerciseStep.Reading)
     refetch()
+    reset()
   }
   const onNext = () => {
     refetch()
-    setStep(ExerciseStep.Reading)
+    reset()
   }
 
   return (

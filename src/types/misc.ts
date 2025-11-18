@@ -97,3 +97,18 @@ export type PassageResponse = {
   updated_at: Date | string;
   id: string;
 };
+
+export const practiced_session = z.object({
+  passage_id: z.string(),
+  exercise_id: z.string(),
+  wpm: z.number(),
+  comprehension: z.number(),
+  duration: z.number(),
+  total_words: z.number(),
+  correct_answers: z.number(),
+  total_questions: z.number(),
+  start_time: z.number(),
+  elapsed_time: z.number(),
+});
+
+export type practiced_session = z.infer<typeof practiced_session>;

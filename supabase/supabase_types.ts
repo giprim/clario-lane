@@ -86,23 +86,32 @@ export type Database = {
         Row: {
           created_at: string | null
           description: string | null
+          difficulty: string | null
           exercise: string
           id: string
+          title: string | null
           updated_at: string | null
+          xp: number | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
+          difficulty?: string | null
           exercise: string
           id?: string
+          title?: string | null
           updated_at?: string | null
+          xp?: number | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
+          difficulty?: string | null
           exercise?: string
           id?: string
+          title?: string | null
           updated_at?: string | null
+          xp?: number | null
         }
         Relationships: []
       }
@@ -183,33 +192,48 @@ export type Database = {
       practice_sessions: {
         Row: {
           comprehension: number
+          correct_answers: number | null
           created_at: string | null
+          duration: number | null
+          elapsed_time: number | null
           exercise_id: string | null
           id: string
           passage_id: string | null
-          timespent: number
+          start_time: number | null
+          total_questions: number | null
+          total_words: number | null
           updated_at: string | null
           user_id: string | null
           wpm: number
         }
         Insert: {
           comprehension: number
+          correct_answers?: number | null
           created_at?: string | null
+          duration?: number | null
+          elapsed_time?: number | null
           exercise_id?: string | null
           id?: string
           passage_id?: string | null
-          timespent: number
+          start_time?: number | null
+          total_questions?: number | null
+          total_words?: number | null
           updated_at?: string | null
           user_id?: string | null
           wpm: number
         }
         Update: {
           comprehension?: number
+          correct_answers?: number | null
           created_at?: string | null
+          duration?: number | null
+          elapsed_time?: number | null
           exercise_id?: string | null
           id?: string
           passage_id?: string | null
-          timespent?: number
+          start_time?: number | null
+          total_questions?: number | null
+          total_words?: number | null
           updated_at?: string | null
           user_id?: string | null
           wpm?: number
@@ -262,7 +286,6 @@ export type Database = {
           onboarding_completed: boolean | null
           reminder_time: string | null
           streak_days: number | null
-          subscriptions: string | null
           total_sessions: number | null
           total_time_spent: number | null
           updated_at: string | null
@@ -292,7 +315,6 @@ export type Database = {
           onboarding_completed?: boolean | null
           reminder_time?: string | null
           streak_days?: number | null
-          subscriptions?: string | null
           total_sessions?: number | null
           total_time_spent?: number | null
           updated_at?: string | null
@@ -322,7 +344,6 @@ export type Database = {
           onboarding_completed?: boolean | null
           reminder_time?: string | null
           streak_days?: number | null
-          subscriptions?: string | null
           total_sessions?: number | null
           total_time_spent?: number | null
           updated_at?: string | null

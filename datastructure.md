@@ -64,8 +64,22 @@ type sessions = {
   wpm: number,
   comprehension: number,
   timestamp: string | Date,
-  passageId: string,
-  userId: string,
 }
+
+
+type practice_sessions = {
+  userId: string,
+  passageId: string,
+  exercise_type: string,
+  wpm: number,
+  comprehension: number,
+  duration: number,
+  totalWords: number
+  correctAnswers: number,
+  totalQuestions: number,
+  startTime: number | Date,
+  elapsedTime: number,
+}
+
 
 ```

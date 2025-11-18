@@ -25,7 +25,7 @@ import {
   fetchPlans,
 } from '@/integration/queries'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useCreateUserMutation, useInitSubscription } from '@/integration'
+import { userMutation, subscriptionMutation } from '@/integration'
 import { useCallback, useEffect } from 'react'
 import { supabaseService } from '~supabase/clientServices'
 
@@ -60,9 +60,9 @@ function RouteComponent() {
   const { data: contentType } = useQuery(fetchContentType)
   const { data: plans } = useQuery(fetchPlans)
 
-  const { mutateAsync: createMutateAsync } = useMutation(useCreateUserMutation)
+  const { mutateAsync: createMutateAsync } = useMutation(userMutation)
 
-  const { mutateAsync: subscriptionMutate } = useMutation(useInitSubscription)
+  const { mutateAsync: subscriptionMutate } = useMutation(subscriptionMutation)
 
   const toggleSelection = (category: keyof Preferences, value: string) => {
     updateProfile({
@@ -98,21 +98,17 @@ function RouteComponent() {
   }
   const route = useRouter()
 
-  const handleConfirmSubscription = useCallback(
-    (payload: UserTable) => {
+  useEffect(() => {
+    const handleConfirmSubscription = (payload: UserTable) => {
       if (payload.email === onboarding.email && payload.is_subscribed) {
         route.navigate({ to: '/dashboard' })
       }
-    },
-    [onboarding.email, route]
-  )
-
-  useEffect(() => {
+    }
     const channel = supabaseService.channel(handleConfirmSubscription)
     return () => {
       supabaseService.sp.removeChannel(channel)
     }
-  }, [handleConfirmSubscription])
+  }, [onboarding.email, route])
 
   const canProceed = () => {
     switch (current_step) {

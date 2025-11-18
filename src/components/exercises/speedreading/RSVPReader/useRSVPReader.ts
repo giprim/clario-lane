@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useSpeedReadingStore } from "../use-speed-reading-store";
-import { ExerciseStep } from "@/lib";
+import { PracticeStep } from "@/lib";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPassage } from "@/integration";
+import { toast } from "sonner";
+import { usePracticeStore } from "@/store";
 
 export type RSVPReaderProps = {
   onPause?: () => void;
@@ -18,8 +19,7 @@ export const useRSVPReader = ({ onPause }: RSVPReaderProps) => {
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const { setWpm, wpm, setStep, setCompleted, passage } =
-    useSpeedReadingStore();
+  const { setWpm, wpm, setStep, updateStore, passage } = usePracticeStore();
 
   const { isLoading } = useQuery(fetchPassage);
 
@@ -91,33 +91,20 @@ export const useRSVPReader = ({ onPause }: RSVPReaderProps) => {
       ? Math.round((wordsRead / duration) * 60)
       : wpm;
 
-    console.log("Reading complete:", {
-      duration,
-      wordsRead,
-      actualWpm,
-      currentIndex,
-      totalWords: words.length,
-      startTime,
-      elapsedTime,
-    });
-
     // Ensure we have valid data
     if (!actualWpm || actualWpm <= 0) {
-      console.error("Invalid WPM calculated, using set WPM:", wpm);
-      setCompleted({
-        wpm: wpm,
-        duration: duration || 1,
-        wordsRead: wordsRead,
-      });
+      toast.error(`Invalid WPM calculated, using set WPM: ${wpm}`);
     } else {
-      setCompleted({
+      updateStore({
         wpm: actualWpm,
         duration,
         wordsRead,
+        elapsedTime,
+        startTime: startTime || 0,
       });
     }
 
-    setStep(ExerciseStep.Quiz);
+    setStep(PracticeStep.enum.Quiz);
   };
 
   const handleReset = () => {

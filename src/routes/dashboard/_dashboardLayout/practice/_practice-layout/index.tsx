@@ -1,24 +1,42 @@
-import { StartPracticeCard } from "@/components";
-import { EXERCISES } from "@/lib";
-import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "motion/react";
+import { StartPracticeCard } from '@/components'
+import { fetchPractices } from '@/integration'
+import type { Practice } from '@/lib'
+
+import { createFileRoute } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 
 export const Route = createFileRoute(
-  "/dashboard/_dashboardLayout/practice/_practice-layout/",
+  '/dashboard/_dashboardLayout/practice/_practice-layout/'
 )({
   component: RouteComponent,
-});
+  loader: async ({ context }) => {
+    const practices = (await context.queryClient.fetchQuery(
+      fetchPractices
+    )) as Practice[]
+    return { practices }
+  },
+})
 
 export function RouteComponent() {
-  const exerciseIds = Object.keys(EXERCISES);
+  const { practices } = Route.useLoaderData()
 
   return (
     <motion.div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {exerciseIds.map((id, index) => (
-          <StartPracticeCard key={id} delay={index} exerciseId={id} />
-        ))}
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+        {practices ? (
+          practices.map((practice, index) => (
+            <StartPracticeCard
+              key={practice.id}
+              delay={index}
+              practice={practice}
+            />
+          ))
+        ) : (
+          <div>
+            <p>No practice available</p>
+          </div>
+        )}
       </div>
     </motion.div>
-  );
+  )
 }

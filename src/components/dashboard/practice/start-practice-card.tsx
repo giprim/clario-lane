@@ -1,27 +1,32 @@
 import { Badge, Button, Card, CardContent } from '@/components'
 import {
-  EXERCISE_CARDS_INFO,
-  EXERCISE_COLORS,
-  EXERCISE_ICONS,
-  EXERCISE_ROUTES,
-  EXERCISES,
+  PRACTICE_COLORS,
+  PRACTICE_ICONS,
+  PRACTICE_ROUTES,
+  type Practice,
 } from '@/lib'
+import { useAppStore } from '@/store'
 import { Link } from '@tanstack/react-router'
+import { useCallback } from 'react'
 
 type StartPracticeCardProps = {
   delay?: number
-  exerciseId: string
+  practice: Practice
 }
 
 export const StartPracticeCard = ({
   delay,
-  exerciseId,
+  practice,
 }: StartPracticeCardProps) => {
-  const id = exerciseId as unknown as keyof typeof EXERCISES
-  const Icon = EXERCISE_ICONS[id]
-  const color = EXERCISE_COLORS[id]
-  const info = EXERCISE_CARDS_INFO[id]
-  const route = EXERCISE_ROUTES[id]
+  const id = practice.exercise
+  const Icon = PRACTICE_ICONS[id]
+  const color = PRACTICE_COLORS[id]
+  const route = PRACTICE_ROUTES[id]
+  const { setActivePractice } = useAppStore()
+  const handleClick = useCallback(
+    () => setActivePractice(practice),
+    [practice, setActivePractice]
+  )
 
   return (
     <Card
@@ -34,21 +39,25 @@ export const StartPracticeCard = ({
             <Icon className={`w-6 h-6 text-${color}-500`} />
           </div>
           <div>
-            <h3 className='mb-1'>{info.title}</h3>
-            <p className='text-sm  mb-3'>{info.description}</p>
+            <h3 className='mb-1'>{practice.title}</h3>
+            <p className='text-sm  mb-3'>{practice.description}</p>
             <div className='flex items-center gap-3 mb-3'>
-              <Badge variant='secondary' className='text-xs'>
-                {info.difficulty}
-              </Badge>
-              <span className='text-sm '>{info.duration}</span>
-              <span className='text-sm text-primary'>+{info.xp} XP</span>
+              {practice.difficulty && (
+                <Badge variant='secondary' className='text-xs capitalize'>
+                  {practice.difficulty}
+                </Badge>
+              )}
+              {practice.xp && (
+                <span className='text-sm text-primary'>+{practice.xp} XP</span>
+              )}
             </div>
             <Button
               asChild
+              onClick={handleClick}
               size='sm'
               variant='outline'
               className={`w-full font-semibold `}>
-              <Link to={route}>Start</Link>
+              <Link to={`${route}/${practice.id}`}>Start</Link>
             </Button>
           </div>
         </div>
