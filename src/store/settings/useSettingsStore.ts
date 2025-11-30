@@ -53,7 +53,7 @@ export const useSettingsStore = create<SettingsStore>()(
           .from("user_preferences")
           .select("*")
           .eq("user_id", userId)
-          .single();
+          .maybeSingle(); // Use maybeSingle() to return null instead of error when no row exists
 
         if (data) {
           set({
@@ -62,6 +62,7 @@ export const useSettingsStore = create<SettingsStore>()(
             theme: data.theme as Theme,
           });
         }
+        // If no data, keep default values from state
       },
     }),
     {
