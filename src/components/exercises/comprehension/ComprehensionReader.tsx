@@ -1,16 +1,38 @@
-import { Card } from '@/components'
+import { SpeedReadingPending } from '../speedreading/speed-reading-pending'
+import { useComprehensionReader } from './useComprehensionReader'
+import { useSyncDisplaySettings, ReaderControls } from '../shared'
+import { VerticalProgressBar } from './VerticalProgressBar'
+import { ScrollingTextDisplay } from './ScrollingTextDisplay'
+import { usePracticeStore } from '@/store'
 
 export function ComprehensionReader() {
+  useSyncDisplaySettings()
+  useComprehensionReader({})
+
+  const loading = usePracticeStore((state) => state.loading)
+  const formatTime = usePracticeStore((state) => state.formatTime)
+  const elapsedTime = usePracticeStore((state) => state.elapsedTime)
+  const estimatedDuration = usePracticeStore((state) => state.estimatedDuration)
+
+  if (loading) {
+    return <SpeedReadingPending />
+  }
+
   return (
     <div className='w-full mx-auto space-y-6'>
-      <Card className='p-8 space-y-6'>
-        <div className='text-center space-y-2'>
-          <h2 className='text-3xl'>Comprehension Practice</h2>
-          <p className='text-muted-foreground'>
-            This component is under development
-          </p>
+      <div className='flex gap-6 h-[60vh]'>
+        <VerticalProgressBar />
+        <ScrollingTextDisplay />
+      </div>
+
+      <ReaderControls>
+        <div className='text-right space-y-1 min-w-[100px]'>
+          <div className='text-sm text-muted-foreground'>Time</div>
+          <div className='text-2xl tabular-nums'>
+            {formatTime(elapsedTime)} / {formatTime(estimatedDuration)}
+          </div>
         </div>
-      </Card>
+      </ReaderControls>
     </div>
   )
 }
