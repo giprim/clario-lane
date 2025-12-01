@@ -1,4 +1,4 @@
 export * from "./ReadingExercise";
 export * from "./speedreading";
-export * from "./comprehension";
+export * from "./teleprompter";
 export * from "./wordchunking";

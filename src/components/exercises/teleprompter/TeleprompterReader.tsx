@@ -1,13 +1,13 @@
 import { SpeedReadingPending } from '../speedreading/speed-reading-pending'
-import { useComprehensionReader } from './useComprehensionReader'
+import { useTeleprompterReader } from './useTeleprompterReader'
 import { useSyncDisplaySettings, ReaderControls } from '../shared'
 import { VerticalProgressBar } from './VerticalProgressBar'
 import { ScrollingTextDisplay } from './ScrollingTextDisplay'
 import { usePracticeStore } from '@/store'
 
-export function ComprehensionReader() {
+export function TeleprompterReader() {
   useSyncDisplaySettings()
-  useComprehensionReader({})
+  useTeleprompterReader({})
 
   const loading = usePracticeStore((state) => state.loading)
   const formatTime = usePracticeStore((state) => state.formatTime)

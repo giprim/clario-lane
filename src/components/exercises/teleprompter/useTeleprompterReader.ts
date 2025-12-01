@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPassage } from "@/integration";
 import { usePracticeStore } from "@/store";
 
-export type ComprehensionReaderProps = {
+export type TeleprompterReaderProps = {
   onPause?: () => void;
 };
 
-export const useComprehensionReader = ({
+export const useTeleprompterReader = ({
   onPause,
-}: ComprehensionReaderProps) => {
+}: TeleprompterReaderProps) => {
   const animationFrameRef = useRef<number | null>(null);
   const lastFrameTimeRef = useRef<number | null>(null);
 

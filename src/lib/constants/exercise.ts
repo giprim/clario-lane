@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const PRACTICES = z.enum([
   "SPEED_READING",
-  "COMPREHENSION",
+  "TELEPROMPTER",
   "WORD_CHUNKING",
   "PERIPHERAL_VISION",
 ]);
@@ -20,14 +20,14 @@ export type PracticeStep = z.infer<typeof PracticeStep>;
 
 export const PRACTICE_ICONS: Record<PRACTICES, typeof TypeIcon> = {
   SPEED_READING: Zap,
-  COMPREHENSION: Brain,
+  TELEPROMPTER: Brain,
   WORD_CHUNKING: Target,
   PERIPHERAL_VISION: Eye,
 };
 
 export const PRACTICE_COLORS: Record<PRACTICES, string> = {
   SPEED_READING: "blue",
-  COMPREHENSION: "green",
+  TELEPROMPTER: "green",
   WORD_CHUNKING: "yellow",
   PERIPHERAL_VISION: "red",
 };
@@ -47,7 +47,7 @@ export type Practice = z.infer<typeof Practice>;
 
 export const PRACTICE_ROUTES: Record<PRACTICES, string> = {
   SPEED_READING: "/dashboard/practice/speedreading",
-  COMPREHENSION: "/dashboard/practice/comprehension",
+  TELEPROMPTER: "/dashboard/practice/teleprompter",
   WORD_CHUNKING: "/dashboard/practice/wordchunking",
   PERIPHERAL_VISION: "/dashboard/practice",
 } as const;
