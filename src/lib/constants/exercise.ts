@@ -48,7 +48,7 @@ export type Practice = z.infer<typeof Practice>;
 export const PRACTICE_ROUTES: Record<PRACTICES, string> = {
   SPEED_READING: "/dashboard/practice/speedreading",
   COMPREHENSION: "/dashboard/practice/comprehension",
-  WORD_CHUNKING: "/dashboard/practice",
+  WORD_CHUNKING: "/dashboard/practice/wordchunking",
   PERIPHERAL_VISION: "/dashboard/practice",
 } as const;
 

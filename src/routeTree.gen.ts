@@ -20,6 +20,7 @@ import { Route as DashboardProgressRouteImport } from './routes/dashboard/progre
 import { Route as DashboardPracticeRouteImport } from './routes/dashboard/practice'
 import { Route as DashboardChallengesRouteImport } from './routes/dashboard/challenges'
 import { Route as DashboardPracticeIndexRouteImport } from './routes/dashboard/practice/index'
+import { Route as DashboardPracticeWordchunkingPracticeIdRouteImport } from './routes/dashboard/practice/wordchunking/$practiceId'
 import { Route as DashboardPracticeSpeedreadingPracticeIdRouteImport } from './routes/dashboard/practice/speedreading/$practiceId'
 import { Route as DashboardPracticeComprehensionPracticeIdRouteImport } from './routes/dashboard/practice/comprehension/$practiceId'
 
@@ -78,6 +79,12 @@ const DashboardPracticeIndexRoute = DashboardPracticeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardPracticeRoute,
 } as any)
+const DashboardPracticeWordchunkingPracticeIdRoute =
+  DashboardPracticeWordchunkingPracticeIdRouteImport.update({
+    id: '/wordchunking/$practiceId',
+    path: '/wordchunking/$practiceId',
+    getParentRoute: () => DashboardPracticeRoute,
+  } as any)
 const DashboardPracticeSpeedreadingPracticeIdRoute =
   DashboardPracticeSpeedreadingPracticeIdRouteImport.update({
     id: '/speedreading/$practiceId',
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/practice/': typeof DashboardPracticeIndexRoute
   '/dashboard/practice/comprehension/$practiceId': typeof DashboardPracticeComprehensionPracticeIdRoute
   '/dashboard/practice/speedreading/$practiceId': typeof DashboardPracticeSpeedreadingPracticeIdRoute
+  '/dashboard/practice/wordchunking/$practiceId': typeof DashboardPracticeWordchunkingPracticeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesByTo {
   '/dashboard/practice': typeof DashboardPracticeIndexRoute
   '/dashboard/practice/comprehension/$practiceId': typeof DashboardPracticeComprehensionPracticeIdRoute
   '/dashboard/practice/speedreading/$practiceId': typeof DashboardPracticeSpeedreadingPracticeIdRoute
+  '/dashboard/practice/wordchunking/$practiceId': typeof DashboardPracticeWordchunkingPracticeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/dashboard/practice/': typeof DashboardPracticeIndexRoute
   '/dashboard/practice/comprehension/$practiceId': typeof DashboardPracticeComprehensionPracticeIdRoute
   '/dashboard/practice/speedreading/$practiceId': typeof DashboardPracticeSpeedreadingPracticeIdRoute
+  '/dashboard/practice/wordchunking/$practiceId': typeof DashboardPracticeWordchunkingPracticeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/dashboard/practice/'
     | '/dashboard/practice/comprehension/$practiceId'
     | '/dashboard/practice/speedreading/$practiceId'
+    | '/dashboard/practice/wordchunking/$practiceId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/dashboard/practice'
     | '/dashboard/practice/comprehension/$practiceId'
     | '/dashboard/practice/speedreading/$practiceId'
+    | '/dashboard/practice/wordchunking/$practiceId'
   id:
     | '__root__'
     | '/'
@@ -177,6 +189,7 @@ export interface FileRouteTypes {
     | '/dashboard/practice/'
     | '/dashboard/practice/comprehension/$practiceId'
     | '/dashboard/practice/speedreading/$practiceId'
+    | '/dashboard/practice/wordchunking/$practiceId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPracticeIndexRouteImport
       parentRoute: typeof DashboardPracticeRoute
     }
+    '/dashboard/practice/wordchunking/$practiceId': {
+      id: '/dashboard/practice/wordchunking/$practiceId'
+      path: '/wordchunking/$practiceId'
+      fullPath: '/dashboard/practice/wordchunking/$practiceId'
+      preLoaderRoute: typeof DashboardPracticeWordchunkingPracticeIdRouteImport
+      parentRoute: typeof DashboardPracticeRoute
+    }
     '/dashboard/practice/speedreading/$practiceId': {
       id: '/dashboard/practice/speedreading/$practiceId'
       path: '/speedreading/$practiceId'
@@ -286,6 +306,7 @@ interface DashboardPracticeRouteChildren {
   DashboardPracticeIndexRoute: typeof DashboardPracticeIndexRoute
   DashboardPracticeComprehensionPracticeIdRoute: typeof DashboardPracticeComprehensionPracticeIdRoute
   DashboardPracticeSpeedreadingPracticeIdRoute: typeof DashboardPracticeSpeedreadingPracticeIdRoute
+  DashboardPracticeWordchunkingPracticeIdRoute: typeof DashboardPracticeWordchunkingPracticeIdRoute
 }
 
 const DashboardPracticeRouteChildren: DashboardPracticeRouteChildren = {
@@ -294,6 +315,8 @@ const DashboardPracticeRouteChildren: DashboardPracticeRouteChildren = {
     DashboardPracticeComprehensionPracticeIdRoute,
   DashboardPracticeSpeedreadingPracticeIdRoute:
     DashboardPracticeSpeedreadingPracticeIdRoute,
+  DashboardPracticeWordchunkingPracticeIdRoute:
+    DashboardPracticeWordchunkingPracticeIdRoute,
 }
 
 const DashboardPracticeRouteWithChildren =

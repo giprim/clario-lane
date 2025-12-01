@@ -16,7 +16,7 @@ export const Results = () => {
   const wpmChange = nextWpm - wpm
 
   const onComplete = () => {
-    route.navigate({ to: '/dashboard/practice' })
+    route.navigate({ to: '/dashboard' })
     refetch()
     reset()
   }
