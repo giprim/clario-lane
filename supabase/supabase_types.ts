@@ -34,6 +34,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          category: string
+          condition_type: string
+          condition_value: number
+          created_at: string
+          description: string
+          icon_url: string | null
+          id: string
+          title: string
+          xp_reward: number
+        }
+        Insert: {
+          category: string
+          condition_type: string
+          condition_value: number
+          created_at?: string
+          description: string
+          icon_url?: string | null
+          id: string
+          title: string
+          xp_reward?: number
+        }
+        Update: {
+          category?: string
+          condition_type?: string
+          condition_value?: number
+          created_at?: string
+          description?: string
+          icon_url?: string | null
+          id?: string
+          title?: string
+          xp_reward?: number
+        }
+        Relationships: []
+      }
       challenges: {
         Row: {
           challenge: string
@@ -247,6 +283,65 @@ export type Database = {
           },
         ]
       }
+      quests: {
+        Row: {
+          created_at: string
+          description: string
+          expires_at: string | null
+          id: string
+          target_metric: string
+          target_value: number
+          type: string
+          xp_reward: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          expires_at?: string | null
+          id?: string
+          target_metric: string
+          target_value: number
+          type: string
+          xp_reward?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          expires_at?: string | null
+          id?: string
+          target_metric?: string
+          target_value?: number
+          type?: string
+          xp_reward?: number
+        }
+        Relationships: []
+      }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_preferences: {
         Row: {
           created_at: string | null
@@ -271,6 +366,80 @@ export type Database = {
           theme?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_quests: {
+        Row: {
+          claimed_at: string | null
+          current_value: number
+          is_completed: boolean
+          quest_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          current_value?: number
+          is_completed?: boolean
+          quest_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string | null
+          current_value?: number
+          is_completed?: boolean
+          quest_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_quests_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "quests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_stats: {
+        Row: {
+          created_at: string
+          current_streak: number
+          last_activity_date: string | null
+          level: number
+          longest_streak: number
+          total_time_seconds: number
+          total_words_read: number
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          current_streak?: number
+          last_activity_date?: string | null
+          level?: number
+          longest_streak?: number
+          total_time_seconds?: number
+          total_words_read?: number
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          current_streak?: number
+          last_activity_date?: string | null
+          level?: number
+          longest_streak?: number
+          total_time_seconds?: number
+          total_words_read?: number
+          updated_at?: string
+          user_id?: string
+          xp?: number
         }
         Relationships: []
       }

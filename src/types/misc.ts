@@ -116,3 +116,10 @@ export const practiced_session = z.object({
 });
 
 export type practiced_session = z.infer<typeof practiced_session>;
+
+export type UserStats = Database["public"]["Tables"]["user_stats"]["Row"];
+export type Achievement = Database["public"]["Tables"]["achievements"]["Row"];
+export type UserAchievement =
+  Database["public"]["Tables"]["user_achievements"]["Row"];
+export type Quest = Database["public"]["Tables"]["quests"]["Row"];
+export type UserQuest = Database["public"]["Tables"]["user_quests"]["Row"];

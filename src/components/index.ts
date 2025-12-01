@@ -9,3 +9,4 @@ export * from "./onboarding";
 export * from "./default-catch-boundary";
 export * from "./dashboard";
 export * from "./exercises";
+export * from "./gamification";

@@ -4,9 +4,13 @@ import {
   GoalTrackerCard,
   DailyPracticeCard,
   OverviewPending,
+  DailyGoalRing,
+  StreakCounter,
+  LevelProgressBar,
 } from '@/components'
 import { getBadges } from '@/lib'
 import { useQuery } from '@tanstack/react-query'
+import { useGamification } from '@/hooks'
 
 import {
   createFileRoute,
@@ -29,6 +33,8 @@ export function RouteComponent() {
     queryFn: async () =>
       await supabaseService.getPracticedSessions(userProfile?.id),
   })
+
+  const { stats, isLoading: isLoadingGamification } = useGamification()
 
   if (!userProfile) {
     throw redirect({ to: '/auth' })
@@ -64,6 +70,10 @@ export function RouteComponent() {
     { id: 3, title: 'Take comprehension quiz', completed: false, xp: 30 },
   ]
 
+  // Daily goal: 1000 words (configurable later)
+  const dailyGoalWords = 1000
+  const wordsReadToday = stats?.total_words_read ?? 0 // This should be tracked per day, but for now using total
+
   return (
     <motion.div
       initial={{ y: 40, opacity: 0 }}
@@ -89,6 +99,21 @@ export function RouteComponent() {
           total: userProfile.total_sessions!,
         }}
       />
+
+      {/* Gamification Widgets */}
+      {!isLoadingGamification && stats && (
+        <div className='grid md:grid-cols-3 gap-4'>
+          <LevelProgressBar currentXP={stats.xp} level={stats.level} />
+          <StreakCounter
+            currentStreak={stats.current_streak}
+            longestStreak={stats.longest_streak}
+          />
+          <DailyGoalRing
+            currentWords={wordsReadToday}
+            goalWords={dailyGoalWords}
+          />
+        </div>
+      )}
 
       {/* Progress Chart */}
       <ProgressChart
