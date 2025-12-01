@@ -24,6 +24,7 @@ export type PracticeStore = {
   words: string[];
   currentIndex: number;
   estimatedDuration: number;
+  chunkSize: number;
 };
 
 type PracticeStoreActions = {
@@ -44,6 +45,7 @@ type PracticeStoreActions = {
   setWords: (words: string[]) => void;
   setCurrentIndex: (currentIndex: number | ((prev: number) => number)) => void;
   setEstimatedDuration: (duration: number) => void;
+  setChunkSize: (size: number) => void;
   handlePlayPause: () => void;
   handleReset: () => void;
   handleComplete: () => void;
@@ -68,6 +70,7 @@ const initialState: PracticeStore = {
   words: [],
   currentIndex: 0,
   estimatedDuration: 0,
+  chunkSize: 3,
 };
 
 export const usePracticeStore = create<PracticeStore & PracticeStoreActions>(
@@ -102,6 +105,7 @@ export const usePracticeStore = create<PracticeStore & PracticeStoreActions>(
       })),
     setEstimatedDuration: (estimatedDuration: number) =>
       set({ estimatedDuration }),
+    setChunkSize: (chunkSize: number) => set({ chunkSize }),
 
     handlePlayPause: () => {
       const { isPlaying, progress } = get();

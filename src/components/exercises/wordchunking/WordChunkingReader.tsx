@@ -1,37 +1,55 @@
-import { Button, Card } from '@/components'
+import { SpeedReadingPending } from '../speedreading/speed-reading-pending'
+import { useWordChunkingReader } from './useWordChunkingReader'
+import { useSyncDisplaySettings, ReaderControls } from '../shared'
+import { WordChunkDisplay } from './WordChunkDisplay'
+import { ChunkSizeSlider } from './ChunkSizeSlider'
 import { usePracticeStore } from '@/store'
-import { BookOpen } from 'lucide-react'
 
 export function WordChunkingReader() {
-  const { setStep } = usePracticeStore()
+  useSyncDisplaySettings()
+  useWordChunkingReader({})
 
-  const handleContinue = () => {
-    setStep('Quiz')
+  const loading = usePracticeStore((state) => state.loading)
+  const formatTime = usePracticeStore((state) => state.formatTime)
+  const elapsedTime = usePracticeStore((state) => state.elapsedTime)
+  const words = usePracticeStore((state) => state.words)
+  const currentIndex = usePracticeStore((state) => state.currentIndex)
+
+  if (loading) {
+    return <SpeedReadingPending />
   }
 
   return (
     <div className='w-full mx-auto space-y-6'>
-      <Card className='p-12 min-h-[60vh] flex items-center justify-center'>
-        <div className='text-center space-y-6 max-w-md'>
-          <div className='flex justify-center'>
-            <div className='bg-primary/10 p-6 rounded-full'>
-              <BookOpen className='h-12 w-12 text-primary' />
-            </div>
-          </div>
+      {/* Word Display */}
+      <WordChunkDisplay />
 
-          <div className='space-y-2'>
-            <h2 className='text-2xl font-semibold'>Word Chunking Reader</h2>
-            <p className='text-muted-foreground'>
-              This reading exercise is coming soon. For now, you can continue to
-              the comprehension quiz to test your understanding.
-            </p>
-          </div>
+      {/* Progress Bar */}
+      <div className='w-full bg-secondary rounded-full h-2'>
+        <div
+          className='bg-primary h-2 rounded-full transition-all duration-200'
+          style={{ width: `${(currentIndex / words.length) * 100}%` }}
+        />
+      </div>
 
-          <Button onClick={handleContinue} size='lg' className='mt-4'>
-            Continue to Quiz
-          </Button>
+      <ReaderControls
+        canComplete={currentIndex >= words.length}
+        canReset={currentIndex > 0}>
+        <div className='text-right space-y-1'>
+          <div className='text-sm text-muted-foreground'>Time</div>
+          <div className='text-2xl tabular-nums'>{formatTime(elapsedTime)}</div>
         </div>
-      </Card>
+
+        <div className='text-right space-y-1'>
+          <div className='text-sm text-muted-foreground'>Progress</div>
+          <div className='text-2xl tabular-nums'>
+            {currentIndex} / {words.length}
+          </div>
+        </div>
+      </ReaderControls>
+
+      {/* Chunk Size Slider */}
+      <ChunkSizeSlider />
     </div>
   )
 }
