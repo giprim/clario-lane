@@ -16,6 +16,8 @@ import {
 import { BookOpen, Target, TrendingUp, Trophy } from 'lucide-react'
 import { AnimatePresence } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { VictoryModal, LevelUpModal } from '@/components/gamification'
+import { useGamificationStore } from '@/store/gamification/useGamificationStore'
 
 export const Route = createFileRoute('/dashboard')({
   component: RouteComponent,
@@ -57,6 +59,9 @@ function RouteComponent() {
   const currentPath = pathsArray[pathsArray.length - 1]
 
   const [activePathname, setActivePathname] = useState(currentPath)
+
+  const { victoryModal, levelUpModal, closeVictoryModal, closeLevelUpModal } =
+    useGamificationStore()
 
   useEffect(() => {
     setActivePathname(currentPath)
@@ -106,6 +111,20 @@ function RouteComponent() {
         </AnimatePresence>
       </div>
       <Copyright />
+
+      {/* Global Gamification Modals */}
+      {victoryModal.data && (
+        <VictoryModal
+          isOpen={victoryModal.isOpen}
+          onClose={closeVictoryModal}
+          {...victoryModal.data}
+        />
+      )}
+      <LevelUpModal
+        isOpen={levelUpModal.isOpen}
+        onClose={closeLevelUpModal}
+        newLevel={levelUpModal.newLevel}
+      />
     </div>
   )
 }

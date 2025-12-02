@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { Button, Card } from '@/components'
 import { CheckCircle, XCircle } from 'lucide-react'
 import { usePracticeStore } from '@/store'
+import { useGamificationStore } from '@/store/gamification/useGamificationStore'
 import { PracticeStep } from '@/lib'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchPassageKey, sessionMutation } from '@/integration'
+import { fetchUserStats } from '@/integration/queries/fetchUserStats'
 
 import type { PassageResponse } from '@/types'
 import { useParams } from '@tanstack/react-router'
@@ -38,6 +40,11 @@ export function ComprehensionQuiz() {
   ]) as PassageResponse
 
   const { mutate } = useMutation(sessionMutation)
+  const {
+    stats: currentStats,
+    openVictoryModal,
+    openLevelUpModal,
+  } = useGamificationStore()
 
   const handleNext = () => {
     if (isLastQuestion) {
@@ -51,20 +58,54 @@ export function ComprehensionQuiz() {
         loading: true,
       }
 
-      mutate({
-        comprehension,
-        correct_answers: correctAnswers,
-        duration: rest.duration!,
-        elapsed_time: rest.elapsedTime,
-        start_time: rest.startTime,
-        total_questions: questions.length,
-        total_words: rest.wordsRead!,
-        wpm: rest.wpm,
-        exercise_id: practiceId!,
-        passage_id: passageResponse?.id,
-      })
+      mutate(
+        {
+          comprehension,
+          correct_answers: correctAnswers,
+          duration: rest.duration!,
+          elapsed_time: rest.elapsedTime,
+          start_time: rest.startTime,
+          total_questions: questions.length,
+          total_words: rest.wordsRead!,
+          wpm: rest.wpm,
+          exercise_id: practiceId!,
+          passage_id: passageResponse?.id,
+        },
+        {
+          onSuccess: async () => {
+            // Fetch updated stats to calculate XP gained and check for level up
+            const newStats = await queryClient.fetchQuery(
+              fetchUserStats(currentStats?.user_id)
+            )
 
-      updateStore(payload)
+            if (newStats && currentStats) {
+              const xpGained = newStats.xp - currentStats.xp
+              const isLevelUp = newStats.level > currentStats.level
+
+              openVictoryModal({
+                xpGained: xpGained > 0 ? xpGained : 0,
+                wordsRead: rest.wordsRead!,
+                timeSpentSeconds: rest.duration!,
+                currentLevel: newStats.level,
+                currentXP: newStats.xp,
+                isLevelUp,
+              })
+
+              if (isLevelUp) {
+                openLevelUpModal(newStats.level)
+              }
+            }
+
+            updateStore(payload)
+          },
+          onError: (error) => {
+            console.error('Failed to save session:', error)
+            // Still proceed to results even if save fails?
+            // Maybe show a toast error but let them see results.
+            updateStore(payload)
+          },
+        }
+      )
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
       setSelectedAnswer(null)
