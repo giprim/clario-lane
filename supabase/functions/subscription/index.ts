@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import type { Database } from "../../supabase_types.ts";
 
@@ -11,7 +12,6 @@ const supabaseAdmin = createClient<Database>(supabaseUrl, supabase_service_key);
 
 const planUrl = "https://api.paystack.co/plan";
 const initateTransactionUrl = "https://api.paystack.co/transaction/initialize";
-const initateSubscriptionUrl = "https://api.paystack.co/subscription";
 const disableSubscriptionUrl = "https://api.paystack.co/subscription/disable";
 
 function jsonResponse(data: unknown, status = 200) {
@@ -55,31 +55,9 @@ async function handleGetPlans() {
   }
 }
 
-async function createCustomer(email: string, name: string) {
-  const url = `https://api.paystack.co/customer`;
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${paystackSecretKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, name }),
-    });
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return jsonResponse([]);
-  }
-}
-
 async function handleInitializeSubscription(req: Request) {
   try {
     const { email, amount, plan } = await req.json();
-
-    // const customer = await createCustomer(email, name);
 
     const response = await fetch(initateTransactionUrl, {
       method: "POST",
@@ -207,14 +185,7 @@ Deno.serve((req) => {
 
   // Handle CORS preflight
   if (method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   // Route matching

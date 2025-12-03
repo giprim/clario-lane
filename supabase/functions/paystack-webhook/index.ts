@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 import crypto from "node:crypto";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import type { Database } from "../../supabase_types.ts";
@@ -41,7 +42,7 @@ async function handlePaystackWebhook(req: Request) {
       .single();
 
     if (customerError || !customer) {
-      return new Response("user not found", { status: 400 });
+      return jsonResponse({ success: false, message: "User not found" }, 400);
     }
 
     const is_subscribed = payload.event === "charge.success";
@@ -60,28 +61,24 @@ async function handlePaystackWebhook(req: Request) {
       customer.id,
     );
 
-    return new Response("got it", { status: 200 });
+    return jsonResponse({ success: true, message: "Webhook processed" }, 200);
   } catch (error) {
     console.error("Webhook error:", error);
-    return new Response("Internal server error", { status: 500 });
+    return jsonResponse(
+      { success: false, message: "Internal server error" },
+      500,
+    );
   }
 }
 
-Deno.serve(async (req) => {
+Deno.serve((req) => {
   const url = new URL(req.url);
   const path = url.pathname;
   const method = req.method;
 
   // Handle CORS preflight
   if (method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, x-paystack-signature",
-      },
-    });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   // Route matching
