@@ -80,7 +80,9 @@ function RouteComponent() {
     <div className='min-h-[calc(100vh-6rem)] w-full flex flex-col'>
       <div className='max-w-7xl flex-1 w-full mx-auto px-6 py-8'>
         <div className='flex items-center pb-8'>
-          <BackButton />
+          <div className='w-[100px]'>
+            <BackButton />
+          </div>
           <Tabs value={activePathname} className='w-fit mx-auto '>
             <TabsList className={`grid w-full max-w-2xl mx-auto grid-cols-4`}>
               {dashboardPrimaryPaths.map((path) => {

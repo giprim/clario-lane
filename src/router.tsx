@@ -18,7 +18,7 @@ export function getRouter() {
     defaultErrorComponent: DefaultCatchBoundary,
     defaultPendingComponent: PendingPage,
     scrollRestoration: true,
-    // defaultPreload: 'render',
+    defaultPreload: 'intent',
     context: {
       queryClient,
       session: null,

@@ -1,8 +1,14 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { corsHeaders } from "../_shared/cors.ts";
+import { Hono } from "npm:hono";
 import crypto from "node:crypto";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import type { Database } from "../../supabase_types.ts";
+import { corsMiddleware } from "../_shared/cors-middleware.ts";
+
+const app = new Hono();
+
+// Apply CORS middleware globally
+app.use("/*", corsMiddleware);
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabase_service_key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -10,20 +16,11 @@ const secret = Deno.env.get("PAYSTACK_SECRET_KEY")!;
 
 const supabaseAdmin = createClient<Database>(supabaseUrl, supabase_service_key);
 
-function jsonResponse(data: unknown, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-}
-
-async function handlePaystackWebhook(req: Request) {
+// POST /paystack-webhook - Handle Paystack webhooks
+app.post("/paystack-webhook", async (c) => {
   try {
-    const payload = await req.json();
-    const signature = req.headers.get("x-paystack-signature");
+    const payload = await c.req.json();
+    const signature = c.req.header("x-paystack-signature");
 
     // Verify webhook signature
     const hash = crypto.createHmac("sha512", secret)
@@ -31,7 +28,7 @@ async function handlePaystackWebhook(req: Request) {
       .digest("hex");
 
     if (hash !== signature) {
-      return jsonResponse({ success: false, message: "Not authorized" }, 401);
+      return c.json({ success: false, message: "Not authorized" }, 401);
     }
 
     // Find user by email
@@ -42,7 +39,7 @@ async function handlePaystackWebhook(req: Request) {
       .single();
 
     if (customerError || !customer) {
-      return jsonResponse({ success: false, message: "User not found" }, 400);
+      return c.json({ success: false, message: "User not found" }, 400);
     }
 
     const is_subscribed = payload.event === "charge.success";
@@ -61,31 +58,11 @@ async function handlePaystackWebhook(req: Request) {
       customer.id,
     );
 
-    return jsonResponse({ success: true, message: "Webhook processed" }, 200);
+    return c.json({ success: true, message: "Webhook processed" }, 200);
   } catch (error) {
     console.error("Webhook error:", error);
-    return jsonResponse(
-      { success: false, message: "Internal server error" },
-      500,
-    );
+    return c.json({ success: false, message: "Internal server error" }, 500);
   }
-}
-
-Deno.serve((req) => {
-  const url = new URL(req.url);
-  const path = url.pathname;
-  const method = req.method;
-
-  // Handle CORS preflight
-  if (method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
-
-  // Route matching
-  if (path === "/paystack-webhook" && method === "POST") {
-    return handlePaystackWebhook(req);
-  }
-
-  // 404 Not Found
-  return jsonResponse({ success: false, message: "Not found" }, 404);
 });
+
+Deno.serve(app.fetch);

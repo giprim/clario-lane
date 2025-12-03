@@ -1,14 +1,17 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { corsHeaders } from "../_shared/cors.ts";
+import { Hono } from "npm:hono";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "jsr:@zod/zod";
-import { Database } from "../../supabase_types.ts";
+import type { Database } from "../../supabase_types.ts";
+import { corsMiddleware } from "../_shared/cors-middleware.ts";
+
+const app = new Hono();
+
+// Apply CORS middleware globally
+app.use("/*", corsMiddleware);
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabase_anon_key = Deno.env.get("SUPABASE_ANON_KEY")!;
-
-// const supabase_service_key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-// const supabaseAdmin = createClient<Database>(supabaseUrl, supabase_service_key);
 
 const sessionSchema = z.object({
   passage_id: z.string(),
@@ -39,7 +42,6 @@ function updateStreak(lastDate: string | null, currentStreak: number) {
     : null;
 
   if (!last) {
-    // first time
     return { streak: 1, date: startOfToday };
   }
 
@@ -47,52 +49,79 @@ function updateStreak(lastDate: string | null, currentStreak: number) {
     (1000 * 60 * 60 * 24);
 
   if (diffDays === 0) {
-    // already logged today
     return { streak: currentStreak, date: startOfToday };
   }
 
   if (diffDays === 1) {
-    // continued streak
     return { streak: currentStreak + 1, date: startOfToday };
   }
 
-  // broke streak
   return { streak: 1, date: startOfToday };
 }
 
-function jsonResponse(data: unknown, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
-}
+// Middleware to create request-scoped Supabase client
+app.use("/practice/*", async (c, next) => {
+  const authHeader = c.req.header("Authorization");
 
-async function handleGetExercises(
-  client: ReturnType<typeof createClient<Database>>,
-) {
+  if (!authHeader) {
+    return c.json({ success: false, message: "Unauthorized" }, 401);
+  }
+
+  const supabaseClient = createClient<Database>(
+    supabaseUrl,
+    supabase_anon_key,
+    {
+      global: {
+        headers: { Authorization: authHeader },
+      },
+    },
+  );
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabaseClient.auth.getUser();
+
+  if (authError || !user) {
+    return c.json({ success: false, message: "Unauthorized" }, 401);
+  }
+
+  c.set("supabase", supabaseClient);
+  c.set("user", user);
+  await next();
+});
+
+// GET /practice - Get all exercises
+app.get("/practice", async (c) => {
+  const supabaseClient = c.get("supabase");
+
   try {
-    const { data, error } = await client.from("exercises").select("*");
+    const { data, error } = await supabaseClient.from("exercises").select("*");
     if (error) throw error;
-    return jsonResponse({
+
+    return c.json({
       success: true,
       data,
       message: "Successfully retrieved",
     });
   } catch (error) {
-    return jsonResponse(
+    console.error(error);
+    return c.json(
       { success: false, data: null, message: "Failed to retrieve exercises" },
       500,
     );
   }
-}
+});
 
-async function handleGetPassage(
-  client: ReturnType<typeof createClient<Database>>,
-) {
+// GET /practice/passage - Get a random passage
+app.get("/practice/passage", async (c) => {
+  const supabaseClient = c.get("supabase");
+
   try {
-    const { data: passageIds, error } = await client.from("passages").select(
-      "id",
-    );
+    const { data: passageIds, error } = await supabaseClient
+      .from("passages")
+      .select("id");
+
     if (error) {
       throw new Error(error.message);
     }
@@ -103,50 +132,46 @@ async function handleGetPassage(
 
     const randomId = passageIds[Math.floor(Math.random() * passageIds.length)];
 
-    const { data: passage } = await client.from("passages").select("*").eq(
-      "id",
-      randomId.id,
-    ).single();
+    const { data: passage } = await supabaseClient
+      .from("passages")
+      .select("*")
+      .eq("id", randomId.id)
+      .single();
 
     if (!passage) {
       throw new Error("Passage not found");
     }
 
-    return jsonResponse({
+    return c.json({
       success: true,
       data: passage,
       message: "Successfully retrieved passage",
     });
   } catch (error) {
     console.error("Error fetching passage:", error);
-    if (error instanceof Error) {
-      return jsonResponse({
-        success: false,
-        data: null,
-        message: `Error fetching passage: ${error.message}`,
-      }, 500);
-    }
+    const message = error instanceof Error
+      ? `Error fetching passage: ${error.message}`
+      : "Error fetching passage";
 
-    return jsonResponse({
-      success: false,
-      data: null,
-      message: "Error fetching passage",
-    }, 500);
+    return c.json(
+      { success: false, data: null, message },
+      500,
+    );
   }
-}
+});
 
-async function handleCreateSession(
-  req: Request,
-  client: ReturnType<typeof createClient<Database>>,
-  userId: string,
-) {
+// POST /practice/session - Create a session
+app.post("/practice/session", async (c) => {
+  const supabaseClient = c.get("supabase");
+  const user = c.get("user");
+
   try {
-    const body = await req.json();
+    const body = await c.req.json();
 
     // Validate request body
     const validationResult = sessionSchema.safeParse(body);
     if (!validationResult.success) {
-      return jsonResponse({
+      return c.json({
         success: false,
         message: "Invalid request data",
         errors: validationResult.error.issues,
@@ -155,29 +180,34 @@ async function handleCreateSession(
 
     const vettedData: SessionData = validationResult.data;
 
-    const { data: user, error } = await client.from("users").select(
-      "id, total_sessions, streak_days, last_active_date",
-    ).eq("id", userId).single();
+    const { data: userData, error } = await supabaseClient
+      .from("users")
+      .select("id, total_sessions, streak_days, last_active_date")
+      .eq("id", user.id)
+      .single();
 
     if (error) throw error;
-    if (!user) {
-      return jsonResponse({ success: false, message: "User not found" }, 404);
+    if (!userData) {
+      return c.json({ success: false, message: "User not found" }, 404);
     }
 
     // Get current user_stats
-    const { data: currentStats } = await client.from("user_stats").select("*")
-      .eq("user_id", userId).single();
+    const { data: currentStats } = await supabaseClient
+      .from("user_stats")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
 
     // Insert practice session
-    const res = await client.from("practice_sessions").insert({
+    const res = await supabaseClient.from("practice_sessions").insert({
       ...vettedData,
-      user_id: userId,
+      user_id: user.id,
     });
 
     if (res.error) throw res.error;
 
-    // Calculate XP for this session using new function
-    const { data: xpData, error: xpError } = await client.rpc(
+    // Calculate XP for this session
+    const { data: xpData, error: xpError } = await supabaseClient.rpc(
       "calculate_session_xp",
       {
         words_read: Math.round(vettedData.total_words),
@@ -189,7 +219,7 @@ async function handleCreateSession(
     if (xpError) throw xpError;
     const sessionXp = xpData as number;
 
-    // Calculate new totals (ensure integers for database)
+    // Calculate new totals
     const newTotalXp = (currentStats?.xp || 0) + sessionXp;
     const newTotalWords = Math.round(
       (currentStats?.total_words_read || 0) + vettedData.total_words,
@@ -199,7 +229,7 @@ async function handleCreateSession(
     );
 
     // Calculate new level
-    const { data: newLevel, error: levelError } = await client.rpc(
+    const { data: newLevel, error: levelError } = await supabaseClient.rpc(
       "calculate_level",
       { total_xp: newTotalXp },
     );
@@ -208,19 +238,19 @@ async function handleCreateSession(
 
     // Update streak
     const streakTracker = updateStreak(
-      user.last_active_date,
-      user.streak_days!,
+      userData.last_active_date,
+      userData.streak_days!,
     );
 
-    // Update user last_active_date and streak FIRST
-    await client.from("users").update({
+    // Update user last_active_date and streak
+    await supabaseClient.from("users").update({
       last_active_date: streakTracker.date.toISOString(),
       streak_days: streakTracker.streak,
-    }).eq("id", userId);
+    }).eq("id", user.id);
 
-    // Update user_stats with new values
-    await client.from("user_stats").upsert({
-      user_id: userId,
+    // Update user_stats
+    await supabaseClient.from("user_stats").upsert({
+      user_id: user.id,
       xp: newTotalXp,
       level: newLevel as number,
       current_streak: streakTracker.streak,
@@ -233,27 +263,25 @@ async function handleCreateSession(
       total_time_seconds: newTotalTime,
     });
 
-    // Update average scores and total_sessions in users table
-    // This must run AFTER the session is inserted so the count is correct
-    const { error: avgError } = await client.rpc(
+    // Update average scores and total_sessions
+    const { error: avgError } = await supabaseClient.rpc(
       "update_avg_scores",
-      { uid: userId },
+      { uid: user.id },
     );
 
     if (avgError) throw avgError;
 
     // Check and unlock achievements
-    const { data: newAchievements, error: achError } = await client.rpc(
+    const { data: newAchievements, error: achError } = await supabaseClient.rpc(
       "check_and_unlock_achievements",
-      { uid: userId },
+      { uid: user.id },
     );
 
     if (achError) {
       console.error("Achievement check error:", achError);
-      // Don't fail the whole request if achievement check fails
     }
 
-    return jsonResponse({
+    return c.json({
       success: true,
       message: "Session successfully recorded",
       data: {
@@ -263,63 +291,12 @@ async function handleCreateSession(
       },
     });
   } catch (error) {
-    console.log(error);
-    return jsonResponse(
+    console.error(error);
+    return c.json(
       { success: false, message: "Something went wrong" },
       500,
     );
   }
-}
-
-Deno.serve(async (req) => {
-  const url = new URL(req.url);
-  const path = url.pathname;
-  const method = req.method;
-  const authHeader = req.headers.get("Authorization");
-
-  // Handle CORS preflight
-  if (method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
-
-  // Create request-scoped Supabase client with auth context
-  const supabaseClient = createClient<Database>(
-    supabaseUrl,
-    supabase_anon_key,
-    {
-      global: {
-        headers: { Authorization: authHeader! },
-      },
-    },
-  );
-
-  // Get authenticated user
-  const {
-    data: { user },
-    error: authError,
-  } = await supabaseClient.auth.getUser();
-
-  if (authError || !user) {
-    console.error("Auth error:", authError);
-    return jsonResponse(
-      { success: false, message: "Unauthorized" },
-      401,
-    );
-  }
-
-  // Route matching
-  if (path === "/practice" && method === "GET") {
-    return handleGetExercises(supabaseClient);
-  }
-
-  if (path === "/practice/passage" && method === "GET") {
-    return handleGetPassage(supabaseClient);
-  }
-
-  if (path === "/practice/session" && method === "POST") {
-    return handleCreateSession(req, supabaseClient, user.id);
-  }
-
-  // 404 Not Found
-  return jsonResponse({ success: false, message: "Not found" }, 404);
 });
+
+Deno.serve(app.fetch);

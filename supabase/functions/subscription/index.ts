@@ -1,7 +1,13 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { corsHeaders } from "../_shared/cors.ts";
+import { Hono } from "npm:hono";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import type { Database } from "../../supabase_types.ts";
+import { corsMiddleware } from "../_shared/cors-middleware.ts";
+
+const app = new Hono();
+
+// Apply CORS middleware globally
+app.use("/*", corsMiddleware);
 
 const paystackSecretKey = Deno.env.get("PAYSTACK_SECRET_KEY")!;
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -14,14 +20,8 @@ const planUrl = "https://api.paystack.co/plan";
 const initateTransactionUrl = "https://api.paystack.co/transaction/initialize";
 const disableSubscriptionUrl = "https://api.paystack.co/subscription/disable";
 
-function jsonResponse(data: unknown, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-async function handleGetPlans() {
+// GET /subscription/plans - Get all plans
+app.get("/subscription/plans", async (c) => {
   try {
     const response = await fetch(planUrl, {
       method: "GET",
@@ -48,16 +48,17 @@ async function handleGetPlans() {
       };
     });
 
-    return jsonResponse(plans);
+    return c.json(plans);
   } catch (error) {
-    console.log(error);
-    return jsonResponse([]);
+    console.error(error);
+    return c.json([]);
   }
-}
+});
 
-async function handleInitializeSubscription(req: Request) {
+// POST /subscription/initialize - Initialize subscription
+app.post("/subscription/initialize", async (c) => {
   try {
-    const { email, amount, plan } = await req.json();
+    const { email, amount, plan } = await c.req.json();
 
     const response = await fetch(initateTransactionUrl, {
       method: "POST",
@@ -70,21 +71,22 @@ async function handleInitializeSubscription(req: Request) {
 
     const data = await response.json();
     console.log(data);
-    return jsonResponse(data);
+    return c.json(data);
   } catch (error) {
     console.error("Error initializing subscription:", error);
-    return jsonResponse(
+    return c.json(
       { success: false, message: "Failed to initialize subscription" },
       500,
     );
   }
-}
+});
 
-async function handleCancelSubscription(req: Request) {
+// POST /subscription/cancel - Cancel subscription
+app.post("/subscription/cancel", async (c) => {
   try {
-    const authHeader = req.headers.get("Authorization");
+    const authHeader = c.req.header("Authorization");
     if (!authHeader) {
-      return jsonResponse({ success: false, message: "Unauthorized" }, 401);
+      return c.json({ success: false, message: "Unauthorized" }, 401);
     }
 
     const supabaseClient = createClient<Database>(
@@ -103,7 +105,7 @@ async function handleCancelSubscription(req: Request) {
     } = await supabaseClient.auth.getUser();
 
     if (authError || !user) {
-      return jsonResponse({ success: false, message: "Unauthorized" }, 401);
+      return c.json({ success: false, message: "Unauthorized" }, 401);
     }
 
     // Get the latest subscription code from paystack_payloads
@@ -115,20 +117,18 @@ async function handleCancelSubscription(req: Request) {
       .limit(1);
 
     if (payloadError || !payloads || payloads.length === 0) {
-      return jsonResponse(
+      return c.json(
         { success: false, message: "No subscription found" },
         404,
       );
     }
 
     // Extract subscription code and token from payload
-    // The payload structure depends on the Paystack event, but usually 'data.subscription_code' or similar
-    // We'll try to find it in the payload
     // deno-lint-ignore no-explicit-any
     const payloadData = payloads[0].payload as any;
     const subscriptionCode = payloadData.data?.authorization
       ?.authorization_code;
-    const email_token = payloadData.data?.customer?.email; // Required for disable endpoint
+    const email_token = payloadData.data?.customer?.email;
 
     console.log({
       subscriptionCode,
@@ -141,7 +141,7 @@ async function handleCancelSubscription(req: Request) {
         "Missing subscription code or email token in payload",
         payloadData,
       );
-      return jsonResponse({
+      return c.json({
         success: false,
         message: "Subscription details not found. Please contact support.",
       }, 404);
@@ -159,7 +159,7 @@ async function handleCancelSubscription(req: Request) {
     const data = await response.json();
 
     if (!data.status) {
-      return jsonResponse({ success: false, message: data.message }, 400);
+      return c.json({ success: false, message: data.message }, 400);
     }
 
     // Update user status
@@ -168,39 +168,14 @@ async function handleCancelSubscription(req: Request) {
       .update({ is_subscribed: false })
       .eq("id", user.id);
 
-    return jsonResponse({ success: true, message: "Subscription cancelled" });
+    return c.json({ success: true, message: "Subscription cancelled" });
   } catch (error) {
     console.error("Error cancelling subscription:", error);
-    return jsonResponse(
+    return c.json(
       { success: false, message: "Failed to cancel subscription" },
       500,
     );
   }
-}
-
-Deno.serve((req) => {
-  const url = new URL(req.url);
-  const path = url.pathname;
-  const method = req.method;
-
-  // Handle CORS preflight
-  if (method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
-
-  // Route matching
-  if (path === "/subscription/plans" && method === "GET") {
-    return handleGetPlans();
-  }
-
-  if (path === "/subscription/initialize" && method === "POST") {
-    return handleInitializeSubscription(req);
-  }
-
-  if (path === "/subscription/cancel" && method === "POST") {
-    return handleCancelSubscription(req);
-  }
-
-  // 404 Not Found
-  return jsonResponse({ success: false, message: "Not found" }, 404);
 });
+
+Deno.serve(app.fetch);
