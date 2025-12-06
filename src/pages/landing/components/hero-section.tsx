@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'motion/react'
 import { Button } from '@/components'
-import { ArrowRight, Play, Zap } from 'lucide-react'
+import { ArrowRight, Play } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import type { Session } from '@supabase/supabase-js'
