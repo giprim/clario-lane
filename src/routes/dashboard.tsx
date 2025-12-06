@@ -80,7 +80,7 @@ function RouteComponent() {
     <div className='min-h-[calc(100vh-6rem)] w-full flex flex-col'>
       <div className='max-w-7xl flex-1 w-full mx-auto px-6 py-8'>
         <div className='flex items-center pb-8'>
-          <div className='w-[100px]'>
+          <div className='w-fit md:w-[100px]'>
             <BackButton />
           </div>
           <Tabs value={activePathname} className='w-fit mx-auto '>
