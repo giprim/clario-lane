@@ -54,7 +54,7 @@ export function LevelUpModal({ isOpen, onClose, newLevel }: LevelUpModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className='sm:max-w-md bg-gradient-to-br from-indigo-900 to-purple-900 border-indigo-800 text-white'>
+      <DialogContent className='sm:max-w-md bg-linear-to-br from-indigo-900 to-purple-900 border-indigo-800 text-white'>
         <DialogHeader>
           <DialogTitle className='text-center text-3xl font-bold flex flex-col items-center gap-4 text-white'>
             <motion.div

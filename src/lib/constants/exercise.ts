@@ -54,3 +54,11 @@ export const PRACTICE_ROUTES: Record<PRACTICES, string> = {
 
 export type PRACTICE_ROUTES =
   (typeof PRACTICE_ROUTES)[keyof typeof PRACTICE_ROUTES];
+
+export const FEEDBACK_KEY = "hasFeedback";
+export const TOTAL_SESSIONS_KEY = "totalSessions";
+export const SESSIONS_THRESHOLD = 3;
+export const FEEDBACK_STATE = {
+  FALSE: "false",
+  TRUE: "true",
+} as const;

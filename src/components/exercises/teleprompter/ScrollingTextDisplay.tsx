@@ -28,8 +28,8 @@ export function ScrollingTextDisplay() {
   return (
     <Card className='flex-1 relative overflow-hidden border-border bg-card'>
       {/* Gradient Masks for Fade Effect */}
-      <div className='absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-card to-transparent z-10 pointer-events-none' />
-      <div className='absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-card to-transparent z-10 pointer-events-none' />
+      <div className='absolute top-0 left-0 right-0 h-24 bg-linear-to-b from-card to-transparent z-10 pointer-events-none' />
+      <div className='absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-card to-transparent z-10 pointer-events-none' />
 
       {/* Scrollable Content */}
       <div

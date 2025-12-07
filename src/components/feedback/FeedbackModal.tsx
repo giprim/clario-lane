@@ -12,6 +12,8 @@ import { Label } from '@/components/ui/label'
 import { useMutation } from '@tanstack/react-query'
 import { supabaseService } from '~supabase/clientServices'
 import { useRouteContext } from '@tanstack/react-router'
+import { FEEDBACK_KEY, FEEDBACK_STATE, TOTAL_SESSIONS_KEY } from '@/lib'
+import { toast } from 'sonner'
 
 interface FeedbackModalProps {
   open: boolean
@@ -47,12 +49,29 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
       setFeedback('')
       setCategory('general')
       onOpenChange(false)
-      // Optional: Show success toast
+      localStorage.setItem(FEEDBACK_KEY, FEEDBACK_STATE.TRUE)
+      toast.success('Feedback submitted successfully')
+    },
+    onError: () => {
+      toast.error('Failed to submit feedback')
     },
   })
 
+  const handleClose = () => {
+    onOpenChange(false)
+    const getHasFeedback = localStorage.getItem(FEEDBACK_KEY)
+    const hasFeedback = getHasFeedback === FEEDBACK_STATE.TRUE
+    if (hasFeedback) return
+
+    localStorage.setItem(FEEDBACK_KEY, FEEDBACK_STATE.FALSE)
+    localStorage.setItem(
+      TOTAL_SESSIONS_KEY,
+      userProfile?.total_sessions?.toString() || '0'
+    )
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className='sm:max-w-[525px]'>
         <DialogHeader>
           <DialogTitle>Send Feedback</DialogTitle>
@@ -96,10 +115,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
         </div>
 
         <DialogFooter>
-          <Button
-            type='button'
-            variant='outline'
-            onClick={() => onOpenChange(false)}>
+          <Button type='button' variant='outline' onClick={handleClose}>
             Cancel
           </Button>
           <Button

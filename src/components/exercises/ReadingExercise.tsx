@@ -294,7 +294,7 @@ export function ReadingExercise({
           </Card>
         </div>
 
-        <Card className='mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200'>
+        <Card className='mb-6 bg-linear-to-r from-indigo-50 to-purple-50 border-indigo-200'>
           <CardContent className='pt-6'>
             <h3 className='mb-2 text-indigo-900'>
               XP Earned: +
@@ -323,7 +323,7 @@ export function ReadingExercise({
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6 py-12'>
+    <div className='min-h-screen bg-linear-to-br from-gray-50 to-blue-50 p-6 py-12'>
       <AnimatePresence mode='wait'>
         {stage === 'reading' && renderReading()}
         {stage === 'questions' && renderQuestions()}

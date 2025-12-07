@@ -1,16 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Card } from '@/components'
 import { CheckCircle, XCircle } from 'lucide-react'
-import { usePracticeStore } from '@/store'
+import { usePracticeStore, useAppStore } from '@/store'
 import { useGamificationStore } from '@/store/gamification/useGamificationStore'
 import { PracticeStep } from '@/lib'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchPassageKey, sessionMutation } from '@/integration'
-import { fetchUserStats } from '@/integration/queries/fetchUserStats'
+import {
+  fetchUserStats,
+  fetchUserStatsKey,
+} from '@/integration/queries/fetchUserStats'
 import { supabaseService } from '~supabase/clientServices'
 
 import type { PassageResponse } from '@/types'
-import { useParams } from '@tanstack/react-router'
+import { useLocation } from '@tanstack/react-router'
 
 export function ComprehensionQuiz() {
   const { passage, updateStore, ...rest } = usePracticeStore()
@@ -19,7 +22,7 @@ export function ComprehensionQuiz() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [answers, setAnswers] = useState<boolean[]>([])
   const [showResult, setShowResult] = useState(false)
-  const { practiceId } = useParams({ strict: false })
+  const [exerciseUuid, setExerciseUuid] = useState<string | undefined>()
 
   const currentQuestion = questions?.[currentQuestionIndex]
   const isLastQuestion = currentQuestionIndex === questions?.length - 1
@@ -41,6 +44,52 @@ export function ComprehensionQuiz() {
   ]) as PassageResponse
 
   const { mutate, status: mutationStatus } = useMutation(sessionMutation)
+  const { activePractice } = useAppStore()
+  const location = useLocation()
+
+  // Extract exercise type from URL path as fallback
+  // URL format: /dashboard/practice/{exerciseType}/{practiceId}
+  const getExerciseFromPath = (): string | undefined => {
+    const pathParts = location.pathname.split('/')
+    const exerciseSegment = pathParts[3] // e.g., 'speedreading', 'teleprompter', 'wordchunking'
+
+    // Map URL segment to exercise enum
+    const exerciseMap: Record<string, string> = {
+      speedreading: 'SPEED_READING',
+      teleprompter: 'TELEPROMPTER',
+      wordchunking: 'WORD_CHUNKING',
+    }
+
+    return exerciseMap[exerciseSegment]
+  }
+
+  // const exerciseId = activePractice?.exercise || getExerciseFromPath()
+
+  // Fetch exercise UUID from database
+  useEffect(() => {
+    const fetchExerciseId = async () => {
+      const exerciseType = activePractice?.exercise || getExerciseFromPath()
+      if (exerciseType) {
+        const { data, error } = await supabaseService.sp
+          .from('exercises')
+          .select('id')
+          .eq('exercise', exerciseType)
+          .single()
+
+        if (error) {
+          console.error('Failed to fetch exercise ID:', error)
+          return
+        }
+
+        if (data?.id) {
+          setExerciseUuid(data.id)
+        }
+      }
+    }
+
+    fetchExerciseId()
+  }, [activePractice])
+
   const {
     stats: currentStats,
     openVictoryModal,
@@ -69,7 +118,7 @@ export function ComprehensionQuiz() {
           total_questions: questions.length,
           total_words: rest.wordsRead!,
           wpm: rest.wpm,
-          exercise_id: practiceId!,
+          exercise_id: exerciseUuid!,
           passage_id: passageResponse?.id,
         },
         {
@@ -148,6 +197,9 @@ export function ComprehensionQuiz() {
             })
             await queryClient.invalidateQueries({
               queryKey: ['words-read-today'],
+            })
+            await queryClient.invalidateQueries({
+              queryKey: [fetchUserStatsKey],
             })
 
             updateStore(payload)

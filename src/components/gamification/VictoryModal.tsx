@@ -44,7 +44,7 @@ export function VictoryModal({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className='sm:max-w-md dark:bg-zinc-900 dark:border-zinc-800 max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle className='text-center text-2xl font-bold flex flex-col items-center gap-2 dark:text-zinc-100 break-words'>
+          <DialogTitle className='text-center text-2xl font-bold flex flex-col items-center gap-2 dark:text-zinc-100 wrap-break-word'>
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}

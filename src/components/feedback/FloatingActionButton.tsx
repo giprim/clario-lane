@@ -1,14 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MessageCircle, Settings as SettingsIcon, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FeedbackModal } from './FeedbackModal'
 import { Link, useRouteContext } from '@tanstack/react-router'
 import { motion, AnimatePresence } from 'motion/react'
+import {
+  FEEDBACK_KEY,
+  FEEDBACK_STATE,
+  SESSIONS_THRESHOLD,
+  TOTAL_SESSIONS_KEY,
+} from '@/lib'
 
 export function FloatingActionButton() {
   const [isOpen, setIsOpen] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
-  const userSession = useRouteContext({ from: '__root__' }).session
+  const { session: userSession, user } = useRouteContext({ from: '__root__' })
 
   const menuItems = [
     {
@@ -26,6 +32,27 @@ export function FloatingActionButton() {
   if (!userSession) {
     menuItems.pop()
   }
+
+  useEffect(() => {
+    const getHasFeedback = localStorage.getItem(FEEDBACK_KEY)
+    const hasFeedback = getHasFeedback === FEEDBACK_STATE.TRUE
+    const totalSessions = user?.total_sessions || 0
+    const storedTotalSessions = localStorage.getItem(TOTAL_SESSIONS_KEY)
+    const storedTotalSessionsValue = storedTotalSessions
+      ? parseInt(storedTotalSessions)
+      : 0
+
+    if (hasFeedback) {
+      return
+    }
+
+    if (
+      totalSessions - storedTotalSessionsValue >= SESSIONS_THRESHOLD &&
+      !hasFeedback
+    ) {
+      setShowFeedback(true)
+    }
+  }, [userSession, user])
 
   return (
     <>
