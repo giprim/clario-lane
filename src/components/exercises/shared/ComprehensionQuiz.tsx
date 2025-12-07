@@ -156,13 +156,13 @@ export function ComprehensionQuiz() {
 
               // Use response data if stats fetch fails or is delayed
               const xpGained =
-                response?.data?.data?.xp_gained ||
+                response?.data?.xp_gained ||
                 (newStats && currentStats ? newStats.xp - currentStats.xp : 0)
               const currentLevel =
-                response?.data?.data?.new_level || newStats?.level || 1
+                response?.data?.new_level || newStats?.level || 1
               const currentXP = newStats?.xp || 0
               const isLevelUp =
-                response?.data?.data?.new_level > (currentStats?.level || 1) ||
+                response?.data?.new_level > (currentStats?.level || 1) ||
                 (newStats &&
                   currentStats &&
                   newStats.level > currentStats.level)

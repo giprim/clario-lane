@@ -29,10 +29,6 @@ export function FloatingActionButton() {
     },
   ]
 
-  if (!userSession) {
-    menuItems.pop()
-  }
-
   useEffect(() => {
     const getHasFeedback = localStorage.getItem(FEEDBACK_KEY)
     const hasFeedback = getHasFeedback === FEEDBACK_STATE.TRUE
@@ -53,6 +49,10 @@ export function FloatingActionButton() {
       setShowFeedback(true)
     }
   }, [userSession, user])
+
+  if (!userSession) {
+    return null
+  }
 
   return (
     <>

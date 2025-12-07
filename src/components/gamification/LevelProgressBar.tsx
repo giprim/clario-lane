@@ -13,15 +13,22 @@ export function LevelProgressBar({ currentXP, level }: LevelProgressBarProps) {
   // So: Total XP needed for level N = N^2 * 100
   const xpForCurrentLevel = level * level * 100
   const xpForNextLevel = (level + 1) * (level + 1) * 100
-  const xpIntoCurrentLevel = currentXP - xpForCurrentLevel
+  const xpIntoCurrentLevel = xpForCurrentLevel - currentXP
   const xpNeededForNextLevel = xpForNextLevel - xpForCurrentLevel
   const progressPercent = Math.min(
     (xpIntoCurrentLevel / xpNeededForNextLevel) * 100,
     100
   )
 
+  console.log({
+    xpForCurrentLevel,
+    xpForNextLevel,
+    xpIntoCurrentLevel,
+    xpNeededForNextLevel,
+  })
+
   return (
-    <Card className='bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-100 dark:from-indigo-900/10 dark:to-purple-900/10 dark:border-indigo-900/30 dark:bg-zinc-900/50'>
+    <Card className='bg-linear-to-r from-indigo-50 to-purple-50 border-indigo-100 dark:from-indigo-900/10 dark:to-purple-900/10 dark:border-indigo-900/30 dark:bg-zinc-900/50'>
       <CardContent className='p-6'>
         <div className='flex items-center justify-between mb-3'>
           <div className='flex items-center gap-2'>

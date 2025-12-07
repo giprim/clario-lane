@@ -248,8 +248,7 @@ app.post("/practice/session", async (c) => {
       streak_days: streakTracker.streak,
     }).eq("id", user.id);
 
-    // Update user_stats
-    await supabaseClient.from("user_stats").upsert({
+    const user_stats_update = {
       user_id: user.id,
       xp: newTotalXp,
       level: newLevel as number,
@@ -261,7 +260,15 @@ app.post("/practice/session", async (c) => {
       last_activity_date: streakTracker.date.toISOString().split("T")[0],
       total_words_read: newTotalWords,
       total_time_seconds: newTotalTime,
-    });
+    };
+
+    console.log({ user_stats_update });
+
+    // Update user_stats
+    const { error: statsError } = await supabaseClient.from("user_stats")
+      .upsert(user_stats_update);
+
+    if (statsError) throw statsError;
 
     // Update average scores and total_sessions
     const { error: avgError } = await supabaseClient.rpc(
