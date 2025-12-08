@@ -16,16 +16,9 @@ export function LevelProgressBar({ currentXP, level }: LevelProgressBarProps) {
   const xpIntoCurrentLevel = xpForCurrentLevel - currentXP
   const xpNeededForNextLevel = xpForNextLevel - xpForCurrentLevel
   const progressPercent = Math.min(
-    (xpIntoCurrentLevel / xpNeededForNextLevel) * 100,
+    (currentXP / xpNeededForNextLevel) * 100,
     100
   )
-
-  console.log({
-    xpForCurrentLevel,
-    xpForNextLevel,
-    xpIntoCurrentLevel,
-    xpNeededForNextLevel,
-  })
 
   return (
     <Card className='bg-linear-to-r from-indigo-50 to-purple-50 border-indigo-100 dark:from-indigo-900/10 dark:to-purple-900/10 dark:border-indigo-900/30 dark:bg-zinc-900/50'>
@@ -38,7 +31,7 @@ export function LevelProgressBar({ currentXP, level }: LevelProgressBarProps) {
             </span>
           </div>
           <span className='text-xs text-gray-600 dark:text-zinc-400'>
-            {xpIntoCurrentLevel.toLocaleString()} /{' '}
+            {currentXP.toLocaleString()} /{' '}
             {xpNeededForNextLevel.toLocaleString()} XP
           </span>
         </div>

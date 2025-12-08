@@ -29,7 +29,7 @@ export const QuestCard = ({ todaysTasks, onClaimQuest }: Props) => {
       <CardHeader>
         <QuestCardHeader count={activeQuests.length} />
       </CardHeader>
-      <CardContent className='space-y-2'>
+      <CardContent className='space-y-4'>
         {activeQuests.map((quest) => {
           const progress = todaysTasks.getProgress(quest.id)
           return (

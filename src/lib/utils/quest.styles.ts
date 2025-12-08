@@ -17,7 +17,6 @@ export function getQuestItemStyles(
       "relative p-4 border rounded-xl transition-all duration-300 ",
       "bg-linear-to-br from-yellow-50 to-amber-50 border-yellow-300",
       "dark:from-yellow-950/20 dark:to-amber-950/20 dark:border-yellow-800",
-      "ring-2 ring-yellow-400 ring-offset-2",
     );
   }
 

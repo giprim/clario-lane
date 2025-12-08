@@ -289,7 +289,7 @@ app.post("/practice/session", async (c: any) => {
         .select("current_value, is_completed")
         .eq("user_id", user.id)
         .eq("quest_id", quest.id)
-        .single();
+        .maybeSingle();
 
       if (_existingError) throw _existingError;
 
