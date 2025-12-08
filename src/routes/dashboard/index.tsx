@@ -6,16 +6,13 @@ import {
   DailyGoalRing,
   StreakCounter,
   LevelProgressBar,
-  Button,
   QuestCard,
 } from '@/components'
-import { getBadges } from '@/lib'
 import { useQuery } from '@tanstack/react-query'
 import { useGamification } from '@/hooks'
 
 import {
   createFileRoute,
-  Link,
   redirect,
   useRouteContext,
 } from '@tanstack/react-router'
@@ -47,9 +44,6 @@ export function RouteComponent() {
     throw redirect({ to: '/auth' })
   }
 
-  const badges = getBadges(userProfile, data)
-  const earnedBadgesCount = badges.filter((b) => b.earned).length
-
   const readingSpeedData = data?.length
     ? data?.map((practiced_session, index) => ({
         session: `session ${index + 1}`,
@@ -65,17 +59,6 @@ export function RouteComponent() {
       100
   )
   const improvement = userProfile.current_wpm! - userProfile.baseline_wpm!
-
-  // const todaysTasks = [
-  //   {
-  //     id: 1,
-  //     title: 'Complete daily reading exercise',
-  //     completed: false,
-  //     xp: 25,
-  //   },
-  //   { id: 2, title: 'Practice word chunking drill', completed: true, xp: 20 },
-  //   { id: 3, title: 'Take comprehension quiz', completed: false, xp: 30 },
-  // ]
 
   return (
     <motion.div
