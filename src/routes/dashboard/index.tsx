@@ -9,7 +9,7 @@ import {
   QuestCard,
 } from '@/components'
 import { useQuery } from '@tanstack/react-query'
-import { useGamification } from '@/hooks'
+import { useClaimQuest, useGamification } from '@/hooks'
 
 import {
   createFileRoute,
@@ -42,6 +42,8 @@ export function RouteComponent() {
   if (!userProfile) {
     throw redirect({ to: '/auth' })
   }
+
+  const { claimQuest } = useClaimQuest()
 
   const readingSpeedData = data?.length
     ? data?.map((practiced_session, index) => ({
@@ -107,7 +109,12 @@ export function RouteComponent() {
 
       <div className='grid md:grid-cols-2 gap-6'>
         {/* Today's Tasks */}
-        {quests ? <QuestCard todaysTasks={quests} /> : null}
+        {quests ? (
+          <QuestCard
+            todaysTasks={quests}
+            onClaimQuest={(questId) => claimQuest(questId)}
+          />
+        ) : null}
 
         {/* Goal Tracker */}
         <GoalTrackerCard

@@ -19,8 +19,6 @@ export const fetchPassage = queryOptions({
       },
     );
 
-    console.log({ data });
-
     if (data) {
       usePracticeStore.setState({ passage: data.data.passage });
     }
