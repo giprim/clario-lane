@@ -2,12 +2,12 @@ import {
   OverviewStats,
   ProgressChart,
   GoalTrackerCard,
-  // DailyPracticeCard,
   OverviewPending,
   DailyGoalRing,
   StreakCounter,
   LevelProgressBar,
   Button,
+  QuestCard,
 } from '@/components'
 import { getBadges } from '@/lib'
 import { useQuery } from '@tanstack/react-query'
@@ -36,7 +36,12 @@ export function RouteComponent() {
       await supabaseService.getPracticedSessions(userProfile?.id),
   })
 
-  const { stats, isLoading: isLoadingGamification } = useGamification()
+  const {
+    stats,
+    achievements,
+    quests,
+    isLoading: isLoadingGamification,
+  } = useGamification()
 
   if (!userProfile) {
     throw redirect({ to: '/auth' })
@@ -93,8 +98,8 @@ export function RouteComponent() {
         }}
         progress={null}
         session={{
-          streak: userProfile.streak_days || 0,
-          total: userProfile.total_sessions || 0,
+          streak: stats?.current_streak || 0,
+          total: stats?.longest_streak || 0,
         }}
       />
 
@@ -120,27 +125,25 @@ export function RouteComponent() {
 
       <div className='grid md:grid-cols-2 gap-6'>
         {/* Today's Tasks */}
-        {/* {todaysTasks.length ? (
-          <DailyPracticeCard todaysTasks={todaysTasks} />
-        ) : null} */}
+        {quests ? <QuestCard todaysTasks={quests} /> : null}
 
         {/* Goal Tracker */}
         <GoalTrackerCard
           current_wpm={userProfile.current_wpm || 0}
           goalWPM={goalWPM}
           progressPercent={progressPercent}
-          earnedBadges={earnedBadgesCount}
+          earnedBadges={achievements.unlocked?.length || 0}
           baseline_wpm={userProfile.baseline_wpm || 0}
-          level={userProfile.level || 0}
-          streak_days={userProfile.streak_days || 0}
+          level={stats?.level}
+          streak_days={stats?.current_streak}
           total_sessions={userProfile.total_sessions || 0}
         />
 
-        <div className='flex justify-center items-center bg-linear-to-r from-primary/10 to-secondary/10 rounded-md p-2'>
+        {/* <div className='flex justify-center items-center bg-linear-to-r from-primary/10 to-secondary/10 rounded-md p-2'>
           <Button size={'lg'} asChild>
             <Link to='/dashboard/practice'>Start reading</Link>
           </Button>
-        </div>
+        </div> */}
       </div>
     </motion.div>
   )
