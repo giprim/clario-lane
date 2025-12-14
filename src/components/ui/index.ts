@@ -2,6 +2,7 @@ export * from "./button";
 export * from "./select";
 export * from "./card";
 export * from "./field";
+export * from "./field-info";
 export * from "./label";
 export * from "./separator";
 export * from "./input";

@@ -46,23 +46,21 @@ export default function AuthPage({
       dateOfBirth: '',
       password: '',
       confirmPassword: '',
-      authType: authState,
     },
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     validators: { onBlur: AuthValidationSchema },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value: { confirmPassword, ...rest } }) => {
       try {
-        updateProfile({ ...value })
+        updateProfile({ ...rest })
 
         if (authState === 'signup') {
-          await supabaseService.signUp(value.email, value.password, value.name)
+          await supabaseService.signUp(rest.email, rest.password, rest.name)
         }
         if (authState === 'signin') {
-          await supabaseService.signIn(value.email, value.password)
+          await supabaseService.signIn(rest.email, rest.password)
         }
         toast.success(successMessage)
-        route.navigate({ to: '/onboarding' })
       } catch (error) {
         catchError(error)
       } finally {
@@ -100,9 +98,7 @@ export default function AuthPage({
           <CardTitle className='text-xl'>
             {authState === 'signin' ? 'Welcome back' : 'Create an account'}
           </CardTitle>
-          <CardDescription>
-            Continue with your Apple or Google account
-          </CardDescription>
+          <CardDescription>Continue with your Google account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -111,6 +107,7 @@ export default function AuthPage({
                 <Button
                   variant='outline'
                   type='button'
+                  size={'lg'}
                   onClick={handleGoogleSignIn}>
                   {isSubmitting ? (
                     <Spinner />
@@ -127,7 +124,9 @@ export default function AuthPage({
                       </svg>
                     </>
                   )}
-                  Login with Google
+                  {authState === 'signin'
+                    ? 'Login with Google'
+                    : 'Sign up with Google'}
                 </Button>
               </Field>
               <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
@@ -189,7 +188,7 @@ export default function AuthPage({
                     <div className='flex items-center'>
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                       <Link
-                        to='/'
+                        to='/auth/forgot-password'
                         className='ml-auto text-sm underline-offset-4 hover:underline'>
                         Forgot your password?
                       </Link>
@@ -242,7 +241,7 @@ export default function AuthPage({
                 <form.Subscribe
                   selector={(state) => [state.canSubmit, state.isSubmitting]}
                   children={([canSubmit, isSubmitting]) => (
-                    <Button type='submit' disabled={!canSubmit}>
+                    <Button type='submit' size={'lg'} disabled={!canSubmit}>
                       {isSubmitting ? <Spinner /> : null}
                       {authState === 'signin' ? ' Sign in' : 'Create account'}
                     </Button>

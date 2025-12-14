@@ -45,13 +45,17 @@ export function ProfileMenu(props: Props) {
         </DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link to='/dashboard'>Dashboard</Link>
+            <Link to='/dashboard' className='w-full h-full'>
+              Dashboard
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
             <Link to='/dashboard/settings'>Billing</Link>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem>
-            <Link to='/dashboard/settings'>Settings</Link>
+            <Link to='/dashboard/settings' className='w-full h-full'>
+              Settings
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         {/* <DropdownMenuSeparator />

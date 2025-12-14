@@ -28,12 +28,6 @@ export function Drill({ currentIndex }: Props) {
           <h2 className='text-5xl md:text-7xl font-black tracking-tight text-center bg-clip-text text-transparent bg-linear-to-b from-foreground to-foreground/70'>
             {currentWord}
           </h2>
-
-          <div className='absolute bottom-6 left-1/2 -translate-x-1/2'>
-            <p className='text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/50'>
-              Focus on center
-            </p>
-          </div>
         </Card>
 
         <div className='mt-8 max-w-sm w-full h-1 bg-secondary rounded-full overflow-hidden'>

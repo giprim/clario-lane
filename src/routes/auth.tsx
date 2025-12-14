@@ -1,5 +1,4 @@
-import AuthPage from '@/pages/auth/auth-page'
-import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
 import { BookOpen } from 'lucide-react'
 import { motion } from 'motion/react'
 
@@ -29,7 +28,7 @@ function RouteComponent() {
           </div>
           ClarioLane
         </Link>
-        <AuthPage />
+        <Outlet />
       </motion.div>
     </div>
   )

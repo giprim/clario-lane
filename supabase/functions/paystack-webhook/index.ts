@@ -42,7 +42,24 @@ app.post("/paystack-webhook", async (c) => {
       return c.json({ success: false, message: "User not found" }, 400);
     }
 
-    const is_subscribed = payload.event === "charge.success";
+    if (payload.event === "charge.success") {
+      // Update user subscription status
+      await supabaseAdmin.from("users").update({ is_subscribed: true }).eq(
+        "id",
+        customer.id,
+      );
+    }
+
+    if (
+      payload.event === "subscription.not_renew" ||
+      payload.event === "subscription.disable"
+    ) {
+      // Update user subscription status
+      await supabaseAdmin.from("users").update({ is_subscribed: false }).eq(
+        "id",
+        customer.id,
+      );
+    }
 
     if (payload.event === "subscription.create") {
       // Store webhook payload
@@ -61,12 +78,6 @@ app.post("/paystack-webhook", async (c) => {
         user_id: customer.id,
       },
     ]);
-
-    // Update user subscription status
-    await supabaseAdmin.from("users").update({ is_subscribed }).eq(
-      "id",
-      customer.id,
-    );
 
     return c.json({ success: true, message: "Webhook processed" }, 200);
   } catch (error) {

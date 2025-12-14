@@ -16,7 +16,7 @@ const supabase_service_key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 const supabaseAdmin = createClient<Database>(supabaseUrl, supabase_service_key);
 
-const planUrl = "https://api.paystack.co/plan";
+const planUrl = "https://api.paystack.co/plan?status=active";
 const initateTransactionUrl = "https://api.paystack.co/transaction/initialize";
 const subscriptionUrl = "https://api.paystack.co/subscription/";
 
@@ -146,8 +146,6 @@ app.post("/subscription/toggle", async (c) => {
 
     const isStatusEnable = status === "enable";
 
-    console.log({ isStatusEnable, status });
-
     const successMessage = isStatusEnable
       ? "Subscription enabled"
       : "Subscription disabled";
@@ -165,7 +163,6 @@ app.post("/subscription/toggle", async (c) => {
     });
 
     const data = await response.json();
-    console.log({ data });
 
     if (!data.status) {
       return c.json({ success: false, message: errorMessage }, 400);
@@ -234,7 +231,6 @@ app.get("/subscription/next-subscription-date", async (c) => {
 
     const payload: any = data[0].payload?.data;
     const nextPaymentDate = payload?.next_payment_date;
-    console.log(nextPaymentDate);
 
     return c.json({
       success: true,

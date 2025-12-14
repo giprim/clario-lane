@@ -123,6 +123,24 @@ class SupabaseService {
       },
     ).subscribe();
   }
+
+  async resetPasswordForEmail(email: string) {
+    const { error } = await this.sp.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async updateUserPassword(password: string) {
+    const { error } = await this.sp.auth.updateUser({ password });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export const supabaseService = new SupabaseService();

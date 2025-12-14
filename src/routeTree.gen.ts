@@ -16,10 +16,13 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as DashboardProgressRouteImport } from './routes/dashboard/progress'
 import { Route as DashboardPracticeRouteImport } from './routes/dashboard/practice'
 import { Route as DashboardChallengesRouteImport } from './routes/dashboard/challenges'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as DashboardPracticeIndexRouteImport } from './routes/dashboard/practice/index'
 import { Route as DashboardPracticeWordchunkingPracticeIdRouteImport } from './routes/dashboard/practice/wordchunking/$practiceId'
 import { Route as DashboardPracticeTeleprompterPracticeIdRouteImport } from './routes/dashboard/practice/teleprompter/$practiceId'
@@ -60,6 +63,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthRoute,
+} as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -79,6 +87,16 @@ const DashboardChallengesRoute = DashboardChallengesRouteImport.update({
   id: '/challenges',
   path: '/challenges',
   getParentRoute: () => DashboardRoute,
+} as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRoute,
 } as any)
 const DashboardPracticeIndexRoute = DashboardPracticeIndexRouteImport.update({
   id: '/',
@@ -106,14 +124,17 @@ const DashboardPracticeSpeedreadingPracticeIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/onboarding': typeof OnboardingRouteWithChildren
   '/pricing': typeof PricingRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/challenges': typeof DashboardChallengesRoute
   '/dashboard/practice': typeof DashboardPracticeRouteWithChildren
   '/dashboard/progress': typeof DashboardProgressRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/dashboard/practice/': typeof DashboardPracticeIndexRoute
@@ -123,11 +144,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/pricing': typeof PricingRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/challenges': typeof DashboardChallengesRoute
   '/dashboard/progress': typeof DashboardProgressRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/dashboard/practice': typeof DashboardPracticeIndexRoute
@@ -138,14 +161,17 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/onboarding': typeof OnboardingRouteWithChildren
   '/pricing': typeof PricingRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/challenges': typeof DashboardChallengesRoute
   '/dashboard/practice': typeof DashboardPracticeRouteWithChildren
   '/dashboard/progress': typeof DashboardProgressRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/dashboard/practice/': typeof DashboardPracticeIndexRoute
@@ -161,10 +187,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/onboarding'
     | '/pricing'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/dashboard/challenges'
     | '/dashboard/practice'
     | '/dashboard/progress'
     | '/dashboard/settings'
+    | '/auth/'
     | '/dashboard/'
     | '/onboarding/'
     | '/dashboard/practice/'
@@ -174,11 +203,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
     | '/pricing'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/dashboard/challenges'
     | '/dashboard/progress'
     | '/dashboard/settings'
+    | '/auth'
     | '/dashboard'
     | '/onboarding'
     | '/dashboard/practice'
@@ -192,10 +223,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/onboarding'
     | '/pricing'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/dashboard/challenges'
     | '/dashboard/practice'
     | '/dashboard/progress'
     | '/dashboard/settings'
+    | '/auth/'
     | '/dashboard/'
     | '/onboarding/'
     | '/dashboard/practice/'
@@ -206,7 +240,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   OnboardingRoute: typeof OnboardingRouteWithChildren
   PricingRoute: typeof PricingRoute
@@ -263,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/auth/': {
+      id: '/auth/'
+      path: '/'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/dashboard/settings': {
       id: '/dashboard/settings'
       path: '/settings'
@@ -290,6 +331,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/challenges'
       preLoaderRoute: typeof DashboardChallengesRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/dashboard/practice/': {
       id: '/dashboard/practice/'
@@ -321,6 +376,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthRouteChildren {
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthIndexRoute: AuthIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface DashboardPracticeRouteChildren {
   DashboardPracticeIndexRoute: typeof DashboardPracticeIndexRoute
@@ -376,7 +445,7 @@ const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   OnboardingRoute: OnboardingRouteWithChildren,
   PricingRoute: PricingRoute,
