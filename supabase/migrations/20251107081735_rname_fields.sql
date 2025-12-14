@@ -44,7 +44,7 @@ alter table "public"."users" add column "current_wpm" integer default 0;
 
 alter table "public"."users" add column "daily_reminder" boolean default true;
 
-alter table "public"."users" add column "date_of_birth" date;
+-- alter table "public"."users" add column "date_of_birth" date;
 
 alter table "public"."users" add column "focus_score" integer default 0;
 

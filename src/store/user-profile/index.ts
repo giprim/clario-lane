@@ -13,7 +13,7 @@ export type UserProfileType = {
   current_wpm: number;
   achievements: boolean;
   badges?: string[];
-  date_of_birth?: string | Date;
+  // date_of_birth?: string | Date;
   focus_score?: number;
   daily_reminder: boolean;
   weekly_summary: boolean;
@@ -32,7 +32,7 @@ export type UserProfileStoreActions = {
 export const initialUserProfile: UserProfileType = {
   name: "",
   email: "",
-  date_of_birth: "",
+  // date_of_birth: "",
   achievements: false,
   baseline_wpm: 0,
   badges: [],

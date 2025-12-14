@@ -13,7 +13,7 @@ export const OnboardingSchema = z.object({
   current_wpm: z.number().optional(),
   achievements: z.boolean(),
   badges: z.array(z.string()).optional(),
-  date_of_birth: z.union([z.string(), z.date()]).optional(),
+  // date_of_birth: z.union([z.string(), z.date()]).optional(),
   focus_score: z.number().optional(),
   daily_reminder: z.boolean(),
   weekly_summary: z.boolean(),

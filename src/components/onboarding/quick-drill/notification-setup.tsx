@@ -1,4 +1,11 @@
-import { Bell, CheckCircle2, ChevronRight, Mail, Trophy } from 'lucide-react'
+import {
+  Bell,
+  CheckCircle2,
+  ChevronRight,
+  Loader2,
+  Mail,
+  Trophy,
+} from 'lucide-react'
 import { motion } from 'motion/react'
 import { useId } from 'react'
 import { useOnboardingStore } from '@/store'
@@ -8,9 +15,10 @@ import { StepCard } from '../layout'
 
 type Props = {
   onContinue: () => void
+  isLoading: boolean
 }
 
-export function NotificationSetup({ onContinue }: Props) {
+export function NotificationSetup({ onContinue, isLoading }: Props) {
   const { updateProfile, ...onboarding } = useOnboardingStore()
 
   const dailyId = useId()
@@ -122,11 +130,16 @@ export function NotificationSetup({ onContinue }: Props) {
 
           <div className='mt-auto pt-8'>
             <Button
+              disabled={isLoading}
               size='lg'
               onClick={onContinue}
               className='w-full h-12 bg-white text-primary hover:bg-white/90 shadow-xl border-0 font-bold tracking-wide'>
               Create Account & Begin
-              <ChevronRight className='ml-2 w-4 h-4' />
+              {isLoading ? (
+                <Loader2 className='ml-2 w-4 h-4 animate-spin' />
+              ) : (
+                <ChevronRight className='ml-2 w-4 h-4' />
+              )}
             </Button>
             {/* <p className='text-center text-xs text-blue-200 mt-4 opacity-80'>
               No credit card required for trial

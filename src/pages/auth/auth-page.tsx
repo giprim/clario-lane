@@ -45,7 +45,7 @@ export default function AuthPage({
     defaultValues: {
       name: '',
       email: '',
-      date_of_birth: '',
+      // date_of_birth: '',
       password: '',
       confirmPassword: '',
     },
@@ -154,7 +154,7 @@ export default function AuthPage({
                       </Field>
                     )}
                   />
-                  <form.Field
+                  {/* <form.Field
                     name='date_of_birth'
                     children={(field) => (
                       <Field>
@@ -162,7 +162,7 @@ export default function AuthPage({
                         <FieldInfo field={field} />
                       </Field>
                     )}
-                  />
+                  /> */}
                 </>
               ) : null}
               <form.Field

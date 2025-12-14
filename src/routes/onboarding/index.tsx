@@ -62,7 +62,8 @@ function RouteComponent() {
   const { data: contentType } = useQuery(fetchContentType)
   const { data: plans } = useQuery(fetchPlans)
 
-  const { mutateAsync: createMutateAsync } = useMutation(userMutation)
+  const { mutateAsync: createMutateAsync, isPending } =
+    useMutation(userMutation)
 
   const toggleSelection = (category: keyof Preferences, value: string) => {
     updateProfile({
@@ -131,7 +132,9 @@ function RouteComponent() {
   if (current_step === 3) return <OnboardingReadingTest />
   if (current_step === 4) return <QuickDrill />
   if (current_step === 5)
-    return <NotificationSetup onContinue={handleSubmission} />
+    return (
+      <NotificationSetup isLoading={isPending} onContinue={handleSubmission} />
+    )
   if (current_step === 6)
     return <Billing plans={plans || []} onSubscribe={onSubscribe} />
 
