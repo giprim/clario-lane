@@ -25,9 +25,7 @@ export const userMutation = mutationOptions({
       queryParams,
     );
 
-    console.log({ error, queryParams, params });
-
-    if (error) throw error;
+    if (error && status !== 409) throw error;
 
     return status;
   },

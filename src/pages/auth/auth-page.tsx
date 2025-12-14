@@ -5,7 +5,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  DatePicker,
   Field,
   FieldDescription,
   FieldGroup,
@@ -128,7 +127,7 @@ export default function AuthPage({
                   )}
                   {authState === 'signin'
                     ? 'Login with Google'
-                    : 'Sign up with Google'}
+                    : 'Signup with Google'}
                 </Button>
               </Field>
               <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>

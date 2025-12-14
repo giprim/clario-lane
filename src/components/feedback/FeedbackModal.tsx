@@ -61,6 +61,8 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
     onOpenChange(false)
     const getHasFeedback = localStorage.getItem(FEEDBACK_KEY)
     const hasFeedback = getHasFeedback === FEEDBACK_STATE.TRUE
+    setFeedback('')
+    setCategory('general')
     if (hasFeedback) return
 
     localStorage.setItem(FEEDBACK_KEY, FEEDBACK_STATE.FALSE)
@@ -108,8 +110,9 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
               id='feedback'
               placeholder='Tell us what you think...'
               value={feedback}
+              rows={5}
               onChange={(e) => setFeedback(e.target.value)}
-              className='min-h-[150px]'
+              className='min-h-[150px] max-h-[200px] overflow-y-auto'
             />
           </div>
         </div>

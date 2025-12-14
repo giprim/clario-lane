@@ -141,9 +141,6 @@ export function NotificationSetup({ onContinue, isLoading }: Props) {
                 <ChevronRight className='ml-2 w-4 h-4' />
               )}
             </Button>
-            {/* <p className='text-center text-xs text-blue-200 mt-4 opacity-80'>
-              No credit card required for trial
-            </p> */}
           </div>
         </div>
       </motion.div>
