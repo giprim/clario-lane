@@ -1,6 +1,6 @@
 name: Build and Deploy Clariolane
 
-on:
+on: 
   push: 
     branches: ["clario-deployment"]
 
