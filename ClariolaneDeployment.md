@@ -1,4 +1,4 @@
-<img width="1370" height="885" alt="image" src="https://github.com/user-attachments/assets/e80fbca2-6a9e-47af-805e-9537324281a8" />### PRE-INSTALLATIONS
+### PRE-INSTALLATIONS
 1. Update and Upgrade 
 ```
 apt update && apt upgrade
@@ -615,6 +615,7 @@ It wasn't received
 
 3. Setup exactly these DNS Records above in `Digital Ocean`
 <img width="1370" height="885" alt="image" src="https://github.com/user-attachments/assets/a1bc4dd0-7145-4025-9d73-8f77e07cf77e" />
+
 Record Type: `MX`
 ```
 mx1.privateemail.com
@@ -627,6 +628,9 @@ Record Type: `TXT`
 ```
 v=spf1 include:spf.privateemail.com ~all
 ```
+
+<img width="1370" height="885" alt="image" src="https://github.com/user-attachments/assets/e80fbca2-6a9e-47af-805e-9537324281a8" />
+
 <img width="1255" height="535" alt="image" src="https://github.com/user-attachments/assets/af3b25bc-56ae-4678-b315-76cc3494bbc6" />
 
 4. This routes everything properly to `admin@clariolane.com` including the `aliases`
