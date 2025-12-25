@@ -525,8 +525,7 @@ Always remove `SSH` at `0.0.0.0` out of `Security Group Inbound Rules`.
     AllowUsers guddy
     ```
     Save.
-15. af
-16. fadsfadf
+15. ...
 
 ✅ Disable root login and password authentication
 ✅ Update sshd_config for key-only access
@@ -543,3 +542,57 @@ Always remove `SSH` at `0.0.0.0` out of `Security Group Inbound Rules`.
     - `/root/.ssh/authorized_keys` = This is where the `Server's Public Key`(for the `$USER` e.g `root` or `guddy`) will reside. This allows a handshake with it's `Private Key` in `SERVER_SSH_KEY` on GitHub. If it's a non `root` user, you'll have to setup `ssh` with `ssh-keygen` for the `$USER`.
 2. User's(e.g `root` or `guddy`) `Public Key` will be in the Server's Authorized_Keys and the User's(e.g `root` or `guddy`) `Private Key` will be in GitHub Secrets. 
 3. For normal local machine `SSH`, the User's `Public Key` will be added the the Server's `/$USER/.ssh/authorized_keys` file, so that the machines's `Private Key` unlocks the `Public Key` in the Server.
+
+### SETTING UP AN OFFCIAL/CUSTOM MAIL FOR CLARIOLANE
+Choosing the right email addresses for Clariolane is a great step toward building a professional brand.
+So we need an official/corporate/custom private mail for `info` and `support` purposes.
+1. `Use a Custom Domain:` Avoid using `clariolane@gmail.com`. Having `@clariolane.com` instantly builds trust with customers.
+- Go to Namecheap.com > Private Email 
+- Purchase the mail service: Free Trial for 2 months or 1$/Month
+- Purchase ONLY `admin@<domain name>` as we'll be using aliases so we don't spend much
+- After the purchase click on `Private Email` again
+<img width="1905" height="541" alt="image" src="https://github.com/user-attachments/assets/b5d67448-2fd0-4a3e-be9c-2dab6bc98079" />
+
+- Click on `Manage` > Catch all mailbox(to create your mail) e.g `admin@clariolane.com`
+  
+<img width="1251" height="158" alt="image" src="https://github.com/user-attachments/assets/a5e48952-118e-4baf-8595-0c83ece3bce4" />
+
+2. `Manage admin@clariolane.com aliases (Save Money):` You don't necessarily need to pay for two separate mailboxes. You can have one primary inbox (like `admin@clariolane.com`) and set up `hello@`, `info@`, `clariolane@` and `support@` as aliases that all forward to that one place.
+>[!Note]
+>Every mailbox has a main address – for example, 1@example.com. You may associate aliases to that same mailbox, such as 2@example.com and 3@example.com. The main address and all aliases share the same inbox, contacts and settings. Aliases are for receiving email only and cannot be used to login or send email. 
+This helps to reduce the cost of buying three `Private Mails`
+
+<img width="1707" height="556" alt="Image" src="https://github.com/user-attachments/assets/9f72f18e-ed39-445a-92d5-a286ed18b1b5" />
+
+### HOW TO ADD ALIASES
+1. `Get your primary email (admin@clariolane.com)`
+If you haven't already, you need to purchase a Private Email plan from Namecheap.
+Cost: Usually around $1/month (Starter plan).
+The Plan: The "Starter" plan allows you to have 1 primary mailbox but up to 10 aliases for free. This is perfect for your needs.
+How to buy: Go to Namecheap > Email > Private Email and follow the checkout process for clariolane.com.
+
+2. `Create your Aliases (clariolane@, hello@, support@ and info@)`
+- Once your `admin@clariolane.com` is active, you don't need to pay for more mailboxes. You just add the aliases through your Namecheap dashboard:
+- Log in to your Namecheap account.
+- Go to Private Email in the left sidebar.
+- Click the Manage button next to your domain.
+- Scroll down to the Mailboxes section.
+- Find `admin@clariolane.com` and click the arrow/dropdown next to the "Edit Storage" button.
+- Select Manage Aliases.
+- Click Add Alias and type in support. Repeat for info.
+- Click Save Changes.
+- Go to https://privateemail.com/appsuite/signin to signin with the `Email` and `Password`
+
+What happens now: Any email sent to `clariolane@clariolane.com`, `support@clariolane.com`, `hello@clariolane.com` or `info@clariolane.com` will instantly show up in your `admin@clariolane.com` inbox.
+
+<img width="1504" height="861" alt="Image" src="https://github.com/user-attachments/assets/4161bd5b-9614-46ea-b505-0d4768757e22" />
+
+<img width="1915" height="756" alt="image" src="https://github.com/user-attachments/assets/669adbf9-61c6-4e3c-94e6-bac85192ea2f" />
+
+### FIX
+
+<img width="1504" height="744" alt="Image" src="https://github.com/user-attachments/assets/129759aa-41e7-4921-ac0e-cb89283c762d" />
+
+<img width="1912" height="717" alt="Image" src="https://github.com/user-attachments/assets/e834b7d9-ea7a-4bf3-abe6-94c02c07f223" />
+
+4. `Email Signatures:` Ensure both emails have a consistent signature that includes your logo, website link, and perhaps a social media handle.
