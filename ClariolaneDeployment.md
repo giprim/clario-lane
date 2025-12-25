@@ -660,28 +660,34 @@ Execution Steps
 3. `Add Alias:` Click "Add another email address" and enter the name (e.g., "Clariolane Support" or "Clariolane") and the alias email e.g `support@clariolane.com`
 <img width="708" height="679" alt="image" src="https://github.com/user-attachments/assets/73fa6c58-f9d8-42c2-a2f8-6d849a9cbc8e" />
 
-4. Authentication: Enter the SMTP details provided above in the `Technical Configuration Details`.
+4. `Authentication:` Enter the SMTP details provided above in the `Technical Configuration Details`.
 <img width="708" height="679" alt="image" src="https://github.com/user-attachments/assets/44525b08-e71b-4677-a69b-614568c5c271" />
 
-5. Verification: Check the `admin@clariolane.com` inbox for the Gmail confirmation code and enter it to verify ownership.
+5. `Verification:` Check the `admin@clariolane.com` inbox for the Gmail confirmation code and enter it to verify ownership.
+
 <img width="614" height="281" alt="image" src="https://github.com/user-attachments/assets/889f88f9-0969-469c-8499-8a25982724a6" />
 <img width="680" height="451" alt="image" src="https://github.com/user-attachments/assets/06df0a4b-b4e0-4da9-bfa9-f613f4f5a69c" />
 <img width="568" height="237" alt="image" src="https://github.com/user-attachments/assets/a2a55cb1-4b3f-4f49-b599-cc4042c72e0c" />
 <img width="568" height="237" alt="image" src="https://github.com/user-attachments/assets/7e7f64a6-ec36-44f7-ba97-08c25d2e8129" />
 
-6. Confirm the email alias addition:
+6. `Confirm the email alias addition:`
+
 <img width="1599" height="412" alt="image" src="https://github.com/user-attachments/assets/04a8c1a3-9639-4f19-9f5f-ce3ad4ee1845" />
 
-7. Behavior Setting: Under "Send mail as," select the option: "Reply from the same address the message was sent to." (Crucial for brand consistency).
+7. `Behavior Setting:` Under "Send mail as," select the option: "Reply from the same address the message was sent to." (Crucial for brand consistency).
+
 <img width="528" height="129" alt="image" src="https://github.com/user-attachments/assets/13878bc1-89c5-4b88-80fa-392eba9a65d5" />
 
-8. Repeat: Perform steps 1–5 for the info@clariolane.com alias.
+8. `Repeat:` Perform steps 1–5 for the info@clariolane.com alias.
+
 <img width="650" height="384" alt="image" src="https://github.com/user-attachments/assets/e87f93ee-1b28-4210-a105-963c20105ed4" />
 
-9. Test: Send a mail from `officialclariolane@gmail.com` to another mail, but select one of the aliases e.g `support@clariolane.com`
+9. `Test:` Send a mail from `officialclariolane@gmail.com` to another mail, but select one of the aliases e.g `support@clariolane.com`
+
 <img width="608" height="319" alt="image" src="https://github.com/user-attachments/assets/0558ea98-6f0d-448f-aa69-f9377fea5c7d" />
-<br>
-Result:
+
+Result: <br>
+
 <img width="731" height="338" alt="image" src="https://github.com/user-attachments/assets/42538614-3bb2-4c7e-b059-57fa55858316" />
 
 
