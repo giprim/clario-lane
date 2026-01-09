@@ -5,6 +5,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from '@/components/ui'
 
 import { enableOrDisableSubscriptionToggleMutation } from '@/integration/mutations/subscriptionMutation'
@@ -64,12 +71,34 @@ export function SubscriptionCard() {
               </div>
             </div>
             {isSubscribed ? (
-              <Button
-                variant='outline'
-                onClick={() => mutate('disable')}
-                disabled={isPending}>
-                {isPending ? 'Cancelling...' : 'Cancel Subscription'}
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant='outline' disabled={isPending}>
+                    {isPending ? 'Cancelling...' : 'Cancel Subscription'}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className='sm:max-w-md'>
+                  <DialogHeader>
+                    <DialogTitle>Cancel Subscription</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to cancel your subscription? You
+                      will lose access to premium features at the end of your
+                      current billing period.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className='flex justify-end space-x-2'>
+                    <DialogClose asChild>
+                      <Button variant='outline'>Back</Button>
+                    </DialogClose>
+                    <Button
+                      variant='destructive'
+                      onClick={() => mutate('disable')}
+                      disabled={isPending}>
+                      {isPending ? 'Cancelling...' : 'Yes, Cancel Subscription'}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             ) : (
               <Button asChild disabled={isPending}>
                 <Link to='/pricing'>Upgrade Plan</Link>

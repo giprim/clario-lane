@@ -6,7 +6,7 @@ const BASE_STYLES = `
   .content { padding: 32px 24px; }
   .h1 { font-size: 24px; font-weight: 700; color: #111827; margin-bottom: 16px; margin-top: 0; }
   .p { font-size: 16px; line-height: 24px; margin-bottom: 16px; color: #4b5563; }
-  .button { display: inline-block; background-color: #2563eb; color: #ffffff; font-weight: 600; padding: 12px 24px; border-radius: 6px; text-decoration: none; margin-top: 16px; }
+  .button { display: inline-block; border: 2px solid #8e51ff; color: #8e51ff !important; font-weight: 600; padding: 12px 24px; border-radius: 6px; text-decoration: none; margin-top: 16px; }
   .footer { background-color: #f9fafb; padding: 24px; text-align: center; font-size: 14px; color: #6b7280; border-top: 1px solid #e5e7eb; }
   .link { color: #2563eb; text-decoration: none; }
 `;
@@ -55,7 +55,7 @@ export const getPasswordChangedEmail = (name: string) =>
   <p class="p">Hello ${name},</p>
   <p class="p">The password for your ClarioLane account was recently changed. If you made this change, you can safely ignore this email.</p>
   <p class="p">If you did not make this change, please contact our support team immediately.</p>
-  <a href="https://clariolane.com/contact" class="button">Contact Support</a>
+  <a href="mailto:support@clariolane.com" class="button">Contact Support</a>
 `);
 
 export const getSubscriptionCancelledEmail = (name: string) =>
