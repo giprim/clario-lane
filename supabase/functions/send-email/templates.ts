@@ -41,6 +41,21 @@ const baseLayout = (content: string) => `
 </html>
 `;
 
+export const getFeedbackSubmittedEmail = (
+  email: string,
+  message: string,
+  category: string,
+) =>
+  baseLayout(`
+  <h1 class="h1">New Feedback Received</h1>
+  <p class="p"><strong>From:</strong> ${email}</p>
+  <p class="p"><strong>Category:</strong> ${category}</p>
+  <p class="p"><strong>Message:</strong></p>
+  <blockquote style="border-left: 4px solid #e5e7eb; padding-left: 16px; margin-left: 0; color: #374151;">
+    ${message.replace(/\n/g, "<br/>")}
+  </blockquote>
+`);
+
 export const getWelcomeEmail = (name: string) =>
   baseLayout(`
   <h1 class="h1">Welcome to ClarioLane, ${name}!</h1>

@@ -2,6 +2,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { Hono } from "npm:hono";
 import { corsMiddleware } from "../_shared/cors-middleware.ts";
 import {
+  getFeedbackSubmittedEmail,
   getPasswordChangedEmail,
   getSubscriptionCancelledEmail,
   getSubscriptionCreatedEmail,
@@ -20,7 +21,8 @@ interface EmailRequest {
     | "WELCOME"
     | "PASSWORD_CHANGED"
     | "SUBSCRIPTION_CANCELLED"
-    | "SUBSCRIPTION_CREATED";
+    | "SUBSCRIPTION_CREATED"
+    | "FEEDBACK_SUBMITTED";
   email: string;
   data?: any;
 }
@@ -29,7 +31,7 @@ app.post("/send-email", async (c) => {
   try {
     const { type, email, data } = await c.req.json<EmailRequest>();
 
-    if (!email || !type) {
+    if (!type) {
       return c.json(
         { success: false, message: "Missing required fields" },
         400,
@@ -38,6 +40,7 @@ app.post("/send-email", async (c) => {
 
     let subject = "";
     let html = "";
+    let toEmail = email; // Default to the email in payload
 
     switch (type) {
       case "WELCOME":
@@ -59,6 +62,15 @@ app.post("/send-email", async (c) => {
           data?.planName,
         );
         break;
+      case "FEEDBACK_SUBMITTED":
+        subject = `New Feedback: ${data?.category || "General"}`;
+        html = getFeedbackSubmittedEmail(
+          email, // User's email (sender)
+          data?.message,
+          data?.category,
+        );
+        toEmail = "admin@clariolane.com"; // Override recipient
+        break;
       default:
         return c.json({ success: false, message: "Invalid email type" }, 400);
     }
@@ -71,7 +83,7 @@ app.post("/send-email", async (c) => {
       },
       body: JSON.stringify({
         from: "ClarioLane <noreply@clariolane.com>",
-        to: [email],
+        to: [toEmail],
         subject: subject,
         html: html,
       }),
