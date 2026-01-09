@@ -12,12 +12,16 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Link } from '@tanstack/react-router'
 import { supabaseService } from '~supabase/clientServices'
+import { fetchNextSubscriptionDate } from '@/integration'
+import { useMemo } from 'react'
 
 export function SubscriptionCard() {
   const { data: user, refetch } = useQuery({
     queryKey: ['user'],
     queryFn: async () => await supabaseService.getUser(),
   })
+
+  const { data } = useQuery(fetchNextSubscriptionDate)
 
   const { mutate, isPending } = useMutation({
     ...enableOrDisableSubscriptionToggleMutation,
@@ -31,6 +35,10 @@ export function SubscriptionCard() {
   })
 
   const isSubscribed = user?.is_subscribed
+  const isSubscriptionExpired = useMemo(
+    () => new Date(data?.next_subscription_date) < new Date(),
+    [data]
+  )
 
   return (
     <Card>
@@ -47,12 +55,12 @@ export function SubscriptionCard() {
           <div className='flex items-center justify-between rounded-lg border p-4'>
             <div className='space-y-0.5'>
               <div className='font-medium'>
-                {isSubscribed ? 'Active Plan' : 'Free Tier / Cancelled'}
+                {isSubscriptionExpired ? 'Expired' : 'Active'}
               </div>
               <div className='text-sm text-muted-foreground'>
-                {isSubscribed
-                  ? 'You are currently on the active plan.'
-                  : 'Your subscription is not active.'}
+                {isSubscriptionExpired
+                  ? 'Your subscription is expired.'
+                  : 'Your subscription is active.'}
               </div>
             </div>
             {isSubscribed ? (
