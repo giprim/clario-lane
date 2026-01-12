@@ -19,8 +19,6 @@ export const Route = createFileRoute('/dashboard')({
   beforeLoad: async ({ context }) => {
     const { session, user, queryClient } = context
 
-    const response = await queryClient.fetchQuery(fetchNextSubscriptionDate)
-
     if (!session) {
       throw redirect({ to: '/auth' })
     }
@@ -28,9 +26,13 @@ export const Route = createFileRoute('/dashboard')({
     if (!user || !user?.onboarding_completed)
       throw redirect({ to: '/onboarding' })
 
+    const response = await queryClient.fetchQuery(fetchNextSubscriptionDate)
+
+    console.log({ response })
+
     if (!response) throw redirect({ to: '/pricing' })
     const isSubscriptionExpired = new Date(response) < new Date()
-
+    console.log({ isSubscriptionExpired })
     if (isSubscriptionExpired) {
       throw redirect({ to: '/pricing' })
     }
