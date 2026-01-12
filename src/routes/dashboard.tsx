@@ -32,7 +32,7 @@ export const Route = createFileRoute('/dashboard')({
     const isSubscriptionExpired = new Date(response) < new Date()
 
     if (isSubscriptionExpired) {
-      throw redirect({ to: '/onboarding', search: { renew: true } })
+      throw redirect({ to: '/pricing' })
     }
   },
 })
