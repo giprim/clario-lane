@@ -47,7 +47,7 @@ export function RSVPReader({ onPause }: RSVPReaderProps) {
             'transition-all duration-500 ease-in-out',
             isMaximized
               ? 'fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl p-4 md:p-8'
-              : 'relative w-full space-y-6'
+              : 'relative w-full space-y-6',
           )}>
           {/* Main Display Card */}
           <motion.div
@@ -56,13 +56,13 @@ export function RSVPReader({ onPause }: RSVPReaderProps) {
               'relative overflow-hidden group',
               isMaximized
                 ? 'w-full max-w-5xl h-[70vh] rounded-3xl border border-border/50 bg-card/30 shadow-2xl backdrop-blur-md'
-                : 'w-full bg-card border border-border rounded-2xl h-[45svh] min-h-[300px] shadow-sm'
+                : 'w-full bg-card border border-border rounded-2xl h-[45svh] min-h-[300px] shadow-sm',
             )}>
             {/* Subtle Gradient Background */}
             <div className='absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-primary/5 opacity-50 pointer-events-none' />
 
             {/* Maximize Toggle Button */}
-            <div className='absolute top-4 right-4 z-20'>
+            <div className='absolute top-4 hidden right-4 z-20'>
               <Button
                 variant='ghost'
                 size='icon'
@@ -85,9 +85,7 @@ export function RSVPReader({ onPause }: RSVPReaderProps) {
                 transition={{ duration: 0.1 }}
                 className='text-center w-full max-w-4xl'>
                 {words.length > 0 && currentIndex < words.length ? (
-                  <DisplayText className={cn(isMaximized && 'scale-125')}>
-                    {words[currentIndex]}
-                  </DisplayText>
+                  <DisplayText>{words[currentIndex]}</DisplayText>
                 ) : words.length > 0 ? (
                   <DisplayText className='text-muted-foreground font-light'>
                     Complete!
@@ -119,7 +117,7 @@ export function RSVPReader({ onPause }: RSVPReaderProps) {
             <div
               className={cn(
                 'rounded-2xl border border-border/50 p-4 backdrop-blur-sm transition-colors',
-                isMaximized ? 'bg-card/40 shadow-lg' : 'bg-card/50'
+                isMaximized ? 'bg-card/40 shadow-lg' : 'bg-card/50',
               )}>
               <ReaderControls
                 canComplete={currentIndex >= words.length}

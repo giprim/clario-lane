@@ -67,20 +67,20 @@ export function DisplaySettings() {
               <div className='flex justify-between items-center'>
                 <Label>Font Size</Label>
                 <span className='text-sm text-muted-foreground'>
-                  {fontSize}px
+                  {fontSize}x
                 </span>
               </div>
               <Slider
                 value={[fontSize]}
                 onValueChange={(value) => setFontSize(value[0])}
-                min={24}
-                max={96}
-                step={4}
+                min={1}
+                max={4}
+                step={0.2}
                 className='w-full'
               />
               <div className='flex justify-between text-xs text-muted-foreground'>
-                <span>24px</span>
-                <span>96px</span>
+                <span>1x</span>
+                <span>4x</span>
               </div>
             </div>
 
@@ -91,7 +91,7 @@ export function DisplaySettings() {
                 <span
                   style={{
                     fontFamily,
-                    fontSize: `${fontSize}px`,
+                    fontSize: `${fontSize}em`,
                   }}>
                   Sample
                 </span>

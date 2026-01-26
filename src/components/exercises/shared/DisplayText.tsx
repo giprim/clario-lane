@@ -1,5 +1,6 @@
 import { useDisplaySettingsStore } from '@/store'
 import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 type DisplayTextProps = {
   children: ReactNode
@@ -11,10 +12,10 @@ export function DisplayText({ children, className = '' }: DisplayTextProps) {
 
   return (
     <span
-      className={className}
+      className={cn('text', className)}
       style={{
         fontFamily,
-        fontSize: `${fontSize}px`,
+        fontSize: `${fontSize}em`,
       }}>
       {children}
     </span>
