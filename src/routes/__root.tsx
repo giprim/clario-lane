@@ -2,7 +2,7 @@ import * as React from 'react'
 import {
   Outlet,
   createRootRouteWithContext,
-  // useLocation,
+  useLocation,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -54,15 +54,18 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
 })
 
 function RootComponent() {
-  // const location = useLocation()
+  const pathname = useLocation().pathname
   return (
     <React.Fragment>
       <SettingsProvider>
         <Navbar />
         <Outlet />
-        <FloatingActionButton />
-        <Copyright />
-        {/* {!location.pathname.startsWith('/dashboard') && <Footer />} */}
+        {pathname.includes('/dashboard/practice') ? null : (
+          <>
+            <FloatingActionButton />
+            <Copyright />
+          </>
+        )}
         <Toaster position='top-center' richColors />
         <TanStackRouterDevtools position='bottom-left' />
         <ReactQueryDevtools position='bottom' initialIsOpen={false} />

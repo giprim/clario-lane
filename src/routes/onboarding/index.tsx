@@ -39,7 +39,7 @@ export const Route = createFileRoute('/onboarding/')({
     if (!session) throw redirect({ to: '/auth' })
     if (!user) return context
     if (user?.onboarding_completed && user.is_subscribed)
-      throw redirect({ to: '/dashboard' })
+      throw redirect({ to: '/dashboard/practice' })
   },
   loader: ({ context: { session } }) => {
     if (!session) return
@@ -82,7 +82,7 @@ function RouteComponent() {
         planCode: plan,
       })
     },
-    [onboarding.email]
+    [onboarding.email],
   )
 
   const handleSubmission = async () => {
@@ -107,7 +107,7 @@ function RouteComponent() {
   useEffect(() => {
     const handleConfirmSubscription = (payload: UserTable) => {
       if (payload.email === onboarding.email && payload.is_subscribed) {
-        route.navigate({ to: '/dashboard' })
+        route.navigate({ to: '/dashboard/practice' })
       }
     }
     const channel = supabaseService.channel(handleConfirmSubscription)

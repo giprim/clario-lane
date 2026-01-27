@@ -135,7 +135,7 @@ export function ComprehensionQuiz() {
             if (userId) {
               // Fetch updated stats to calculate XP gained and check for level up
               const newStats = await queryClient.fetchQuery(
-                fetchUserStats(userId)
+                fetchUserStats(userId),
               )
 
               const newAchievementsData = response?.data?.new_achievements || []
@@ -145,13 +145,13 @@ export function ComprehensionQuiz() {
               const newAchievementsWithTitles = newAchievementsData.map(
                 (na: any) => {
                   const ach = allAchievements.find(
-                    (a) => a.id === na.achievement_id
+                    (a) => a.id === na.achievement_id,
                   )
                   return {
                     achievement_id: na.achievement_id,
                     title: ach?.title || na.achievement_id,
                   }
-                }
+                },
               )
 
               // Use response data if stats fetch fails or is delayed
@@ -210,7 +210,7 @@ export function ComprehensionQuiz() {
             // Maybe show a toast error but let them see results.
             updateStore(payload)
           },
-        }
+        },
       )
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
@@ -250,10 +250,10 @@ export function ComprehensionQuiz() {
                 disabled={selectedAnswer !== null}
                 className={`
                   w-full text-left p-4 rounded-lg border-2 transition-all
-                  ${!showResult && !isSelected ? 'border-border hover:border-primary hover:bg-accent' : ''}
+                  ${!showResult && !isSelected ? 'border-border hover:border-primary/10 hover:bg-primary/5' : ''}
                   ${isSelected && !showResult ? 'border-primary bg-accent' : ''}
-                  ${showCorrect ? 'border-green-500 bg-green-50 dark:bg-green-950' : ''}
-                  ${showIncorrect ? 'border-red-500 bg-red-50 dark:bg-red-950' : ''}
+                  ${showCorrect ? 'border-green-500/20 bg-green-50/20 dark:bg-green-950' : ''}
+                  ${showIncorrect ? 'border-red-500/20 bg-red-50/20 dark:bg-red-950' : ''}
                   ${selectedAnswer !== null && !isSelected && !showCorrect ? 'opacity-50' : ''}
                   disabled:cursor-not-allowed
                 `}>

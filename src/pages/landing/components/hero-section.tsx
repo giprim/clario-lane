@@ -87,7 +87,7 @@ export function HeroSection({ session }: HeroSectionProps) {
               asChild
               size='xl'
               className='h-14 px-8 text-lg rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all'>
-              <Link to='/dashboard'>
+              <Link to='/dashboard/practice'>
                 Go to Dashboard <ArrowRight className='ml-2 h-5 w-5' />
               </Link>
             </Button>

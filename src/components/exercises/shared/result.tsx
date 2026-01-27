@@ -32,7 +32,7 @@ export const Results = () => {
   return (
     <>
       <div className='w-full max-w-2xl mx-auto'>
-        <Card className='p-8 space-y-6'>
+        <Card className=' bg-transparent border-none shadow-none md:shadow-lg md:border md:border-border md:bg-card md:p-8 space-y-6'>
           <div className='text-center space-y-2'>
             <h2 className='text-3xl'>Session Complete!</h2>
             <p className='text-muted-foreground'>Great work on this session</p>
@@ -104,11 +104,15 @@ export const Results = () => {
             </div>
           </div>
 
-          <div className='flex gap-3'>
-            <Button onClick={onComplete} variant='outline' className='flex-1'>
+          <div className='flex-wrap flex gap-3'>
+            <Button
+              size='xl'
+              onClick={onComplete}
+              variant='outline'
+              className='flex-1'>
               View Dashboard
             </Button>
-            <Button onClick={onNext} className='flex-1'>
+            <Button size='xl' onClick={onNext} className='flex-1'>
               Next Session
             </Button>
           </div>

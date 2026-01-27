@@ -8,7 +8,7 @@ export const Route = createFileRoute('/auth')({
     if (!context.session) return
     if (!context.user) throw redirect({ to: '/onboarding' })
     if (context.user?.onboarding_completed) {
-      throw redirect({ to: '/dashboard' })
+      throw redirect({ to: '/dashboard/practice' })
     }
   },
 })

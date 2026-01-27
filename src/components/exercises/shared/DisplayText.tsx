@@ -1,4 +1,5 @@
 import { useDisplaySettingsStore } from '@/store'
+import { useAdjustedFontSize } from './useAdjustedFontSize'
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -8,14 +9,15 @@ type DisplayTextProps = {
 }
 
 export function DisplayText({ children, className = '' }: DisplayTextProps) {
-  const { fontFamily, fontSize } = useDisplaySettingsStore()
+  const { fontFamily } = useDisplaySettingsStore()
+  const adjustedFontSize = useAdjustedFontSize()
 
   return (
     <span
       className={cn('text', className)}
       style={{
         fontFamily,
-        fontSize: `${fontSize}em`,
+        fontSize: `${adjustedFontSize}em`,
       }}>
       {children}
     </span>

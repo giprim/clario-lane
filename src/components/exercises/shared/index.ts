@@ -5,3 +5,6 @@ export { DisplaySettings } from "./DisplaySettings";
 export { useSyncDisplaySettings } from "./useSyncDisplaySettings";
 export { ReaderControls } from "./ReaderControls";
 export { IntroStep } from "./IntroStep";
+export { ControlPanel } from "./controlPanel";
+export { CustomProgress } from "./customProgress";
+export { useAdjustedFontSize } from "./useAdjustedFontSize";
