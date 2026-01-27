@@ -84,8 +84,8 @@ export function Result({ improvement }: Props) {
 
         <Button
           onClick={onContinue}
-          size='lg'
-          className='w-full h-12 text-lg group bg-primary hover:bg-primary/90'>
+          size='xl'
+          className='w-full text-lg group bg-primary hover:bg-primary/90'>
           Continue
           <ArrowRight className='ml-2 w-4 h-4 transition-transform group-hover:translate-x-1' />
         </Button>

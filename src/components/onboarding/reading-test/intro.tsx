@@ -54,16 +54,16 @@ export function ReadingTestIntro() {
           ))}
         </div>
 
-        <div className='p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-sm text-yellow-600 dark:text-yellow-400 text-center'>
+        <div className='p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/15 text-sm text-yellow-600 dark:text-yellow-400 text-center'>
           <span className='font-medium'>Tip:</span> Don't rush! Read for
           understanding, not just speed.
         </div>
 
         <div className='flex justify-center mt-2'>
           <Button
-            size='lg'
+            size='xl'
             onClick={handleStartReading}
-            className='min-w-[200px] h-12 text-lg font-medium bg-primary shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all'>
+            className='text-lg w-full md:w-auto md:min-w-[200px] font-medium bg-primary shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all'>
             Start Reading
           </Button>
         </div>

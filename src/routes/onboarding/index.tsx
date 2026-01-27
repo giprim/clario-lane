@@ -139,9 +139,9 @@ function RouteComponent() {
     return <Billing plans={plans || []} onSubscribe={onSubscribe} />
 
   return (
-    <Card className='w-full mx-auto mt-10 lg:mt-20 max-w-3xl  p-8'>
+    <Card className=' bg-transparent border-0 shadow-none w-full max-w-3xl mx-auto md:mt-20 md:bg-card md:shadow-lg md:p-8 '>
       {/* Progress Bar */}
-      <div className='mb-8'>
+      <div className='md:mb-8 mb-4'>
         <div className='flex justify-between mb-2 text-sm text-muted-foreground'>
           <span>
             Step {current_step + 1} of {total_steps}
@@ -153,9 +153,11 @@ function RouteComponent() {
 
       {/* Welcome Message */}
       {current_step === 0 && (
-        <div className='mb-6 text-center'>
-          <h2 className='mb-2'>Welcome, {onboarding.name}! 👋</h2>
-          <p className='text-muted-foreground'>
+        <div className='mb-4 text-center'>
+          <h2 className='mb-1 font-extralight text-2xl'>
+            Welcome, {onboarding.name}! 👋
+          </h2>
+          <p className='text-muted-foreground text-sm'>
             Let's personalize your learning journey
           </p>
         </div>
@@ -187,9 +189,9 @@ function RouteComponent() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <div className='flex gap-4 mt-8'>
+      <div className='flex gap-4 md:mt-8'>
         <Button
-          size={'lg'}
+          size={'xl'}
           onClick={handleNext}
           disabled={!canProceed()}
           className='flex-1'>

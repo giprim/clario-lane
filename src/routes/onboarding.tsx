@@ -17,10 +17,10 @@ function RouteComponent() {
   const { current_step, total_steps, update } = useOnboardingFlow()
 
   const onSkipNextStep = () => {
-    if (current_step < 6) update({ current_step: current_step + 1 })
+    if (current_step <= 5) update({ current_step: current_step + 1 })
   }
 
-  const canSkip = [4, 5].includes(current_step)
+  const canSkip = [4].includes(current_step)
 
   return (
     <div className='min-h-[80svh] p-4 max-w-6xl mx-auto'>

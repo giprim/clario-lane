@@ -91,7 +91,7 @@ export function Results() {
         </motion.div>
 
         <Button
-          size='lg'
+          size='xl'
           onClick={onContinue}
           className='w-full h-12 text-lg font-medium'>
           Continue to Quick Drill

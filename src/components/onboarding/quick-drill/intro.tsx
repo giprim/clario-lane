@@ -56,9 +56,9 @@ export function QuickDrillIntro({ handleStartDrill }: Props) {
 
       <div className='flex justify-center'>
         <Button
-          size='lg'
+          size='xl'
           onClick={handleStartDrill}
-          className='min-w-[200px] h-12 text-lg font-medium bg-linear-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg hover:shadow-primary/25 transition-all duration-300'>
+          className='min-w-[200px] w-full md:w-auto text-lg font-medium bg-linear-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg hover:shadow-primary/25 transition-all duration-300'>
           Start Drill
         </Button>
       </div>
