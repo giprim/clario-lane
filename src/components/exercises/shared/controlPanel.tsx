@@ -17,6 +17,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { usePracticeStore } from '@/store'
+import type { PRACTICES } from '@/lib'
 
 type ReaderControlsProps = {
   children?: ReactNode
@@ -25,12 +27,21 @@ type ReaderControlsProps = {
   onTriggerClick?: () => void
 }
 
+const additionalControls: Record<PRACTICES, ReactNode | null> = {
+  WORD_CHUNKING: <ChunkSizeSlider />,
+  SPEED_READING: null,
+  PERIPHERAL_VISION: null,
+  TELEPROMPTER: null,
+}
+
 export function ControlPanel({
   children,
   canComplete,
   canReset,
   onTriggerClick,
 }: ReaderControlsProps) {
+  const { exerciseType } = usePracticeStore()
+
   return (
     <Drawer direction={window.innerWidth >= 768 ? 'right' : 'bottom'}>
       <Tooltip>
@@ -58,7 +69,7 @@ export function ControlPanel({
             {children}
           </ReaderControls>
           <DisplaySettings />
-          <ChunkSizeSlider />
+          {additionalControls[exerciseType]}
         </div>
       </DrawerContent>
     </Drawer>

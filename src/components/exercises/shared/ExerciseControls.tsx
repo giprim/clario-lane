@@ -2,14 +2,14 @@ import { usePracticeStore } from '@/store'
 import { Button } from '@/components/ui'
 import { Pause, Play, RotateCcw } from 'lucide-react'
 import { ReaderProgressHeader } from './ReaderProgressHeader'
-import { CustomProgress, ControlPanel } from '../shared'
+import { CustomProgress, ControlPanel } from '.'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 
-export function WordChunkingControls() {
+export function ExerciseControls() {
   const words = usePracticeStore((state) => state.words)
   const currentIndex = usePracticeStore((state) => state.currentIndex)
   const isPlaying = usePracticeStore((state) => state.isPlaying)
@@ -21,7 +21,7 @@ export function WordChunkingControls() {
 
   const canComplete = currentIndex >= words.length
   const canReset = currentIndex > 0
-  const shouldShowComplete = canComplete || progress >= 100
+  const shouldShowComplete = progress >= 100
   const shouldAllowReset = canReset || progress > 0
 
   return (
@@ -29,7 +29,7 @@ export function WordChunkingControls() {
       <ReaderProgressHeader />
 
       {/* Progress Bar */}
-      <CustomProgress currentIndex={currentIndex} words={words} />
+      <CustomProgress progress={progress} />
 
       <Tooltip>
         <TooltipTrigger asChild>

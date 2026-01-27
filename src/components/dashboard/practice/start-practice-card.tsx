@@ -5,7 +5,7 @@ import {
   PRACTICE_ROUTES,
   type Practice,
 } from '@/lib'
-import { useAppStore } from '@/store'
+import { useAppStore, usePracticeStore } from '@/store'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 import { useCallback } from 'react'
@@ -24,10 +24,11 @@ export const StartPracticeCard = ({
   const color = PRACTICE_COLORS[id]
   const route = PRACTICE_ROUTES[id]
   const { setActivePractice } = useAppStore()
-  const handleClick = useCallback(
-    () => setActivePractice(practice),
-    [practice, setActivePractice]
-  )
+  const { setExerciseType } = usePracticeStore()
+  const handleClick = useCallback(() => {
+    setActivePractice(practice)
+    setExerciseType(id)
+  }, [practice, setActivePractice])
 
   return (
     <Card

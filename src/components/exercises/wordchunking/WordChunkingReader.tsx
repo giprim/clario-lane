@@ -1,9 +1,8 @@
 import { SpeedReadingPending } from '../speedreading/speed-reading-pending'
 import { useWordChunkingReader } from './useWordChunkingReader'
-import { useSyncDisplaySettings } from '../shared'
+import { useSyncDisplaySettings, ExerciseControls } from '../shared'
 import { WordChunkDisplay } from './WordChunkDisplay'
 import { usePracticeStore } from '@/store'
-import { WordChunkingControls } from './WordChunkingControls'
 
 export function WordChunkingReader() {
   useSyncDisplaySettings()
@@ -19,7 +18,7 @@ export function WordChunkingReader() {
     <div className='w-full mx-auto space-y-6'>
       <WordChunkDisplay />
       <div className='fixed bottom-6 right-4 left-4 flex items-center justify-center z-50'>
-        <WordChunkingControls />
+        <ExerciseControls />
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { PracticeStep } from "@/lib";
+import { PRACTICES, PracticeStep } from "@/lib";
 import type { Passage } from "@/types";
 import { create } from "zustand";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ export type PracticeStore = {
   currentIndex: number;
   estimatedDuration: number;
   chunkSize: number;
+  exerciseType: PRACTICES;
 };
 
 type PracticeStoreActions = {
@@ -50,6 +51,7 @@ type PracticeStoreActions = {
   handleReset: () => void;
   handleComplete: () => void;
   formatTime: (seconds: number) => string;
+  setExerciseType: (exerciseType: PRACTICES) => void;
 };
 
 const initialState: PracticeStore = {
@@ -71,11 +73,16 @@ const initialState: PracticeStore = {
   currentIndex: 0,
   estimatedDuration: 0,
   chunkSize: 3,
+  exerciseType: PRACTICES.enum.SPEED_READING,
 };
 
 export const usePracticeStore = create<PracticeStore & PracticeStoreActions>(
   (set, get) => ({
     ...initialState,
+
+    setExerciseType: (
+      exerciseType: PRACTICES,
+    ) => set({ exerciseType }),
 
     // Existing actions
     setStep: (step: PracticeStep) => set({ currentStep: step }),

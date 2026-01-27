@@ -8,3 +8,5 @@ export { IntroStep } from "./IntroStep";
 export { ControlPanel } from "./controlPanel";
 export { CustomProgress } from "./customProgress";
 export { useAdjustedFontSize } from "./useAdjustedFontSize";
+export { ReaderProgressHeader } from "./ReaderProgressHeader";
+export { ExerciseControls } from "./ExerciseControls";

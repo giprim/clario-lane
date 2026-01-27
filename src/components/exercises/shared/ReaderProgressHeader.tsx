@@ -1,11 +1,14 @@
 import { Timer } from 'lucide-react'
 import { usePracticeStore } from '@/store'
+import { PRACTICES } from '@/lib'
 
 export function ReaderProgressHeader() {
   const formatTime = usePracticeStore((state) => state.formatTime)
   const elapsedTime = usePracticeStore((state) => state.elapsedTime)
   const words = usePracticeStore((state) => state.words)
   const currentIndex = usePracticeStore((state) => state.currentIndex)
+  const progress = usePracticeStore((state) => state.progress)
+  const exerciseType = usePracticeStore((state) => state.exerciseType)
 
   return (
     <div className='flex items-center justify-between w-full gap-4'>
@@ -20,8 +23,16 @@ export function ReaderProgressHeader() {
       <div className='text-right space-y-1'>
         <div className='text-sm text-muted-foreground'>Progress</div>
         <div className='font-mono text-lg md:text-2xl font-bold tabular-nums'>
-          <span className='text-primary'>{currentIndex}</span> /{' '}
-          <span>{words.length}</span>
+          {exerciseType === PRACTICES.enum.TELEPROMPTER ? (
+            <>
+              <span className='text-primary'>{progress.toFixed(0)}%</span>
+            </>
+          ) : (
+            <>
+              <span className='text-primary'>{currentIndex}</span> /{' '}
+              <span>{words.length}</span>
+            </>
+          )}
         </div>
       </div>
     </div>
