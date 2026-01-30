@@ -29,7 +29,7 @@ export const PRACTICE_ICONS: Record<PRACTICES, typeof TypeIcon> = {
 export const PRACTICE_COLORS: Record<PRACTICES, string> = {
   SPEED_READING: "blue",
   TELEPROMPTER: "green",
-  WORD_CHUNKING: "yellow",
+  WORD_CHUNKING: "orange",
   PERIPHERAL_VISION: "red",
 };
 
