@@ -23,10 +23,10 @@ function RouteComponent() {
   const canSkip = [4].includes(current_step)
 
   return (
-    <div className='min-h-[80svh] p-4 max-w-6xl mx-auto pt-24'>
+    <div className='min-h-[80svh] p-4 max-w-6xl mx-auto '>
       {/* Progress Bar */}
-      <div className=' pt-28 nd:pt-24'>
-        <div className='mb-8'>
+      <div className=' pt-24'>
+        <div className='mb-4'>
           <div className='flex justify-between mb-2 text-sm text-muted-foreground'>
             <div className='flex gap-2 items-center'>
               {current_step > 0 ? (
@@ -56,7 +56,7 @@ function RouteComponent() {
           </div>
         </div>
 
-        <div className='flex items-center justify-center '>
+        <div className='flex items-center justify-center mb-24 md:mb-auto'>
           <Outlet />
         </div>
       </div>

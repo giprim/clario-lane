@@ -40,7 +40,7 @@ export function HeroSection({ session }: HeroSectionProps) {
 
       <motion.div
         style={{ opacity, y }}
-        className='relative z-10 max-w-7xl mx-auto w-full flex flex-col items-start'>
+        className='relative z-10 max-w-6xl mx-auto w-full flex flex-col items-start'>
         {/* Main Content Container */}
         <div className='grid lg:grid-cols-2 gap-12 items-center'>
           {/* Left: Text Content */}

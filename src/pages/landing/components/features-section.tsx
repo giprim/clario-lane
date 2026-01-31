@@ -9,7 +9,7 @@ import { FeatureCard } from './presentational/FeatureCard'
 export function FeaturesSection() {
   return (
     <section className='py-24 px-4 relative bg-[#F5F5F7] dark:bg-black'>
-      <div className='container mx-auto max-w-7xl'>
+      <div className='container mx-auto max-w-6xl'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

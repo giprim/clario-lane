@@ -15,7 +15,7 @@ export function FooterCTA({ session }: FooterCTAProps) {
 
   return (
     <section className='py-20 px-4 bg-[#F5F5F7] dark:bg-black'>
-      <div className='container mx-auto max-w-[1400px]'>
+      <div className='container mx-auto max-w-6xl'>
         <div className='bg-white dark:bg-[#1A1625] rounded-[3rem] p-12 md:p-24 text-center shadow-lg relative overflow-hidden'>
           {/* Subtle Background Glows */}
           <div className='absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-purple-50/50 to-transparent dark:from-purple-900/10 pointer-events-none' />

@@ -62,6 +62,8 @@ import { clientEnv } from '@/config/env'
 import { useEffect } from 'react'
 import ReactGA from 'react-ga4'
 
+const ONBOARDING_ROUTES = ['/onboarding', '/dashboard/practice']
+
 function RootComponent() {
   const pathname = useLocation().pathname
 
@@ -83,7 +85,7 @@ function RootComponent() {
       <SettingsProvider>
         <Navbar />
         <Outlet />
-        {pathname.includes('/dashboard/practice') ? null : (
+        {ONBOARDING_ROUTES.includes(pathname) ? null : (
           <>
             <FloatingActionButton />
             <Copyright />

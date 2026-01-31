@@ -189,14 +189,16 @@ function RouteComponent() {
       </AnimatePresence>
 
       {/* Navigation */}
-      <div className='flex gap-4 md:mt-8'>
-        <Button
-          size={'xl'}
-          onClick={handleNext}
-          disabled={!canProceed()}
-          className='flex-1'>
-          {current_step === total_steps - 1 ? 'Complete' : 'Next'}
-        </Button>
+      <div className='w-full fixed bottom-0 left-0 right-0 z-50 md:relative md:bottom-auto md:left-auto md:right-auto bg-gradient-to-t from-background/50 via-background/5 to-transparent backdrop-blur-sm'>
+        <div className='py-4 px-4 pt-6 md:p-0'>
+          <Button
+            size={'xl'}
+            onClick={handleNext}
+            disabled={!canProceed()}
+            className='w-full'>
+            {current_step === total_steps - 1 ? 'Complete' : 'Next'}
+          </Button>
+        </div>
       </div>
     </Card>
   )

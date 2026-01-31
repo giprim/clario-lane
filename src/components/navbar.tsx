@@ -41,7 +41,7 @@ const Navbar = () => {
   // Floating pill navbar for landing page
   return (
     <nav className='fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none '>
-      <div className='bg-white/90 dark:bg-purple-950/80 backdrop-blur-xl border border-white/20 dark:border-purple-800/50 shadow-lg shadow-purple-500/10 rounded-full px-6 py-3 w-full flex items-center justify-between pointer-events-auto'>
+      <div className='bg-white/90 dark:bg-purple-950/80 backdrop-blur-xl border border-white/20 dark:border-purple-800/50 shadow-lg shadow-purple-500/10 rounded-full px-6 py-3 w-full max-w-6xl flex items-center justify-between pointer-events-auto'>
         {/* Logo */}
         <AnimateLink
           whileHover={{ scale: 1.05 }}

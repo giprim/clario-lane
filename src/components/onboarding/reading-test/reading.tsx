@@ -12,7 +12,7 @@ export function Reading() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className='w-full max-w-3xl mx-auto'>
-      <div className='sticky top-4 z-50 mb-8 flex justify-center'>
+      <div className='sticky top-24 z-50 mb-8 flex justify-center'>
         <div className='px-4 py-1.5 rounded-full bg-black/80 text-white backdrop-blur-md text-xs font-medium tracking-wide shadow-lg border border-white/10 flex items-center gap-2'>
           <span className='w-2 h-2 rounded-full bg-red-500 animate-pulse' />
           Timer Running
@@ -37,7 +37,7 @@ export function Reading() {
         </motion.div>
       </Card>
 
-      <div className='mt-8 text-center sticky bottom-8'>
+      <div className='mt-8 text-center sticky bottom-4'>
         <Button
           size='xl'
           onClick={handleFinishReading}

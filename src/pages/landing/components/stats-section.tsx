@@ -8,7 +8,7 @@ import { StatisticCard } from './presentational/StatisticCard'
 export function StatsSection() {
   return (
     <section className='py-20 px-4 bg-[#F5F5F7] dark:bg-black'>
-      <div className='container mx-auto'>
+      <div className='container mx-auto max-w-6xl'>
         <div className='grid md:grid-cols-3 gap-12 text-center'>
           {STATISTICS.map((statistic, index) => (
             <StatisticCard key={index} statistic={statistic} />
