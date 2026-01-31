@@ -58,40 +58,25 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
 //   storage: window.localStorage,
 // })
 
-// import { clientEnv } from '@/config/env'
-// import { useEffect } from 'react'
+import { clientEnv } from '@/config/env'
+import { useEffect } from 'react'
+import ReactGA from 'react-ga4'
 
 function RootComponent() {
   const pathname = useLocation().pathname
 
-  // useEffect(() => {
-  //   const gaKey = clientEnv.VITE_GOOGLE_ANALYTICS_KEY
-  //   if (!gaKey) return
+  useEffect(() => {
+    const gaKey = clientEnv.VITE_GOOGLE_ANALYTICS_KEY
+    if (gaKey) {
+      ReactGA.initialize(gaKey)
+    }
+  }, [])
 
-  //   // Inject generic script
-  //   const script1 = document.createElement('script')
-  //   script1.async = true
-  //   script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaKey}`
-  //   document.head.appendChild(script1)
-
-  //   const script2 = document.createElement('script')
-  //   script2.innerHTML = `
-  //     window.dataLayer = window.dataLayer || [];
-  //     function gtag(){dataLayer.push(arguments);}
-  //     gtag('js', new Date());
-  //     gtag('config', '${gaKey}');
-  //   `
-  //   document.head.appendChild(script2)
-  // }, [])
-
-  // useEffect(() => {
-  //   const gaKey = clientEnv.VITE_GOOGLE_ANALYTICS_KEY
-  //   if (typeof window !== 'undefined' && (window as any).gtag && gaKey) {
-  //     ;(window as any).gtag('config', gaKey, {
-  //       page_path: pathname,
-  //     })
-  //   }
-  // }, [pathname])
+  useEffect(() => {
+    if (clientEnv.VITE_GOOGLE_ANALYTICS_KEY) {
+      ReactGA.send({ hitType: 'pageview', page: pathname, title: pathname })
+    }
+  }, [pathname])
 
   return (
     <React.Fragment>
