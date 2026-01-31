@@ -147,7 +147,7 @@ export default function AuthPage({
                           value={field.state.value}
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder='Ikenna Okoro'
+                          placeholder='Will Smith'
                           required
                         />
                         <FieldInfo field={field} />

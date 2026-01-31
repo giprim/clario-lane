@@ -36,7 +36,7 @@ export function WordChunkDisplay() {
         <div className='absolute right-1/4 bottom-0  w-1 h-1/4 bg-primary/50 rounded-full opacity-50 pointer-events-none' />
 
         <p className='text-muted-foreground/50 uppercase font-mono lg:text-md text-xs absolute bottom-4 w-full z-20 text-center'>
-          Rest you gaze in between the lines
+          Rest your gaze in between the lines
         </p>
 
         <div className='flex items-center gap-4 flex-wrap justify-center max-w-4xl z-10'>
