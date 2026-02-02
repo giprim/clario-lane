@@ -8,6 +8,12 @@ export const PRACTICES = z.enum([
   "PERIPHERAL_VISION",
 ]);
 
+export const READING_SPEED_RANGE = {
+  MIN: 50,
+  MAX: 1500,
+  DEFAULT: 200,
+};
+
 export type PRACTICES = z.infer<typeof PRACTICES>;
 
 export const PracticeStep = z.enum([

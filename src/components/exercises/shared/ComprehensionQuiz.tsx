@@ -3,7 +3,7 @@ import { Button, Card } from '@/components'
 import { CheckCircle, XCircle } from 'lucide-react'
 import { usePracticeStore, useAppStore } from '@/store'
 import { useGamificationStore } from '@/store/gamification/useGamificationStore'
-import { PracticeStep } from '@/lib'
+import { PracticeStep, READING_SPEED_RANGE } from '@/lib'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { fetchPassageKey, sessionMutation } from '@/integration'
 import {
@@ -16,7 +16,20 @@ import type { PassageResponse } from '@/types'
 import { useLocation } from '@tanstack/react-router'
 
 export function ComprehensionQuiz() {
-  const { passage, updateStore, ...rest } = usePracticeStore()
+  const {
+    passage,
+    wpm,
+    duration,
+    wordsRead,
+    startTime,
+    elapsedTime,
+    setComprehension,
+    setCorrectAnswers,
+    setTotalQuestions,
+    setStep,
+    setLoading,
+    setNextWpm,
+  } = usePracticeStore()
   const questions = passage!.questions!
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -99,35 +112,39 @@ export function ComprehensionQuiz() {
     openLevelUpModal,
   } = useGamificationStore()
 
-  const ers = Math.round((rest.wpm * rest.comprehension) / 100)
-  const tenPercent = Math.round(rest.wpm * 0.1)
-  const nextWpm = ers > 70 ? rest.wpm + tenPercent : rest.wpm
-
   const handleNext = () => {
     if (isLastQuestion) {
       const correctAnswers = answers.filter((a) => a).length
       const comprehension = (correctAnswers / questions.length) * 100
+
+      const ers = Math.round((wpm * comprehension) / 100)
+      const tenPercent = Math.round(wpm * 0.1)
+      const nextWpm = ers > 70 ? wpm + tenPercent : wpm
+      const actualNextWpm =
+        nextWpm >= READING_SPEED_RANGE.MAX ? READING_SPEED_RANGE.MAX : nextWpm
+
       const payload = {
         correctAnswers,
         totalQuestions: questions.length,
         comprehension,
         currentStep: PracticeStep.enum.Results,
         loading: true,
+        nextWpm,
       }
 
       mutate(
         {
           comprehension,
           correct_answers: correctAnswers,
-          duration: rest.duration!,
-          elapsed_time: rest.elapsedTime,
-          start_time: rest.startTime,
+          duration: duration!,
+          elapsed_time: elapsedTime,
+          start_time: startTime,
           total_questions: questions.length,
-          total_words: rest.wordsRead!,
-          wpm: rest.wpm,
+          total_words: wordsRead!,
+          wpm: wpm,
           exercise_id: exerciseUuid!,
           passage_id: passageResponse?.id,
-          next_wpm: nextWpm,
+          next_wpm: actualNextWpm,
         },
         {
           onSuccess: async (response: any) => {
@@ -177,8 +194,8 @@ export function ComprehensionQuiz() {
 
               openVictoryModal({
                 xpGained: xpGained > 0 ? xpGained : 0,
-                wordsRead: rest.wordsRead!,
-                timeSpentSeconds: rest.duration!,
+                wordsRead: wordsRead!,
+                timeSpentSeconds: duration!,
                 currentLevel,
                 currentXP,
                 isLevelUp: !!isLevelUp,
@@ -210,14 +227,23 @@ export function ComprehensionQuiz() {
               queryKey: [fetchUserStatsKey],
             })
 
-            updateStore(payload)
-            updateStore({ nextWpm })
+            setCorrectAnswers(payload.correctAnswers)
+            setTotalQuestions(payload.totalQuestions)
+            setComprehension(payload.comprehension)
+            setStep(payload.currentStep)
+            setLoading(payload.loading)
+            setNextWpm(payload.nextWpm)
           },
           onError: (error) => {
             console.error('Failed to save session:', error)
             // Still proceed to results even if save fails?
             // Maybe show a toast error but let them see results.
-            updateStore(payload)
+            setCorrectAnswers(payload.correctAnswers)
+            setTotalQuestions(payload.totalQuestions)
+            setComprehension(payload.comprehension)
+            setStep(payload.currentStep)
+            setLoading(payload.loading)
+            setNextWpm(payload.nextWpm)
           },
         },
       )

@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { AnimatePresence } from 'motion/react'
 import {
   Button,
@@ -12,12 +12,11 @@ import {
   OnboardingPending,
 } from '@/components'
 import { Card } from '@/components/ui/card'
-import PaystackPop from '@paystack/inline-js'
 
 import { useOnboardingFlow, useOnboardingStore } from '@/store'
 
 import Billing from '@/components/onboarding/billing'
-import type { Preferences, UserTable } from '@/types'
+import type { Preferences } from '@/types'
 import {
   fetchChallenges,
   fetchContentType,
@@ -25,10 +24,8 @@ import {
 } from '@/integration/queries'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { userMutation } from '@/integration'
-import { useCallback, useEffect } from 'react'
-import { supabaseService } from '~supabase/clientServices'
-import { clientEnv } from '@/config/env'
 import { toast } from 'sonner'
+import { useSubscription } from '@/hooks'
 
 export const Route = createFileRoute('/onboarding/')({
   component: RouteComponent,
@@ -48,8 +45,6 @@ export const Route = createFileRoute('/onboarding/')({
     useOnboardingStore.setState({ email, name })
   },
 })
-
-const paystackPop = new PaystackPop()
 
 function RouteComponent() {
   const { updateProfile, ...onboarding } = useOnboardingStore()
@@ -71,17 +66,7 @@ function RouteComponent() {
     })
   }
 
-  const onSubscribe = useCallback(
-    (amount: number, plan: string) => {
-      paystackPop.newTransaction({
-        key: clientEnv.VITE_PAYSTACK_PUBLIC_KEY,
-        email: onboarding.email,
-        amount,
-        planCode: plan,
-      })
-    },
-    [onboarding.email],
-  )
+  const { onSubscribe } = useSubscription()
 
   const handleSubmission = async () => {
     createMutateAsync({
@@ -100,19 +85,6 @@ function RouteComponent() {
       update({ current_step: current_step + 1 })
     }
   }
-  const route = useRouter()
-
-  useEffect(() => {
-    const handleConfirmSubscription = (payload: UserTable) => {
-      if (payload.email === onboarding.email && payload.is_subscribed) {
-        route.navigate({ to: '/dashboard/practice' })
-      }
-    }
-    const channel = supabaseService.channel(handleConfirmSubscription)
-    return () => {
-      supabaseService.sp.removeChannel(channel)
-    }
-  }, [onboarding.email, route])
 
   const canProceed = () => {
     switch (current_step) {

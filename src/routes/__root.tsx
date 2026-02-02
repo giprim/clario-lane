@@ -40,6 +40,7 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
   beforeLoad: async ({ context }) => {
     const session = await context.queryClient.ensureQueryData(fetchSession)
     let user = undefined
+
     if (session) {
       try {
         user = await context.queryClient.ensureQueryData(fetchUserProfile)

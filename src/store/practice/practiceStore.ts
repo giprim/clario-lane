@@ -1,4 +1,4 @@
-import { PRACTICES, PracticeStep } from "@/lib";
+import { PRACTICES, PracticeStep, READING_SPEED_RANGE } from "@/lib";
 import type { Passage } from "@/types";
 import { create } from "zustand";
 import { toast } from "sonner";
@@ -35,7 +35,7 @@ type PracticeStoreActions = {
     values: Pick<PracticeStore, "wordsRead" | "duration" | "wpm">,
   ) => void;
   setWpm: (wpm: number) => void;
-  updateStore: (values: Partial<PracticeStore>) => void;
+  setNextWpm: (wpm: number) => void;
   reset: () => void;
 
   // New reader actions
@@ -52,11 +52,16 @@ type PracticeStoreActions = {
   handleComplete: () => void;
   formatTime: (seconds: number) => string;
   setExerciseType: (exerciseType: PRACTICES) => void;
+  setLoading: (loading: boolean) => void;
+  setWordsRead: (wordsRead: number) => void;
+  setCorrectAnswers: (correctAnswers: number) => void;
+  setTotalQuestions: (totalQuestions: number) => void;
+  setComprehension: (comprehension: number) => void;
 };
 
 const initialState: PracticeStore = {
-  wpm: 200,
-  nextWpm: 200,
+  wpm: READING_SPEED_RANGE.DEFAULT,
+  nextWpm: 0,
   currentStep: PracticeStep.enum.Intro,
   correctAnswers: 0,
   totalQuestions: 0,
@@ -80,10 +85,14 @@ const initialState: PracticeStore = {
 export const usePracticeStore = create<PracticeStore & PracticeStoreActions>(
   (set, get) => ({
     ...initialState,
-
+    setLoading: (loading: boolean) => set({ loading }),
+    setWordsRead: (wordsRead: number) => set({ wordsRead }),
     setExerciseType: (
       exerciseType: PRACTICES,
     ) => set({ exerciseType }),
+    setCorrectAnswers: (correctAnswers: number) => set({ correctAnswers }),
+    setTotalQuestions: (totalQuestions: number) => set({ totalQuestions }),
+    setComprehension: (comprehension: number) => set({ comprehension }),
 
     // Existing actions
     setStep: (step: PracticeStep) => set({ currentStep: step }),
@@ -91,8 +100,12 @@ export const usePracticeStore = create<PracticeStore & PracticeStoreActions>(
       values: Pick<PracticeStore, "wordsRead" | "duration" | "wpm">,
     ) => set(values),
     setWpm: (wpm: number) => set({ wpm }),
+    setNextWpm: (nextWpm: number) => set({ nextWpm }),
     updateStore: (values: Partial<PracticeStore>) => set(values),
-    reset: () => set(initialState),
+    reset: () => {
+      const { exerciseType } = get();
+      set({ ...initialState, exerciseType });
+    },
 
     // New reader actions
     setIsPlaying: (isPlaying: boolean) => set({ isPlaying }),
@@ -132,17 +145,17 @@ export const usePracticeStore = create<PracticeStore & PracticeStoreActions>(
         elapsedTime: 0,
         startTime: 0,
         progress: 0,
+        nextWpm: 0,
       });
     },
 
     handleComplete: () => {
-      const { startTime, elapsedTime, wordsRead, wpm, setStep, updateStore } =
-        get();
+      const { startTime, elapsedTime, wordsRead, wpm, setStep } = get();
 
       set({ isPlaying: false });
 
       const duration = startTime
-        ? (Date.now() - startTime) / 1000
+        ? (Date.now() - startTime) / READING_SPEED_RANGE.MAX
         : elapsedTime;
       const actualWpm = duration > 0 && wordsRead
         ? Math.round((wordsRead / duration) * 60)
@@ -151,7 +164,7 @@ export const usePracticeStore = create<PracticeStore & PracticeStoreActions>(
       if (!actualWpm || actualWpm <= 0) {
         toast.error(`Invalid WPM calculated, using set WPM: ${wpm}`);
       } else {
-        updateStore({
+        set({
           wpm: actualWpm,
           duration,
           wordsRead,

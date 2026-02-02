@@ -1,8 +1,14 @@
-import { DashboardPending, DashboardTabs } from '@/components'
+import {
+  DashboardPending,
+  DashboardTabs,
+  LevelUpModal,
+  VictoryModal,
+} from '@/components'
 
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { AnimatePresence } from 'motion/react'
 import { fetchNextSubscriptionDate } from '@/integration'
+import { useGamificationStore } from '@/store/gamification/useGamificationStore'
 
 export const Route = createFileRoute('/dashboard')({
   component: RouteComponent,
@@ -31,8 +37,8 @@ export const Route = createFileRoute('/dashboard')({
 })
 
 function RouteComponent() {
-  // const { victoryModal, levelUpModal, closeVictoryModal, closeLevelUpModal } =
-  //   useGamificationStore()
+  const { victoryModal, levelUpModal, closeVictoryModal, closeLevelUpModal } =
+    useGamificationStore()
 
   return (
     <div className='min-h-[calc(80vh-6rem)] w-full flex flex-col'>
@@ -50,7 +56,7 @@ function RouteComponent() {
       {/* <Copyright /> */}
 
       {/* Global Gamification Modals */}
-      {/* {victoryModal.data && (
+      {victoryModal.data && (
         <VictoryModal
           isOpen={victoryModal.isOpen}
           onClose={closeVictoryModal}
@@ -61,7 +67,7 @@ function RouteComponent() {
         isOpen={levelUpModal.isOpen}
         onClose={closeLevelUpModal}
         newLevel={levelUpModal.newLevel}
-      /> */}
+      />
     </div>
   )
 }

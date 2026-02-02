@@ -59,7 +59,7 @@ export function NotificationSetup({ onContinue, isLoading }: Props) {
   ]
 
   return (
-    <div className='max-w-4xl mx-auto grid lg:grid-cols-2 gap-8 items-start'>
+    <div className='max-w-2xl lg:max-w-4xl mx-auto grid lg:grid-cols-2 gap-8 items-start'>
       <StepCard
         title='Stay on Track'
         description='Consistency is key to improving reading speed. Choose how we can help you.'>

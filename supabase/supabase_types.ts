@@ -208,20 +208,32 @@ export type Database = {
       passages: {
         Row: {
           created_at: string | null
+          difficulty: string
           id: string
-          passage: Json
+          questions: Json
+          tags: string[]
+          text: string
+          title: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
+          difficulty: string
           id?: string
-          passage?: Json
+          questions?: Json
+          tags?: string[]
+          text: string
+          title: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
+          difficulty?: string
           id?: string
-          passage?: Json
+          questions?: Json
+          tags?: string[]
+          text?: string
+          title?: string
           updated_at?: string | null
         }
         Relationships: []
@@ -277,6 +289,7 @@ export type Database = {
           elapsed_time: number | null
           exercise_id: string | null
           id: string
+          next_wpm: number | null
           passage_id: string | null
           start_time: number | null
           total_questions: number | null
@@ -293,6 +306,7 @@ export type Database = {
           elapsed_time?: number | null
           exercise_id?: string | null
           id?: string
+          next_wpm?: number | null
           passage_id?: string | null
           start_time?: number | null
           total_questions?: number | null
@@ -309,6 +323,7 @@ export type Database = {
           elapsed_time?: number | null
           exercise_id?: string | null
           id?: string
+          next_wpm?: number | null
           passage_id?: string | null
           start_time?: number | null
           total_questions?: number | null
@@ -604,11 +619,10 @@ export type Database = {
       check_and_unlock_achievements: {
         Args: { uid: string }
         Returns: {
-          achievement_id: string
           just_unlocked: boolean
+          out_achievement_id: string
         }[]
       }
-      claim_quest: { Args: { quest_uuid: string }; Returns: Json }
       get_words_read_today: { Args: { uid: string }; Returns: number }
       update_avg_scores: { Args: { uid: string }; Returns: Json }
     }

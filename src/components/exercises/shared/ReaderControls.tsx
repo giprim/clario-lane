@@ -1,4 +1,5 @@
 import { Slider } from '@/components'
+import { READING_SPEED_RANGE } from '@/lib'
 import { usePracticeStore } from '@/store'
 import { type ReactNode } from 'react'
 
@@ -24,15 +25,15 @@ export function ReaderControls({}: ReaderControlsProps) {
         <Slider
           value={[wpm]}
           onValueChange={(value) => setWpm(value[0])}
-          min={100}
-          max={1000}
+          min={READING_SPEED_RANGE.MIN}
+          max={READING_SPEED_RANGE.MAX}
           step={10}
           disabled={isPlaying}
           className='w-full'
         />
         <div className='flex justify-between text-sm text-muted-foreground'>
-          <span>100 WPM</span>
-          <span>1000 WPM</span>
+          <span>{READING_SPEED_RANGE.MIN} WPM</span>
+          <span>{READING_SPEED_RANGE.MAX} WPM</span>
         </div>
       </div>
     </div>

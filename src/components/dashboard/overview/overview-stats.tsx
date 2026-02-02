@@ -45,12 +45,12 @@ export const OverviewStats = (props: Props) => {
       <Card>
         <CardContent>
           <div className='flex items-center justify-between mb-2'>
-            <span className=' text-sm'>Current Speed</span>
+            <span className=' text-sm'>Average Reading Speed</span>
             <span
               className={cn(
                 currentSpeed.improvement > 0
                   ? 'text-green-600 dark:text-green-400'
-                  : 'text-red-400'
+                  : 'text-red-400',
               )}>
               {currentSpeed.improvement > 0 ? (
                 <TrendingUp className='w-5 h-5' />
@@ -65,7 +65,7 @@ export const OverviewStats = (props: Props) => {
           <div
             className={cn(
               'flex items-center gap-1 text-sm',
-              currentSpeed.improvement > 0 ? 'text-green-600' : 'text-red-400'
+              currentSpeed.improvement > 0 ? 'text-green-600' : 'text-red-400',
             )}>
             {currentSpeed.improvement > 0 ? (
               <ArrowUp className='w-3 h-3' />
@@ -85,7 +85,7 @@ export const OverviewStats = (props: Props) => {
       <Card>
         <CardContent>
           <div className='flex items-center justify-between mb-2'>
-            <span className=' text-sm'>Comprehension</span>
+            <span className=' text-sm'>Average Comprehension</span>
             <CheckCircle2 className='w-4 h-4 text-blue-600' />
           </div>
           <div className='text-2xl text-primary mb-1'>
