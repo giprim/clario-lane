@@ -4,9 +4,11 @@ import { useOnboardingFlow } from '@/store'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { supabaseService } from '~supabase/clientServices'
+import { OnboardingPending } from '@/components'
 
 export const Route = createFileRoute('/onboarding')({
   component: RouteComponent,
+  pendingComponent: OnboardingPending,
   beforeLoad: async ({ context }) => {
     const user = await supabaseService.getUser()
     return { ...context, user }

@@ -1,6 +1,6 @@
 import { Skeleton } from '.'
 
-export function PendingPage() {
+export function DashboardPending() {
   return (
     <div className='min-h-[100svh] w-full  flex flex-col'>
       {/* Main Content Skeleton */}

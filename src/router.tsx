@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { createRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import { routeTree } from './routeTree.gen'
-import { DefaultCatchBoundary, PendingPage } from './components'
+import { DefaultCatchBoundary, RootPending } from './components'
 import { logServerError } from './lib'
 
 export function getRouter(queryClient?: QueryClient) {
@@ -21,7 +21,7 @@ export function getRouter(queryClient?: QueryClient) {
   const router = createRouter({
     routeTree,
     defaultErrorComponent: DefaultCatchBoundary,
-    defaultPendingComponent: PendingPage,
+    defaultPendingComponent: RootPending,
     scrollRestoration: true,
     defaultPreloadStaleTime: 1 * 60 * 1000,
     context: {

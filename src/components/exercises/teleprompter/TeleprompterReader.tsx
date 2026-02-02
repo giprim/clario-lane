@@ -1,4 +1,4 @@
-import { SpeedReadingPending } from '../speedreading/speed-reading-pending'
+import { SpeedReadingPending } from '@/components'
 import { useTeleprompterReader } from './useTeleprompterReader'
 import { useSyncDisplaySettings, ExerciseControls } from '../shared'
 import { ScrollingTextDisplay } from './ScrollingTextDisplay'

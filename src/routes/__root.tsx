@@ -13,10 +13,10 @@ import Navbar from '@/components/navbar'
 
 import {
   // Footer,
-  PendingPage,
   SettingsProvider,
   FloatingActionButton,
   Copyright,
+  RootPending,
 } from '@/components'
 import type { Session } from '@supabase/supabase-js'
 import type { UserTable } from '@/types'
@@ -36,7 +36,7 @@ import { fetchSession, fetchUserProfile } from '@/integration'
 
 export const Route = createRootRouteWithContext<RootRouteContext>()({
   component: RootComponent,
-  pendingComponent: PendingPage,
+  pendingComponent: RootPending,
   beforeLoad: async ({ context }) => {
     const session = await context.queryClient.ensureQueryData(fetchSession)
     let user = undefined

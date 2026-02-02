@@ -8,8 +8,8 @@ import {
   OnboardingReadingTest,
   QuickDrill,
   Progress,
-  PendingPage,
   NotificationSetup,
+  OnboardingPending,
 } from '@/components'
 import { Card } from '@/components/ui/card'
 import PaystackPop from '@paystack/inline-js'
@@ -33,7 +33,7 @@ import { toast } from 'sonner'
 
 export const Route = createFileRoute('/onboarding/')({
   component: RouteComponent,
-  pendingComponent: PendingPage,
+  pendingComponent: OnboardingPending,
   beforeLoad: ({ context }) => {
     const { user, session } = context
     if (!session) throw redirect({ to: '/auth' })

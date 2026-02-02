@@ -1,9 +1,11 @@
+import { AuthPending } from '@/components'
 import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
 import { BookOpen } from 'lucide-react'
 import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/auth')({
   component: RouteComponent,
+  pendingComponent: AuthPending,
   beforeLoad: ({ context }) => {
     if (!context.session) return
     if (!context.user) throw redirect({ to: '/onboarding' })

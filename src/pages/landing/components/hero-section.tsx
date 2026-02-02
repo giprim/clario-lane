@@ -83,7 +83,7 @@ export function HeroSection({ session }: HeroSectionProps) {
               transition={{ duration: 0.8, delay: 0.5 }}
               className='flex flex-wrap items-center gap-5'>
               <CTAButton
-                label='Get started'
+                label={session ? 'Go to Dashboard' : 'Get started'}
                 onClick={navigation.primaryAction}
                 variant='primary'
                 className='bg-[#9333EA] w-full md:w-auto hover:bg-[#7E22CE] text-white shadow-xl shadow-purple-500/20 h-14 px-8 text-[15px] font-semibold tracking-wide'

@@ -1,4 +1,4 @@
-import { SpeedReadingPending } from '../speed-reading-pending'
+import { SpeedReadingPending } from '@/components'
 import { useRSVPReader, type RSVPReaderProps } from './useRSVPReader'
 import { ExerciseControls, useSyncDisplaySettings } from '../../shared'
 import { usePracticeStore } from '@/store'

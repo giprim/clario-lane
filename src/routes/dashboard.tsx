@@ -1,4 +1,4 @@
-import { DashboardTabs } from '@/components'
+import { DashboardPending, DashboardTabs } from '@/components'
 
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { AnimatePresence } from 'motion/react'
@@ -6,6 +6,7 @@ import { fetchNextSubscriptionDate } from '@/integration'
 
 export const Route = createFileRoute('/dashboard')({
   component: RouteComponent,
+  pendingComponent: DashboardPending,
   beforeLoad: async ({ context }) => {
     const { session, user, queryClient } = context
 

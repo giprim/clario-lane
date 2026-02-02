@@ -1,4 +1,4 @@
-import { SpeedReadingPending } from '../speedreading/speed-reading-pending'
+import { SpeedReadingPending } from '@/components'
 import { useWordChunkingReader } from './useWordChunkingReader'
 import { useSyncDisplaySettings, ExerciseControls } from '../shared'
 import { WordChunkDisplay } from './WordChunkDisplay'

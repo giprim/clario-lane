@@ -69,6 +69,13 @@ export const TESTIMONIALS: readonly ITestimonial[] = [
     rating: 5,
     improvement: '3x faster',
   },
+  {
+    name: 'Emily Carter',
+    department: 'Law Student',
+    text: 'The platform helped me improve my reading speed and retention. I can now read case files much faster and with better comprehension.',
+    rating: 5,
+    improvement: '2x faster',
+  },
 ] as const
 
 /**
