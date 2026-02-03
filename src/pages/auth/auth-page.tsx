@@ -20,14 +20,12 @@ import { useOnboardingStore } from '@/store'
 import { AuthValidationSchema } from '@/types'
 import type { AnyFieldApi } from '@tanstack/react-form'
 import { useForm } from '@tanstack/react-form'
-import { Link, useRouter } from '@tanstack/react-router'
+import { Link, useRouteContext, useRouter } from '@tanstack/react-router'
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
 
 import { supabaseService } from '~supabase/clientServices'
-import { useQuery } from '@tanstack/react-query'
-import { fetchSession, fetchUserProfile } from '@/integration/queries'
 
 export default function AuthPage({
   className,
@@ -38,9 +36,7 @@ export default function AuthPage({
   const route = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-
-  const { refetch: refetchSession } = useQuery(fetchSession)
-  const { refetch: refetchUserProfile } = useQuery(fetchUserProfile)
+  const rootContext = useRouteContext({ from: '__root__' })
 
   const successMessage =
     authState === 'signin' ? 'Logged in successfully' : 'Signed up successfully'
@@ -66,8 +62,8 @@ export default function AuthPage({
         if (authState === 'signin') {
           await supabaseService.signIn(rest.email, password)
         }
-        await refetchSession()
-        await refetchUserProfile()
+
+        await rootContext.queryClient.invalidateQueries()
 
         toast.success(successMessage)
       } catch (error) {
@@ -93,8 +89,7 @@ export default function AuthPage({
     setIsSubmitting(true)
     try {
       await supabaseService.signInWithGoogle()
-      await refetchSession()
-      await refetchUserProfile()
+      await rootContext.queryClient.invalidateQueries()
     } catch (error) {
       catchError(error)
     } finally {
