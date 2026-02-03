@@ -623,6 +623,7 @@ export type Database = {
           out_achievement_id: string
         }[]
       }
+      claim_quest: { Args: { quest_uuid: string }; Returns: Json }
       get_words_read_today: { Args: { uid: string }; Returns: number }
       update_avg_scores: { Args: { uid: string }; Returns: Json }
     }

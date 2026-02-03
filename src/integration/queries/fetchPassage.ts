@@ -14,7 +14,7 @@ export const fetchPassage = queryOptions({
 
   queryFn: async () => {
     const { data } = await supabaseService.sp.functions.invoke(
-      "/practice/passage",
+      "practice/passage",
       {
         method: "GET",
       },

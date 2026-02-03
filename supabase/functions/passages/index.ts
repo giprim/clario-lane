@@ -48,7 +48,7 @@ const getSupabaseClient = (c: Context) => {
 };
 
 // GET - Read all or one
-app.get("/", async (c) => {
+app.get("/passages", async (c) => {
   try {
     const supabase = getSupabaseClient(c);
     const id = c.req.query("id");
@@ -63,9 +63,27 @@ app.get("/", async (c) => {
       if (error) throw error;
       return c.json(data);
     } else {
-      const { data, error } = await supabase.from("passages").select("*");
+      const page = parseInt(c.req.query("page") || "1");
+      const limit = parseInt(c.req.query("limit") || "10");
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+
+      const { data, count, error } = await supabase
+        .from("passages")
+        .select("*", { count: "exact" })
+        .range(from, to);
+
       if (error) throw error;
-      return c.json(data);
+
+      return c.json({
+        data,
+        meta: {
+          page,
+          limit,
+          total: count,
+          totalPages: Math.ceil((count || 0) / limit),
+        },
+      });
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -74,7 +92,7 @@ app.get("/", async (c) => {
 });
 
 // POST - Create
-app.post("/", async (c) => {
+app.post("/passages", async (c) => {
   try {
     const supabase = getSupabaseClient(c);
     const body = await c.req.json();
@@ -94,7 +112,7 @@ app.post("/", async (c) => {
 });
 
 // PUT - Update
-app.put("/", async (c) => {
+app.put("/passages", async (c) => {
   try {
     const supabase = getSupabaseClient(c);
     const body = await c.req.json();
@@ -121,10 +139,11 @@ app.put("/", async (c) => {
 });
 
 // DELETE - Delete
-app.delete("/", async (c) => {
+app.delete("/passages", async (c) => {
   try {
     const supabase = getSupabaseClient(c);
-    const id = c.req.query("id");
+    const body = await c.req.json();
+    const id = body?.id;
 
     if (!id) {
       return c.text("ID is required for delete", 400);
