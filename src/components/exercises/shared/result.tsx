@@ -6,7 +6,7 @@ import { fetchPassage } from '@/integration'
 import { useQuery } from '@tanstack/react-query'
 
 export const Results = () => {
-  const { wpm, comprehension, reset, nextWpm } = usePracticeStore()
+  const { wpm, comprehension, reset, nextWpm, setWpm } = usePracticeStore()
   const route = useRouter()
   const { refetch } = useQuery(fetchPassage)
 
@@ -19,6 +19,9 @@ export const Results = () => {
     reset()
   }
   const onNext = () => {
+    if (nextWpm) {
+      setWpm(nextWpm)
+    }
     refetch()
     reset()
   }

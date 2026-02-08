@@ -12,6 +12,7 @@ app.use("/*", corsMiddleware);
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 // Setup DOMPurify
 const window = new JSDOM("").window;
@@ -45,6 +46,10 @@ const getSupabaseClient = (c: Context) => {
       headers: { Authorization: authHeader || "" },
     },
   });
+};
+
+const getSupabaseServiceRoleClient = () => {
+  return createClient<Database>(supabaseUrl, supabaseServiceRoleKey);
 };
 
 // GET - Read all or one
@@ -94,7 +99,7 @@ app.get("/passages", async (c) => {
 // POST - Create
 app.post("/passages", async (c) => {
   try {
-    const supabase = getSupabaseClient(c);
+    const supabase = getSupabaseServiceRoleClient();
     const body = await c.req.json();
     const sanitizedBody = sanitizeData(body);
     const { data, error } = await supabase
@@ -114,7 +119,7 @@ app.post("/passages", async (c) => {
 // PUT - Update
 app.put("/passages", async (c) => {
   try {
-    const supabase = getSupabaseClient(c);
+    const supabase = getSupabaseServiceRoleClient();
     const body = await c.req.json();
     const sanitizedBody = sanitizeData(body);
     const { id, ...updates } = sanitizedBody;
@@ -141,7 +146,7 @@ app.put("/passages", async (c) => {
 // DELETE - Delete
 app.delete("/passages", async (c) => {
   try {
-    const supabase = getSupabaseClient(c);
+    const supabase = getSupabaseServiceRoleClient();
     const body = await c.req.json();
     const id = body?.id;
 
@@ -149,10 +154,29 @@ app.delete("/passages", async (c) => {
       return c.text("ID is required for delete", 400);
     }
 
-    const { error } = await supabase.from("passages").delete().eq("id", id);
+    const { error } = await supabase.from("passages").delete().eq(
+      "id",
+      id,
+    );
 
     if (error) throw error;
     return c.json({ message: "Deleted successfully" });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return c.json({ error: message }, 400);
+  }
+});
+
+app.get("/passages/:id", async (c) => {
+  try {
+    const supabase = getSupabaseClient(c);
+    const id = c.req.param("id");
+    const { data, error } = await supabase.from("passages").select("*").eq(
+      "id",
+      id,
+    ).single();
+    if (error) throw error;
+    return c.json(data);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return c.json({ error: message }, 400);

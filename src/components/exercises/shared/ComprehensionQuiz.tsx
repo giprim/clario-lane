@@ -117,19 +117,31 @@ export function ComprehensionQuiz() {
       const correctAnswers = answers.filter((a) => a).length
       const comprehension = (correctAnswers / questions.length) * 100
 
-      const ers = Math.round((wpm * comprehension) / 100)
       const tenPercent = Math.round(wpm * 0.1)
-      const nextWpm = ers > 70 ? wpm + tenPercent : wpm
-      const actualNextWpm =
-        nextWpm >= READING_SPEED_RANGE.MAX ? READING_SPEED_RANGE.MAX : nextWpm
+      let nextWpm = wpm
+
+      if (comprehension >= 80) {
+        nextWpm = wpm + tenPercent
+      } else if (comprehension < 60) {
+        nextWpm = wpm - tenPercent
+      }
+
+      // Ensure we don't go below MIN or above MAX
+      if (nextWpm > READING_SPEED_RANGE.MAX) {
+        nextWpm = READING_SPEED_RANGE.MAX
+      } else if (nextWpm < READING_SPEED_RANGE.MIN) {
+        nextWpm = READING_SPEED_RANGE.MIN
+      }
+
+      const actualNextWpm = nextWpm
 
       const payload = {
         correctAnswers,
         totalQuestions: questions.length,
         comprehension,
         currentStep: PracticeStep.enum.Results,
-        loading: true,
-        nextWpm,
+        loading: false,
+        nextWpm: actualNextWpm,
       }
 
       mutate(
@@ -230,9 +242,9 @@ export function ComprehensionQuiz() {
             setCorrectAnswers(payload.correctAnswers)
             setTotalQuestions(payload.totalQuestions)
             setComprehension(payload.comprehension)
-            setStep(payload.currentStep)
-            setLoading(payload.loading)
             setNextWpm(payload.nextWpm)
+            setLoading(false)
+            setStep(payload.currentStep)
           },
           onError: (error) => {
             console.error('Failed to save session:', error)
@@ -241,9 +253,9 @@ export function ComprehensionQuiz() {
             setCorrectAnswers(payload.correctAnswers)
             setTotalQuestions(payload.totalQuestions)
             setComprehension(payload.comprehension)
-            setStep(payload.currentStep)
-            setLoading(payload.loading)
             setNextWpm(payload.nextWpm)
+            setLoading(false)
+            setStep(payload.currentStep)
           },
         },
       )
