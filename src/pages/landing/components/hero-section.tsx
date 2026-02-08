@@ -24,8 +24,8 @@ export function HeroSection({ session }: HeroSectionProps) {
   })
 
   const { opacity, y } = useScrollAnimation(
-    { startScroll: 0, endScroll: 300, startValue: 1, endValue: 0 },
-    { startScroll: 0, endScroll: 300, startValue: 0, endValue: 50 },
+    { startScroll: 0, endScroll: 750, startValue: 1, endValue: 0 },
+    { startScroll: 0, endScroll: 750, startValue: 0, endValue: 50 },
   )
 
   const navigation = useNavigation(session)
