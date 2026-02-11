@@ -8,10 +8,9 @@ import { supabaseService } from "~supabase/clientServices";
 import type { UserTable } from "@/types";
 import { useRouteContext, useRouter } from "@tanstack/react-router";
 
-const paystackPop = new PaystackPop();
-
 export const useSubscription = () => {
   const { data: user, refetch } = useQuery(fetchUserProfile);
+  const paystackPop = new PaystackPop();
 
   const onboardingEmail = useOnboardingStore((state) => state.email);
   const email = user?.email || onboardingEmail;
