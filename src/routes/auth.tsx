@@ -1,7 +1,6 @@
 import { AuthPending } from '@/components'
 import { SeoHead } from '@/components/shared'
-import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
-import { BookOpen } from 'lucide-react'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 
 export const Route = createFileRoute('/auth')({
@@ -18,7 +17,7 @@ export const Route = createFileRoute('/auth')({
 
 function RouteComponent() {
   return (
-    <div className='bg-background min-h-[75svh] p-4  md:p-10'>
+    <div className='bg-background min-h-[75svh] p-5  md:p-10'>
       <SeoHead
         title='Authentication'
         description='Login or Sign up to ClarioLane.'
@@ -26,17 +25,7 @@ function RouteComponent() {
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        className='w-full max-w-lg space-y-6 mx-auto pt-28 nd:pt-24'>
-        <div className='mx-auto w-fit'>
-          <Link
-            to='/'
-            className='flex items-center gap-2 self-center font-medium '>
-            <div className='bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md'>
-              <BookOpen className='size-4' />
-            </div>
-            ClarioLane
-          </Link>
-        </div>
+        className='w-full max-w-lg space-y-6 mx-auto pt-28 md:pt-24'>
         <Outlet />
       </motion.div>
     </div>
