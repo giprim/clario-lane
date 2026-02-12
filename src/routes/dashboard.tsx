@@ -4,6 +4,7 @@ import {
   LevelUpModal,
   VictoryModal,
 } from '@/components'
+import { SeoHead } from '@/components/shared'
 
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { AnimatePresence } from 'motion/react'
@@ -42,6 +43,10 @@ function RouteComponent() {
 
   return (
     <div className='min-h-[calc(80vh-6rem)] w-full flex flex-col'>
+      <SeoHead
+        title='Dashboard'
+        description='Track your reading progress and practice daily.'
+      />
       <div className='max-w-7xl flex-1 w-full mx-auto px-6 py-8'>
         <div className='flex items-center pb-8'>
           {/* <div className='w-fit md:w-[100px]'>

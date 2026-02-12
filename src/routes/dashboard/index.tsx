@@ -8,6 +8,7 @@ import {
   QuestCard,
   Button,
 } from '@/components'
+import { SeoHead } from '@/components/shared'
 import { useQuery } from '@tanstack/react-query'
 import { useClaimQuest, useGamification } from '@/hooks'
 
@@ -61,6 +62,10 @@ export function RouteComponent() {
       transition={{ type: 'spring' }}
       className='space-y-4'
       key='overview'>
+      <SeoHead
+        title='Overview'
+        description='Your daily reading stats and gamification progress.'
+      />
       {/* Quick Stats */}
       <OverviewStats
         comprehension={{

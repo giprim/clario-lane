@@ -5,6 +5,7 @@ import {
   ActivityChart,
   MilestonesCard,
 } from '@/components/dashboard/progress'
+import { SeoHead } from '@/components/shared'
 import { AchievementsGrid } from '@/components/gamification'
 import { useGamification } from '@/hooks'
 
@@ -138,6 +139,10 @@ export function RouteComponent() {
       exit={{ y: -40, opacity: 0 }}
       transition={{ type: 'spring' }}
       className='space-y-6'>
+      <SeoHead
+        title='Progress & Stats'
+        description='Detailed analytics of your reading speed and comprehension improvements.'
+      />
       {/* Stats Overview */}
       <StatsOverview userProfile={userProfile} />
 

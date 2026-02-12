@@ -1,10 +1,28 @@
 import { Route } from '@/routes/__root'
 import { HeroSection } from './landing/components/hero-section'
-import { FeaturesSection } from './landing/components/features-section'
-import { StatsSection } from './landing/components/stats-section'
-import { TestimonialsSection } from './landing/components/testimonials-section'
-import { FooterCTA } from './landing/components/footer-cta'
 import { SeoHead } from '@/components/shared'
+import { Suspense, lazy } from 'react'
+
+const FeaturesSection = lazy(() =>
+  import('./landing/components/features-section').then((module) => ({
+    default: module.FeaturesSection,
+  })),
+)
+const StatsSection = lazy(() =>
+  import('./landing/components/stats-section').then((module) => ({
+    default: module.StatsSection,
+  })),
+)
+const TestimonialsSection = lazy(() =>
+  import('./landing/components/testimonials-section').then((module) => ({
+    default: module.TestimonialsSection,
+  })),
+)
+const FooterCTA = lazy(() =>
+  import('./landing/components/footer-cta').then((module) => ({
+    default: module.FooterCTA,
+  })),
+)
 
 export function LandingPage() {
   const { session } = Route.useRouteContext()
@@ -16,10 +34,12 @@ export function LandingPage() {
         description='Train your brain to read faster and retain more with ClarioLane.'
       />
       <HeroSection session={session} />
-      <FeaturesSection />
-      <StatsSection />
-      <TestimonialsSection />
-      <FooterCTA session={session} />
+      <Suspense fallback={<div className='h-96' />}>
+        <FeaturesSection />
+        <StatsSection />
+        <TestimonialsSection />
+        <FooterCTA session={session} />
+      </Suspense>
     </div>
   )
 }

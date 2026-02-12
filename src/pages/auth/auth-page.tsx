@@ -147,6 +147,7 @@ export default function AuthPage({
                           onBlur={field.handleBlur}
                           onChange={(e) => field.handleChange(e.target.value)}
                           placeholder='Will Smith'
+                          autoComplete='name'
                           required
                         />
                         <FieldInfo field={field} />
@@ -177,6 +178,7 @@ export default function AuthPage({
                       onChange={(e) => field.handleChange(e.target.value)}
                       type='email'
                       placeholder='email@example.com'
+                      autoComplete='email'
                       required
                     />
                     <FieldInfo field={field} />
@@ -206,6 +208,11 @@ export default function AuthPage({
                       onChange={(e) => field.handleChange(e.target.value)}
                       type={showPassword ? 'text' : 'password'}
                       placeholder='••••••••'
+                      autoComplete={
+                        authState === 'signup'
+                          ? 'new-password'
+                          : 'current-password'
+                      }
                       required
                     />
                     <FieldInfo field={field} />
