@@ -1,4 +1,5 @@
 import { Button } from '@/components'
+import { SeoHead } from '@/components/shared'
 
 import { useOnboardingFlow } from '@/store'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
@@ -27,6 +28,7 @@ function RouteComponent() {
 
   return (
     <div className='min-h-[80svh] p-4 max-w-6xl mx-auto '>
+      <SeoHead title='Onboarding' description='Get started with ClarioLane.' />
       {/* Progress Bar */}
       <div className=' pt-24'>
         <div className='mb-4'>

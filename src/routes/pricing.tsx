@@ -1,4 +1,5 @@
 import Billing from '@/components/onboarding/billing'
+import { SeoHead } from '@/components/shared'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { BillingPendingPage } from '@/components'
 import { useSubscription } from '@/hooks'
@@ -19,6 +20,10 @@ function RouteComponent() {
 
   return (
     <div className='py-10 px-4 pt-28 nd:pt-24'>
+      <SeoHead
+        title='Pricing'
+        description='Choose the plan that fits your needs.'
+      />
       <Billing onSubscribe={onSubscribe} />
     </div>
   )

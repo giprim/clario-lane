@@ -11,6 +11,8 @@ import { QueryClient } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 import Navbar from '@/components/navbar'
 import { AuthProvider } from '@/context/auth-provider'
+import { HelmetProvider } from 'react-helmet-async'
+import { SeoHead } from '@/components/shared'
 
 import {
   // Footer,
@@ -93,21 +95,27 @@ function RootComponent() {
 
   return (
     <React.Fragment>
-      <AuthProvider>
-        <SettingsProvider>
-          <Navbar />
-          <Outlet />
-          {isValidRoute ? null : (
-            <>
-              <FloatingActionButton />
-              <Copyright />
-            </>
-          )}
-          <Toaster position='top-center' richColors />
-          <TanStackRouterDevtools position='bottom-left' />
-          <ReactQueryDevtools position='bottom' initialIsOpen={false} />
-        </SettingsProvider>
-      </AuthProvider>
+      <HelmetProvider>
+        <SeoHead
+          title='ClarioLane'
+          description='Master speed reading and comprehension with ClarioLane. Interactive exercises and progress tracking.'
+        />
+        <AuthProvider>
+          <SettingsProvider>
+            <Navbar />
+            <Outlet />
+            {isValidRoute ? null : (
+              <>
+                <FloatingActionButton />
+                <Copyright />
+              </>
+            )}
+            <Toaster position='top-center' richColors />
+            <TanStackRouterDevtools position='bottom-left' />
+            <ReactQueryDevtools position='bottom' initialIsOpen={false} />
+          </SettingsProvider>
+        </AuthProvider>
+      </HelmetProvider>
     </React.Fragment>
   )
 }
