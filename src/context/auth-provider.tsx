@@ -112,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       router.invalidate()
       useOnboardingStore.getState().reset()
       useOnboardingFlow.getState().reset()
-      router.navigate({ to: '/' })
+      router.navigate({ to: '/auth' })
       toast.success('Logged out successfully')
     },
     onError: (error) => {
