@@ -17,6 +17,9 @@ export const useSubscription = () => {
   const route = useRouter();
   const rootContext = useRouteContext({ from: "__root__" });
 
+  // @ts-ignore
+  const affiliateId = window?.Bluecea?.getAffiliateId();
+
   const onSubscribe = useCallback(
     (amount: number, plan: string) => {
       paystackPop.newTransaction({
@@ -24,9 +27,18 @@ export const useSubscription = () => {
         email,
         amount: amount * 100,
         planCode: plan,
+        metadata: {
+          custom_fields: [
+            {
+              display_name: "Affiliate Link ID",
+              variable_name: "affiliate_link_id",
+              value: affiliateId,
+            },
+          ],
+        },
       });
     },
-    [email],
+    [email, affiliateId],
   );
 
   useEffect(() => {
@@ -43,7 +55,7 @@ export const useSubscription = () => {
     return () => {
       supabaseService.sp.removeChannel(channel);
     };
-  }, [email]);
+  }, [email, affiliateId]);
 
   return { onSubscribe };
 };

@@ -57,6 +57,15 @@ app.post("/paystack-webhook", async (c) => {
       return c.json({ success: false, message: "Not authorized" }, 401);
     }
 
+    fetch(`bluecea-affiliate.netlify.app/api/webhooks/paystack`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${supabase_service_key}`,
+      },
+      body: JSON.stringify({ payload }),
+    });
+
     // Find user by email
     const { data: customer, error: customerError } = await supabaseAdmin
       .from("users")

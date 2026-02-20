@@ -13,7 +13,7 @@ const BASE_STYLES = `
 
 // TODO: Replace with actual hosted URL of the logo
 const LOGO_URL =
-  "https://clariolane-bucket.nyc3.cdn.digitaloceanspaces.com/brand.png";
+  "https://res.cloudinary.com/dgdlf0668/image/upload/v1770759102/brand_ztp3ex.png";
 
 const baseLayout = (content: string) => `
 <!DOCTYPE html>
