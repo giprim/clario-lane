@@ -20,6 +20,7 @@ import {
   FloatingActionButton,
   RootPending,
   Copyright,
+  ReferralModal,
 } from '@/components'
 import type { Session } from '@supabase/supabase-js'
 import type { UserTable } from '@/types'
@@ -119,6 +120,7 @@ function RootComponent() {
             <Outlet />
             {isValidRoute ? null : <FloatingActionButton />}
             {hideFooterRoutes ? <Copyright /> : <Footer />}
+            <ReferralModal />
             <Toaster position='top-center' richColors />
             <TanStackRouterDevtools position='bottom-left' />
             <ReactQueryDevtools position='bottom' initialIsOpen={false} />

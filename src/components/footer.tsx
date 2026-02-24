@@ -73,6 +73,20 @@ export const Footer = () => {
               </li>
             </ul>
           </div>
+          <div>
+            <h3 className='mb-4'>Partners</h3>
+            <ul className='space-y-2 text-sm text-muted-foreground'>
+              <li>
+                <a
+                  href='https://affiliate.bluecea.com'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='hover:text-foreground'>
+                  Bluecea Referral Program
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         <Copyright />
       </div>
