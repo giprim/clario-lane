@@ -10,7 +10,7 @@ import { TrendingUp } from 'lucide-react'
 const AnimateLink = motion.create(Link)
 
 const Navbar = () => {
-  const { session } = useAuth()
+  const { session, isLoading } = useAuth()
   const pathname = useLocation().pathname
   const isDashboard = pathname.includes('/dashboard')
 
@@ -83,7 +83,9 @@ const Navbar = () => {
           </div>
 
           <div className='flex gap-4 items-center font-semibold'>
-            {!session ? (
+            {isLoading ? (
+              <div className='w-24 h-10 rounded-full bg-muted animate-pulse' />
+            ) : !session ? (
               <Button asChild>
                 <AnimateLink to='/auth'>Sign in</AnimateLink>
               </Button>
@@ -132,7 +134,9 @@ const Navbar = () => {
 
         {/* Right Action */}
         <div className='flex gap-4 items-center font-semibold'>
-          {!session ? (
+          {isLoading ? (
+            <div className='w-24 h-10 rounded-full bg-muted/50 dark:bg-purple-900/50 animate-pulse' />
+          ) : !session ? (
             <Button
               asChild
               className='rounded-full bg-purple-600 hover:bg-purple-700 text-white px-6 h-10 shadow-md shadow-purple-500/20'>
